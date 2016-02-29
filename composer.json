@@ -25,6 +25,7 @@
         }
     },
     "suggest": {
+        "graphp/graphviz": "For rendering Entity Relationship diagrams"
     },
     "extra": {
         "branch-alias": {
