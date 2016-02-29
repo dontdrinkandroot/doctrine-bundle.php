@@ -102,9 +102,6 @@ class RenderOrmDiagramCommand extends ContainerAwareCommand
 
     private function isNullableAssociation($associationMapping)
     {
-        if (!array_key_exists('joinColumns', $associationMapping)) {
-            var_dump($associationMapping);
-        }
         $joinColumns = $associationMapping['joinColumns'];
         if (count($joinColumns) > 1) {
             throw new \Exception('More than one join Column currently not supported');
