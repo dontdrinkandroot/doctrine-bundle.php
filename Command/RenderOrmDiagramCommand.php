@@ -3,7 +3,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Command;
 
-use Doctrine\Bundle\MigrationsBundle\Command\Helper\DoctrineCommandHelper;
+use Doctrine\Bundle\DoctrineBundle\Command\Proxy\DoctrineCommandHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Fhaculty\Graph\Graph;
