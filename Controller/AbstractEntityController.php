@@ -184,8 +184,8 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      */
     protected function getListModel(Request $request)
     {
-        $page = $request->query->get('page', 1);
-        $perPage = $request->query->get('perpage', 10);
+        $page = $this->getPage($request);
+        $perPage = $this->getPerPage($request);
         $paginatedEntities = $this->getRepository()->findPaginatedBy($page, $perPage);
 
         return [
@@ -394,11 +394,6 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
-     * @return FormTypeInterface
-     */
-    protected abstract function getFormType();
-
-    /**
      * @return string
      */
     protected function getEntityShortName()
@@ -426,8 +421,31 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
+     * @param Request $request
+     * @return int
+     */
+    protected function getPerPage(Request $request)
+    {
+        return $request->query->get('perpage', 10);
+    }
+
+    /**
+     * @param Request $request
+     * @return int
+     */
+    protected function getPage(Request $request)
+    {
+        return $request->query->get('page', 1);
+    }
+
+    /**
      * @return string
      */
     protected abstract function getEntityClass();
+
+    /**
+     * @return FormTypeInterface
+     */
+    protected abstract function getFormType();
 
 }

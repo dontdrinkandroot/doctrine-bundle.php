@@ -14,6 +14,7 @@
     "require": {
         "php": ">=5.5",
         "symfony/symfony": "~2.7",
+        "doctrine/doctrine-bundle": "~1.4",
         "dontdrinkandroot/utils": "0.5.x-dev",
         "dontdrinkandroot/doctrine": "0.1.x-dev",
         "dontdrinkandroot/utils-bundle": "0.3.x-dev"
@@ -27,6 +28,7 @@
         }
     },
     "suggest": {
+        "doctrine/data-fixtures": "For data fixture testing",
         "graphp/graphviz": "For rendering Entity Relationship diagrams"
     },
     "extra": {
