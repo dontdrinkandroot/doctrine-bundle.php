@@ -3,8 +3,14 @@
 <phpunit colors="true" bootstrap="vendor/autoload.php">
 
     <testsuites>
-        <testsuite name="Dontdrinkandroot Doctrine Bundle">
-            <directory>./Tests</directory>
+        <testsuite name="Unit Tests">
+            <directory>./Tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration Tests">
+            <directory>./Tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Acceptance Tests">
+            <directory>./Tests/Acceptance</directory>
         </testsuite>
     </testsuites>
 
