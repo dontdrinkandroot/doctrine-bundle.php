@@ -32,6 +32,10 @@ class RenderOrmDiagramCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!class_exists(Graph::class)) {
+            throw new \Exception('You need to install graphp/graphviz in order to render diagrams');
+        }
+
         DoctrineCommandHelper::setApplicationEntityManager($this->getApplication(), $input->getOption('em'));
         /** @var EntityManagerInterface $em */
         $em = $this->getHelper('em')->getEntityManager();
