@@ -4,6 +4,7 @@ sudo: false
 
 matrix:
     include:
+        -
             php: 5.6
             env: dependencies=lowest
         -
