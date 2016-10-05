@@ -9,7 +9,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class AbstractContainerAwareFixture extends AbstractFixture
     implements ContainerAwareInterface
 {
-
     /**
      * @var ContainerInterface
      */
