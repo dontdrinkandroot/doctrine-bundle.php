@@ -25,7 +25,7 @@ class SetUuidsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var UuidEntityListener $uuidListener */
-        $uuidListener = $this->getContainer()->get('ddr_utils.listener.doctrine.uuid');
+        $uuidListener = $this->getContainer()->get('ddr.doctrine.event.listener.uuid');
         $strategy = $uuidListener->getStrategy();
         if ($input->getOption('strategy')) {
             $strategy = $input->getOption('strategy');
