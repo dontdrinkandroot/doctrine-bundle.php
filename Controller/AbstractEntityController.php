@@ -447,5 +447,4 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      * @return FormTypeInterface
      */
     protected abstract function getFormType();
-
 }

@@ -9,7 +9,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class AbstractUuidEntityController extends AbstractEntityController
 {
-
     /**
      * {@inheritdoc}
      */
