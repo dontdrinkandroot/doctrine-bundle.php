@@ -83,6 +83,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         if ($form->isValid()) {
             /** @var EntityInterface $entity */
             $entity = $form->getData();
+            $this->postProcessSubmittedEntity($request, $entity);
             if ($new) {
                 $entity = $this->getRepository()->persist($entity);
             } else {
@@ -422,6 +423,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
 
     /**
      * @param Request $request
+     *
      * @return int
      */
     protected function getPerPage(Request $request)
@@ -431,11 +433,17 @@ abstract class AbstractEntityController extends Controller implements EntityCont
 
     /**
      * @param Request $request
+     *
      * @return int
      */
     protected function getPage(Request $request)
     {
         return $request->query->get('page', 1);
+    }
+
+    protected function postProcessSubmittedEntity(Request $request, EntityInterface $entity)
+    {
+        /*Hook*/
     }
 
     /**
@@ -447,4 +455,5 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      * @return FormTypeInterface
      */
     protected abstract function getFormType();
+
 }
