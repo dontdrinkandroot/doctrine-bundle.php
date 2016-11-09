@@ -27,7 +27,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     public function listAction(Request $request)
     {
         $user = $this->getUser();
-        $this->checkListActionAuthorization($user);
+        $this->checkListActionAuthorization($request);
 
         $view = $this->getListView();
         $model = $this->getListModel($request);
@@ -40,10 +40,8 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      */
     public function detailAction(Request $request, $id)
     {
-        $user = $this->getUser();
-        $this->checkDetailActionAuthorization($user);
-
         $entity = $this->fetchEntity($id);
+        $this->checkDetailActionAuthorization($request, $entity);
 
         $response = new Response();
         $lastModified = $this->getLastModified($entity);
@@ -68,14 +66,17 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      */
     public function editAction(Request $request, $id = null)
     {
-        $user = $this->getUser();
-        $this->checkEditActionAuthorization($user);
-
         $new = true;
         $entity = null;
         if (null !== $id && $id !== 'new') {
             $new = false;
             $entity = $this->fetchEntity($id);
+        }
+
+        if ($new) {
+            $this->checkCreateActionAuthorization($request);
+        } else {
+            $this->checkEditActionAuthorization($request, $entity);
         }
         $form = $this->createForm($this->getFormType(), $entity);
 
@@ -104,9 +105,9 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     public function deleteAction(Request $request, $id)
     {
         $user = $this->getUser();
-        $this->checkDeleteActionAuthorization($user);
-
         $entity = $this->fetchEntity($id);
+        $this->checkDeleteActionAuthorization($request, $entity);
+
         $this->getRepository()->remove($entity);
 
         return $this->createPostDeleteResponse($request, $entity);
@@ -235,6 +236,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      */
     protected function fetchEntity($id)
     {
+        /** @var EntityInterface $entity */
         $entity = $this->getRepository()->find($id);
         if (null === $entity) {
             throw new NotFoundHttpException();
@@ -378,19 +380,23 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         return null;
     }
 
-    protected function checkListActionAuthorization($user)
+    protected function checkListActionAuthorization(Request $request)
     {
     }
 
-    protected function checkDetailActionAuthorization($user)
+    protected function checkDetailActionAuthorization(Request $request, EntityInterface $entity)
     {
     }
 
-    protected function checkEditActionAuthorization($user)
+    protected function checkCreateActionAuthorization(Request $request)
     {
     }
 
-    protected function checkDeleteActionAuthorization($user)
+    protected function checkEditActionAuthorization(Request $request, EntityInterface $entity)
+    {
+    }
+
+    protected function checkDeleteActionAuthorization(Request $request, EntityInterface $entity)
     {
     }
 
