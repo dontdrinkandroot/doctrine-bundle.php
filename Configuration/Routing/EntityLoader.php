@@ -10,7 +10,6 @@ use Symfony\Component\Routing\RouteCollection;
 
 class EntityLoader extends Loader
 {
-
     /**
      * @var KernelInterface
      */
