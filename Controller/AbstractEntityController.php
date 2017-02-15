@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Controller;
 
 use Dontdrinkandroot\Entity\EntityInterface;
 use Dontdrinkandroot\Entity\UpdatedEntityInterface;
+use Dontdrinkandroot\Pagination\Pagination;
 use Dontdrinkandroot\Repository\OrmEntityRepository;
 use Dontdrinkandroot\Utils\StringUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,7 +15,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class AbstractEntityController extends Controller implements EntityControllerInterface
 {
-
     protected $routePrefix = null;
 
     protected $viewPrefix = null;
@@ -188,11 +188,12 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     {
         $page = $this->getPage($request);
         $perPage = $this->getPerPage($request);
-        $paginatedEntities = $this->getRepository()->findPaginatedBy($page, $perPage);
+        $paginator = $this->getRepository()->findPaginatedBy($page, $perPage);
+        $total = $paginator->count();
 
         return [
-            'pagination' => $paginatedEntities->getPagination(),
-            'entities'   => $paginatedEntities->getResults(),
+            'pagination' => new Pagination($page, $perPage, $total),
+            'entities'   => $paginator->getIterator()->getArrayCopy(),
             'fields'     => $this->getListFields(),
             'routes'     => $this->getRoutes()
         ];
