@@ -1,0 +1,12 @@
+services:
+    ddr_doctrine.event.listener.kernel:
+        class: Dontdrinkandroot\DoctrineBundle\Event\Listener\TransactionalKernelEventListener
+        arguments:
+            - "@ddr.doctrine.transaction_manager"
+        calls:
+            - ["setLogger", ["@logger"]]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 2048 }
+            - { name: kernel.event_listener, event: kernel.terminate }
+            - { name: kernel.event_listener, event: kernel.exception }
+            - { name: monolog.logger, channel: doctrine }

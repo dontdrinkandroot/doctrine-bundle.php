@@ -15,6 +15,13 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('ddr_doctrine');
 
+        // @formatter:off
+        $rootNode->children()
+            ->booleanNode('wrap_request_in_transaction')->defaultFalse()
+            ->end()
+        ->end();
+        // @formatter:on
+
         return $treeBuilder;
     }
 }

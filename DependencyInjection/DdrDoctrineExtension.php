@@ -19,5 +19,9 @@ class DdrDoctrineExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
+
+        if ($config['wrap_request_in_transaction']) {
+            $loader->load('transactional_kernel_event_listener.yml');
+        }
     }
 }
