@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Event\Listener;
 use Dontdrinkandroot\Repository\TransactionManager;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
@@ -27,8 +28,8 @@ class TransactionalKernelEventListener
     {
         $this->transactionManager = $transactionManager;
         $this->logger = new NullLogger();
-        $this->rollbackCodes[] = 400;
-        $this->rollbackCodes[] = 500;
+        $this->rollbackCodes[] = Response::HTTP_BAD_REQUEST;
+        $this->rollbackCodes[] = Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
