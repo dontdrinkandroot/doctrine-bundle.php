@@ -25,6 +25,8 @@ services:
         class: Dontdrinkandroot\Repository\TransactionManager
         arguments:
             - '@doctrine.orm.entity_manager'
+        calls:
+            - ['setLogger', ['@logger']]
 
     ddr.doctrine.configuration.routing.entity_loader:
         class: Dontdrinkandroot\DoctrineBundle\Configuration\Routing\EntityLoader
