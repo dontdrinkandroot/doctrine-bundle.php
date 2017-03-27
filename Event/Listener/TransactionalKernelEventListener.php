@@ -6,6 +6,7 @@ use Dontdrinkandroot\Repository\TransactionManager;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Event\PostResponseEvent;
@@ -38,6 +39,12 @@ class TransactionalKernelEventListener
         $this->transactionManager->beginTransaction();
     }
 
+    public function onKernelFinishRequest(FinishRequestEvent $event)
+    {
+        $this->getLogger()->info('Kernel Transaction: Commit');
+        $this->transactionManager->commitTransaction();
+    }
+
     public function onKernelTerminate(PostResponseEvent $event)
     {
         $response = $event->getResponse();
@@ -45,12 +52,7 @@ class TransactionalKernelEventListener
         if (in_array($statusCode, $this->rollbackCodes)) {
             $this->getLogger()->info('Kernel Transaction: Rollback by statusCode', ['statusCode' => $statusCode]);
             $this->transactionManager->rollbackTransaction();
-
-            return;
         }
-
-        $this->getLogger()->info('Kernel Transaction: Commit');
-        $this->transactionManager->commitTransaction();
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)

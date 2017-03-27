@@ -7,6 +7,7 @@ services:
             - ["setLogger", ["@logger"]]
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 2048 }
+            - { name: kernel.event_listener, event: kernel.finish_request }
             - { name: kernel.event_listener, event: kernel.terminate }
             - { name: kernel.event_listener, event: kernel.exception }
             - { name: monolog.logger, channel: doctrine }
