@@ -6,7 +6,6 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
-use Symfony\Component\Security\Core\Util\SecureRandom;
 
 class UuidEntityListener
 {
@@ -59,11 +58,11 @@ class UuidEntityListener
         //TODO: Refactor into own class
         return sprintf(
             '%s-%s-%04x-%04x-%s',
-            bin2hex($this->getRandomBytes(4)),
-            bin2hex($this->getRandomBytes(2)),
+            bin2hex(random_bytes(4)),
+            bin2hex(random_bytes(2)),
             mt_rand(0, 0x0fff) | 0x4000,
             mt_rand(0, 0x3fff) | 0x8000,
-            bin2hex($this->getRandomBytes(6))
+            bin2hex(random_bytes(6))
         );
     }
 
@@ -79,17 +78,6 @@ class UuidEntityListener
         $sql = 'SELECT ' . $conn->getDatabasePlatform()->getGuidExpression();
 
         return $conn->query($sql)->fetchColumn(0);
-    }
-
-    protected function getRandomBytes($length)
-    {
-        if (function_exists('random_bytes')) {
-            return random_bytes($length);
-        } else {
-            $secureRandom = new SecureRandom();
-
-            return $secureRandom->nextBytes($length);
-        }
     }
 
     /**

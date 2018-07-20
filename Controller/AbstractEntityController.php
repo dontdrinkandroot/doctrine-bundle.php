@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Controller;
 
+use Doctrine\Common\Persistence\ObjectRepository;
 use Dontdrinkandroot\Entity\EntityInterface;
 use Dontdrinkandroot\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\Pagination\Pagination;
@@ -304,7 +305,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     }
 
     /**
-     * @return OrmEntityRepository
+     * @return ObjectRepository|OrmEntityRepository
      */
     protected function getRepository()
     {
@@ -462,5 +463,4 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      * @return FormTypeInterface
      */
     protected abstract function getFormType();
-
 }

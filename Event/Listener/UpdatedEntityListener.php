@@ -7,7 +7,6 @@ use Dontdrinkandroot\Entity\UpdatedEntityInterface;
 
 class UpdatedEntityListener
 {
-
     public function prePersist(LifecycleEventArgs $args)
     {
         $this->checkAndSetUpdated($args);
