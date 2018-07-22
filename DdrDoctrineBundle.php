@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class DdrDoctrineBundle extends Bundle
 {
-
     /**
      * {@inheritdoc}
      */
@@ -25,5 +24,4 @@ class DdrDoctrineBundle extends Bundle
             );
         }
     }
-
 }

@@ -7,6 +7,7 @@ use Dontdrinkandroot\Entity\EntityInterface;
 use Dontdrinkandroot\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\Pagination\Pagination;
 use Dontdrinkandroot\Repository\OrmEntityRepository;
+use Dontdrinkandroot\Utils\ClassNameUtils;
 use Dontdrinkandroot\Utils\StringUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormTypeInterface;
@@ -123,14 +124,9 @@ abstract class AbstractEntityController extends Controller implements EntityCont
             return $this->routePrefix;
         }
 
-        list($bundle, $entityName) = $this->extractBundleAndEntityName();
+        $entityShortName = ClassNameUtils::getShortName($this->getEntityClass());
 
-        $prefix = str_replace('Bundle', '', $bundle);
-        $prefix = $prefix . '.' . $entityName;
-        $prefix = str_replace('\\', '.', $prefix);
-        $prefix = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $prefix));
-
-        return $prefix;
+        return 'entity.' . $entityShortName;
     }
 
     /**
@@ -142,9 +138,9 @@ abstract class AbstractEntityController extends Controller implements EntityCont
             return $this->pathPrefix;
         }
 
-        list($bundle, $entityName) = $this->extractBundleAndEntityName();
+        $entityShortName = ClassNameUtils::getShortName($this->getEntityClass());
 
-        return '/' . strtolower($entityName) . '/';
+        return '/' . $entityShortName . 's/';
     }
 
     /**
@@ -332,17 +328,6 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         ];
     }
 
-    protected function extractBundleAndEntityName()
-    {
-        $shortName = $this->getEntityShortName();
-        $parts = explode(':', $shortName);
-        if (2 !== count($parts)) {
-            throw new \Exception(sprintf('Expecting entity class to be "Bundle:Entity", %s given', $shortName));
-        }
-
-        return $parts;
-    }
-
     /**
      * @param Request         $request
      * @param EntityInterface $entity
@@ -400,33 +385,6 @@ abstract class AbstractEntityController extends Controller implements EntityCont
 
     protected function checkDeleteActionAuthorization(Request $request, EntityInterface $entity)
     {
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEntityShortName()
-    {
-        $entityClass = $this->getEntityClass();
-        $entityClassParts = explode('\\', $entityClass);
-
-        $bundle = $this->findBundle($entityClassParts);
-        $className = $entityClassParts[count($entityClassParts) - 1];
-
-        $shortName = $bundle . ':' . $className;
-
-        return $shortName;
-    }
-
-    private function findBundle(array $entityClassParts)
-    {
-        foreach ($entityClassParts as $part) {
-            if (StringUtils::endsWith($part, 'Bundle')) {
-                return $part;
-            }
-        }
-
-        throw new \RuntimeException('No Bundle found in namespace');
     }
 
     /**

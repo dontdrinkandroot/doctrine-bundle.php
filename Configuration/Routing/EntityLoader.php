@@ -25,9 +25,38 @@ class EntityLoader extends Loader
      */
     public function load($resource, $type = null)
     {
+        $controllerClass = $this->resolveControllerClass($resource);
+
+        /** @var EntityControllerInterface $controller */
+        $controller = new $controllerClass;
+
+        $routes = $this->createRouteCollection($controller, $resource);
+
+        return $routes;
+    }
+
+    protected function resolveControllerClass($resource)
+    {
+        $controllerClass = null;
+        if (false !== strpos($resource, ':')) {
+            $controllerClass = $this->resolveControllerClassByBundle($resource);
+        } else {
+            $controllerClass = $resource;
+        }
+
+        $reflectionClass = new \ReflectionClass($controllerClass);
+        if (!$reflectionClass->implementsInterface($this->getControllerClass())) {
+            throw new \Exception('Controller must implement ' . $this->getControllerClass());
+        }
+
+        return $controllerClass;
+    }
+
+    private function resolveControllerClassByBundle($resource)
+    {
         $parts = explode(':', $resource);
         if (2 !== count($parts)) {
-            throw new \Exception('Can not process resource string');
+            throw new \Exception('Can not process bundle resource string');
         }
 
         $bundle = $parts[0];
@@ -57,19 +86,7 @@ class EntityLoader extends Loader
             throw new \Exception('More than one matching candidate found');
         }
 
-        $controllerClass = $candidates[0];
-
-        $reflectionClass = new \ReflectionClass($controllerClass);
-        if (!$reflectionClass->implementsInterface($this->getControllerClass())) {
-            throw new \Exception('Controller must implement ' . $this->getControllerClass());
-        }
-
-        /** @var EntityControllerInterface $controller */
-        $controller = new $controllerClass;
-
-        $routes = $this->createRouteCollection($controller, $resource);
-
-        return $routes;
+        return $candidates[0];
     }
 
     /**
@@ -111,17 +128,17 @@ class EntityLoader extends Loader
 
         $routes->add(
             $routePrefix . '.edit',
-            new Route($pathPrefix . '{id}/edit', ['_controller' => $resource . ':edit'])
+            new Route($pathPrefix . '{id}/edit', ['_controller' => $resource . ':editAction'])
         );
         $routes->add(
             $routePrefix . '.delete',
-            new Route($pathPrefix . '{id}/delete', ['_controller' => $resource . ':delete'])
+            new Route($pathPrefix . '{id}/delete', ['_controller' => $resource . ':deleteAction'])
         );
         $routes->add(
             $routePrefix . '.detail',
-            new Route($pathPrefix . '{id}', ['_controller' => $resource . ':detail'])
+            new Route($pathPrefix . '{id}', ['_controller' => $resource . ':detailAction'])
         );
-        $routes->add($routePrefix . '.list', new Route($pathPrefix, ['_controller' => $resource . ':list']));
+        $routes->add($routePrefix . '.list', new Route($pathPrefix, ['_controller' => $resource . ':listAction']));
 
         return $routes;
     }
