@@ -18,7 +18,7 @@ abstract class AbstractUuidEntityController extends AbstractEntityController
             return $this->viewPrefix;
         }
 
-        return 'DdrDoctrineBundle:UuidEntity';
+        return '@DdrDoctrine/UuidEntity';
     }
 
     /**

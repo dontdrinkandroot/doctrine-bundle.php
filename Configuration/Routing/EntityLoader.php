@@ -128,17 +128,17 @@ class EntityLoader extends Loader
 
         $routes->add(
             $routePrefix . '.edit',
-            new Route($pathPrefix . '{id}/edit', ['_controller' => $resource . ':editAction'])
+            new Route($pathPrefix . '{id}/edit', ['_controller' => $resource . '::editAction'])
         );
         $routes->add(
             $routePrefix . '.delete',
-            new Route($pathPrefix . '{id}/delete', ['_controller' => $resource . ':deleteAction'])
+            new Route($pathPrefix . '{id}/delete', ['_controller' => $resource . '::deleteAction'])
         );
         $routes->add(
             $routePrefix . '.detail',
-            new Route($pathPrefix . '{id}', ['_controller' => $resource . ':detailAction'])
+            new Route($pathPrefix . '{id}', ['_controller' => $resource . '::detailAction'])
         );
-        $routes->add($routePrefix . '.list', new Route($pathPrefix, ['_controller' => $resource . ':listAction']));
+        $routes->add($routePrefix . '.list', new Route($pathPrefix, ['_controller' => $resource . '::listAction']));
 
         return $routes;
     }

@@ -83,7 +83,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         $form = $this->createForm($this->getFormType(), $entity);
 
         $form->handleRequest($request);
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var EntityInterface $entity */
             $entity = $form->getData();
             $this->postProcessSubmittedEntity($request, $entity);
@@ -172,7 +172,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      */
     protected function getListView()
     {
-        return $this->getViewPrefix() . ':list.html.twig';
+        return $this->getViewPrefix() . '/list.html.twig';
     }
 
     /**
@@ -201,7 +201,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      */
     protected function getDetailView()
     {
-        return $this->getViewPrefix() . ':detail.html.twig';
+        return $this->getViewPrefix() . '/detail.html.twig';
     }
 
     /**
@@ -224,7 +224,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
      */
     protected function getEditView()
     {
-        return $this->getViewPrefix() . ':edit.html.twig';
+        return $this->getViewPrefix() . '/edit.html.twig';
     }
 
     /**
@@ -297,7 +297,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
             return $this->viewPrefix;
         }
 
-        return 'DdrDoctrineBundle:Entity';
+        return '@DdrDoctrine/Entity';
     }
 
     /**
