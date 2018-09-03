@@ -2,7 +2,7 @@ services:
     ddr_doctrine.event.listener.kernel:
         class: Dontdrinkandroot\DoctrineBundle\Event\Listener\TransactionalKernelEventListener
         arguments:
-            - "@ddr.doctrine.transaction_manager"
+        - "@Dontdrinkandroot\Repository\TransactionManager"
         calls:
             - ["setLogger", ["@logger"]]
         tags:
