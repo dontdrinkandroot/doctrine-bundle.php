@@ -2,9 +2,9 @@ services:
     ddr_doctrine.event.listener.kernel:
         class: Dontdrinkandroot\DoctrineBundle\Event\Listener\TransactionalKernelEventListener
         arguments:
-        - "@Dontdrinkandroot\Repository\TransactionManager"
+            - '@Dontdrinkandroot\Repository\TransactionManager'
         calls:
-            - ["setLogger", ["@logger"]]
+            - ['setLogger', ['@logger']]
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 2048 }
             - { name: kernel.event_listener, event: kernel.finish_request }
