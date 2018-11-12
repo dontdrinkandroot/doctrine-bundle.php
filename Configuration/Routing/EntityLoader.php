@@ -30,7 +30,7 @@ class EntityLoader extends Loader
         /** @var EntityControllerInterface $controller */
         $controller = new $controllerClass;
 
-        $routes = $this->createRouteCollection($controllerClass, $resource);
+        $routes = $this->createRouteCollection($controller, $resource);
 
         return $routes;
     }
