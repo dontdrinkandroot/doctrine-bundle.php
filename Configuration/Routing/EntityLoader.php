@@ -30,7 +30,7 @@ class EntityLoader extends Loader
         /** @var EntityControllerInterface $controller */
         $controller = new $controllerClass;
 
-        $routes = $this->createRouteCollection($controller, $resource);
+        $routes = $this->createRouteCollection($controllerClass, $resource);
 
         return $routes;
     }
@@ -79,11 +79,11 @@ class EntityLoader extends Loader
         }
 
         if (0 === count($candidates)) {
-            throw new \Exception('Controller not found');
+            throw new \Exception(sprintf('Controller not found: %s', $resource));
         }
 
         if (count($candidates) > 1) {
-            throw new \Exception('More than one matching candidate found');
+            throw new \Exception(sprintf('More than one matching candidate found: %s', $resource));
         }
 
         return $candidates[0];
