@@ -10,11 +10,12 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RenderOrmDiagramCommand extends ContainerAwareCommand
+class RenderOrmDiagramCommand extends Command
 {
     /**
      * {@inheritdoc}
@@ -22,7 +23,6 @@ class RenderOrmDiagramCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('ddr:doctrine:render-orm-diagram')
             ->setDescription('Renders an entity relationship diagram based on the ORM Metadata')
             ->addOption('em', null, InputOption::VALUE_OPTIONAL, 'The entity manager to use for this command');
     }

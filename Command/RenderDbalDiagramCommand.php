@@ -1,23 +1,34 @@
 <?php
 
-
 namespace Dontdrinkandroot\DoctrineBundle\Command;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Visitor\Graphviz;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RenderDbalDiagramCommand extends ContainerAwareCommand
+class RenderDbalDiagramCommand extends Command
 {
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    public function __construct(Registry $registry)
+    {
+        parent::__construct();
+        $this->registry = $registry;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this
-            ->setName('ddr:doctrine:render-dbal-diagram')
             ->setDescription('Renders an entity relationship diagram based on the current database schema');
     }
 
@@ -26,9 +37,9 @@ class RenderDbalDiagramCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $connectionName = $this->getContainer()->get('doctrine')->getDefaultConnectionName();
+        $connectionName = $this->registry->getDefaultConnectionName();
         /** @var Connection $connection */
-        $connection = $this->getContainer()->get('doctrine')->getConnection($connectionName);
+        $connection = $this->registry->getConnection($connectionName);
 
         $schemaManager = $connection->getSchemaManager();
         $schema = $schemaManager->createSchema();
