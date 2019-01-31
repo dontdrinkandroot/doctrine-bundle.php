@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Dontdrinkandroot\DoctrineBundle\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\DoctrineCommandHelper;
@@ -39,21 +38,27 @@ class RenderOrmDiagramCommand extends Command
         DoctrineCommandHelper::setApplicationEntityManager($this->getApplication(), $input->getOption('em'));
         /** @var EntityManagerInterface $em */
         $em = $this->getHelper('em')->getEntityManager();
+
         $entityClassNames = $em->getConfiguration()
             ->getMetadataDriverImpl()
             ->getAllClassNames();
+
         $graph = new Graph();
         $graph->setAttribute('graphviz.graph.overlap', 'false');
         $graph->setAttribute('graphviz.graph.splines', 'true');
+
         $vertices = [];
         $metaDatas = [];
         $classToTableNames = [];
+
         /* Collect vertices */
         foreach ($entityClassNames as $entityClassName) {
             $classMetaData = $em->getClassMetadata($entityClassName);
             if (!$classMetaData->isMappedSuperclass) {
                 $tableName = $classMetaData->getTableName();
-                //$output->writeln($tableName);
+                if ($output->isVerbose()) {
+                    $output->writeln(sprintf('Adding entity %s with table name %s', $entityClassName, $tableName));
+                }
                 $vertex = $graph->createVertex($tableName);
                 $vertex->setAttribute('graphviz.shape', 'box');
                 $vertices[$tableName] = $vertex;
@@ -61,6 +66,7 @@ class RenderOrmDiagramCommand extends Command
                 $classToTableNames[$classMetaData->getName()] = $tableName;
             }
         }
+
         /* Collect associations */
         foreach ($entityClassNames as $entityClassName) {
             $classMetaData = $em->getClassMetadata($entityClassName);
@@ -82,7 +88,7 @@ class RenderOrmDiagramCommand extends Command
                                 break;
                             case ClassMetadataInfo::ONE_TO_MANY:
                                 throw new \Exception(
-                                    'One to many not supported yet: ' . $sourceTableName . ':' . $associationMapping['fieldName']
+                                    'One to many not supported yet: '.$sourceTableName.':'.$associationMapping['fieldName']
                                 );
                                 break;
                             case ClassMetadataInfo::MANY_TO_ONE:
@@ -98,10 +104,11 @@ class RenderOrmDiagramCommand extends Command
                 }
             }
         }
+
         $graphviz = new GraphViz();
         $graphviz->setExecutable('neato');
-        $graphviz->display($graph);
         $output->writeln($graphviz->createScript($graph));
+        $graphviz->display($graph);
     }
 
     private function isNullableAssociation($associationMapping)
