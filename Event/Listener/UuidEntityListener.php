@@ -6,10 +6,10 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
+use RuntimeException;
 
 class UuidEntityListener
 {
-
     const STRATEGY_DATABASE = 'database';
 
     const STRATEGY_RANDOM = 'random';
@@ -45,7 +45,7 @@ class UuidEntityListener
                 return $this->generateDatabaseUuid($entityManager);
         }
 
-        throw new \RuntimeException(sprintf('Strategy %s was not found', $strategy));
+        throw new RuntimeException(sprintf('Strategy %s was not found', $strategy));
     }
 
     /**

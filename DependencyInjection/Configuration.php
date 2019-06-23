@@ -17,8 +17,7 @@ class Configuration implements ConfigurationInterface
 
         // @formatter:off
         $rootNode->children()
-            ->booleanNode('wrap_request_in_transaction')->defaultFalse()
-            ->end()
+            ->booleanNode('wrap_request_in_transaction')->defaultFalse()->end()
         ->end();
         // @formatter:on
 

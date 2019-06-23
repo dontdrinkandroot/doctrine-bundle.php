@@ -57,4 +57,3 @@ services:
             - '@ddr.doctrine.event.listener.uuid'
         tags:
             - { name: 'console.command', command: 'ddr:doctrine:set-uuids' }
-

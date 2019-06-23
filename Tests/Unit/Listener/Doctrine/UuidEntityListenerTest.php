@@ -4,10 +4,10 @@ namespace Dontdrinkandroot\DoctrineBundle\Tests\Unit\Listener\Doctrine;
 
 use Dontdrinkandroot\DoctrineBundle\Event\Listener\UuidEntityListener;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
+use PHPUnit_Framework_TestCase;
 
-class UuidEntityListenerTest extends \PHPUnit_Framework_TestCase
+class UuidEntityListenerTest extends PHPUnit_Framework_TestCase
 {
-
     public function testGenerateRandomUuid()
     {
         $uuidEntityListener = new UuidEntityListener();
