@@ -12,8 +12,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('ddr_doctrine');
+        $treeBuilder = new TreeBuilder('ddr_doctrine');
+        $rootNode = $treeBuilder->getRootNode();
 
         // @formatter:off
         $rootNode->children()
