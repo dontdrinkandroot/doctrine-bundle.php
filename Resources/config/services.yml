@@ -1,22 +1,19 @@
 parameters:
-    ddr_doctrine.listener.uuid.strategy: 'random'
 
 services:
 
     ddr.doctrine.event.listener.uuid:
-        class: Dontdrinkandroot\DoctrineBundle\Event\Listener\UuidEntityListener
-        calls:
-            - ['setStrategy', ['%ddr_doctrine.listener.uuid.strategy%']]
+        class: Dontdrinkandroot\Event\Listener\UuidEntityListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
     ddr.doctrine.event.listener.created:
-        class: Dontdrinkandroot\DoctrineBundle\Event\Listener\CreatedEntityListener
+        class: Dontdrinkandroot\Event\Listener\CreatedEntityListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
     ddr.doctrine.event.listener.updated:
-        class: Dontdrinkandroot\DoctrineBundle\Event\Listener\UpdatedEntityListener
+        class: Dontdrinkandroot\Event\Listener\UpdatedEntityListener
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
