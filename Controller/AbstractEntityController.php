@@ -2,20 +2,33 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Controller;
 
-use Doctrine\Common\Persistence\ObjectRepository;
-use Dontdrinkandroot\Entity\EntityInterface;
+use DateTime;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Dontdrinkandroot\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\Pagination\Pagination;
-use Dontdrinkandroot\Repository\OrmEntityRepository;
 use Dontdrinkandroot\Utils\ClassNameUtils;
-use Dontdrinkandroot\Utils\StringUtils;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\FormTypeInterface;
+use function is_object;
+use RuntimeException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Twig\Environment;
 
-abstract class AbstractEntityController extends Controller implements EntityControllerInterface
+abstract class AbstractEntityController implements EntityControllerInterface
 {
     protected $routePrefix = null;
 
@@ -24,11 +37,56 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     protected $pathPrefix = null;
 
     /**
+     * @var Environment
+     */
+    private $twig;
+
+    /**
+     * @var ManagerRegistry
+     */
+    private $registry;
+
+    /**
+     * @var AuthorizationCheckerInterface
+     */
+    private $authorizationChecker;
+
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    private $formFactory;
+
+    /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    public function __construct(
+        ManagerRegistry $registry,
+        AuthorizationCheckerInterface $authorizationChecker,
+        TokenStorageInterface $tokenStorage,
+        FormFactoryInterface $formFactory,
+        RouterInterface $router,
+        Environment $twig
+    ) {
+        $this->twig = $twig;
+        $this->registry = $registry;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->tokenStorage = $tokenStorage;
+        $this->formFactory = $formFactory;
+        $this->router = $router;
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request): Response
     {
-        $user = $this->getUser();
         $this->checkListActionAuthorization($request);
 
         $view = $this->getListView();
@@ -40,7 +98,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     /**
      * {@inheritdoc}
      */
-    public function detailAction(Request $request, $id)
+    public function detailAction(Request $request, $id): Response
     {
         $entity = $this->fetchEntity($id);
         $this->checkDetailActionAuthorization($request, $entity);
@@ -66,7 +124,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     /**
      * {@inheritdoc}
      */
-    public function editAction(Request $request, $id = null)
+    public function editAction(Request $request, $id = null): Response
     {
         $new = true;
         $entity = null;
@@ -84,14 +142,13 @@ abstract class AbstractEntityController extends Controller implements EntityCont
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var EntityInterface $entity */
             $entity = $form->getData();
             $this->postProcessSubmittedEntity($request, $entity);
+            $objectManager = $this->getEntityManager();
             if ($new) {
-                $entity = $this->getRepository()->persist($entity);
-            } else {
-                $this->getRepository()->flush($entity);
+                $objectManager->persist($entity);
             }
+            $objectManager->flush($entity);
 
             return $this->createPostEditResponse($request, $entity);
         }
@@ -104,13 +161,15 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     /**
      * {@inheritdoc}
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $id): Response
     {
         $user = $this->getUser();
         $entity = $this->fetchEntity($id);
         $this->checkDeleteActionAuthorization($request, $entity);
 
-        $this->getRepository()->remove($entity);
+        $objectManager = $this->getEntityManager();
+        $objectManager->remove($entity);
+        $objectManager->flush();
 
         return $this->createPostDeleteResponse($request, $entity);
     }
@@ -118,7 +177,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     /**
      * {@inheritdoc}
      */
-    public function getRoutePrefix()
+    public function getRoutePrefix(): string
     {
         if (null !== $this->routePrefix) {
             return $this->routePrefix;
@@ -132,7 +191,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
     /**
      * {@inheritdoc}
      */
-    public function getPathPrefix()
+    public function getPathPrefix(): string
     {
         if (null !== $this->pathPrefix) {
             return $this->pathPrefix;
@@ -143,99 +202,65 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         return '/' . $entityShortName . 's/';
     }
 
-    /**
-     * @param string|null $routePrefix
-     */
-    public function setRoutePrefix($routePrefix)
+    public function setRoutePrefix(?string $routePrefix)
     {
         $this->routePrefix = $routePrefix;
     }
 
-    /**
-     * @param string|null $viewPrefix
-     */
-    public function setViewPrefix($viewPrefix)
+    public function setViewPrefix(?string $viewPrefix)
     {
         $this->viewPrefix = $viewPrefix;
     }
 
-    /**
-     * @param string|null $pathPrefix
-     */
-    public function setPathPrefix($pathPrefix)
+    public function setPathPrefix(?string $pathPrefix)
     {
         $this->pathPrefix = $pathPrefix;
     }
 
-    /**
-     * @return string
-     */
-    protected function getListView()
+    protected function getListView(): string
     {
         return $this->getViewPrefix() . '/list.html.twig';
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return array
-     * @throws \Exception
-     */
-    protected function getListModel(Request $request)
+    protected function getListModel(Request $request): array
     {
         $page = $this->getPage($request);
         $perPage = $this->getPerPage($request);
-        $paginator = $this->getRepository()->findPaginatedBy($page, $perPage);
+        $paginator = $this->findPaginated($page, $perPage);
         $total = $paginator->count();
 
         return [
-            'pagination' => new Pagination($page, $perPage, $total),
-            'entities'   => $paginator->getIterator()->getArrayCopy(),
-            'fields'     => $this->getListFields(),
-            'routes'     => $this->getRoutes()
+            'pagination'  => new Pagination($page, $perPage, $total),
+            'entities'    => $paginator->getIterator()->getArrayCopy(),
+            'fields'      => $this->getListFields(),
+            'routes'      => $this->getRoutes(),
+            'entityClass' => $this->getEntityClass(),
         ];
     }
 
-    /**
-     * @return string
-     */
-    protected function getDetailView()
+    protected function getDetailView(): string
     {
         return $this->getViewPrefix() . '/detail.html.twig';
     }
 
-    /**
-     * @param Request         $request
-     * @param EntityInterface $entity
-     *
-     * @return array
-     */
-    protected function getDetailModel(Request $request, EntityInterface $entity)
+    protected function getDetailModel(Request $request, $entity): array
     {
         return [
-            'entity' => $entity,
-            'routes' => $this->getRoutes(),
-            'fields' => $this->getDetailFields(),
+            'entity'      => $entity,
+            'routes'      => $this->getRoutes(),
+            'fields'      => $this->getDetailFields(),
+            'entityClass' => $this->getEntityClass(),
         ];
     }
 
-    /**
-     * @return string
-     */
-    protected function getEditView()
+    protected function getEditView(): string
     {
         return $this->getViewPrefix() . '/edit.html.twig';
     }
 
-    /**
-     * @param mixed $id
-     *
-     * @return EntityInterface
-     */
     protected function fetchEntity($id)
     {
-        /** @var EntityInterface $entity */
-        $entity = $this->getRepository()->find($id);
+        $entity = $this->getDoctrine()->getRepository($this->getEntityClass())->find($id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -243,10 +268,7 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         return $entity;
     }
 
-    /**
-     * @return array
-     */
-    protected function getRoutes()
+    protected function getRoutes(): array
     {
         return [
             'list'   => $this->getListRoute(),
@@ -256,56 +278,33 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         ];
     }
 
-    /**
-     * @return string
-     */
-    protected function getListRoute()
+    protected function getListRoute(): string
     {
         return $this->getRoutePrefix() . ".list";
     }
 
-    /**
-     * @return string
-     */
-    protected function getDetailRoute()
+    protected function getDetailRoute(): string
     {
         return $this->getRoutePrefix() . ".detail";
     }
 
-    /**
-     * @return string
-     */
-    protected function getEditRoute()
+    protected function getEditRoute(): string
     {
         return $this->getRoutePrefix() . ".edit";
     }
 
-    /**
-     * @return string
-     */
-    protected function getDeleteRoute()
+    protected function getDeleteRoute(): string
     {
         return $this->getRoutePrefix() . ".delete";
     }
 
-    /**
-     * @return string
-     */
-    protected function getViewPrefix()
+    protected function getViewPrefix(): string
     {
         if (null !== $this->viewPrefix) {
             return $this->viewPrefix;
         }
 
         return '@DdrDoctrine/Entity';
-    }
-
-    /**
-     * @return ObjectRepository|OrmEntityRepository
-     */
-    protected function getRepository()
-    {
-        return $this->getDoctrine()->getRepository($this->getEntityClass());
     }
 
     /**
@@ -328,34 +327,17 @@ abstract class AbstractEntityController extends Controller implements EntityCont
         ];
     }
 
-    /**
-     * @param Request         $request
-     * @param EntityInterface $entity
-     *
-     * @return Response
-     */
-    protected function createPostEditResponse(Request $request, EntityInterface $entity)
+    protected function createPostEditResponse(Request $request, $entity): Response
     {
         return $this->redirectToRoute($this->getDetailRoute(), ['id' => $entity->getId()]);
     }
 
-    /**
-     * @param Request         $request
-     * @param EntityInterface $entity
-     *
-     * @return Response
-     */
-    protected function createPostDeleteResponse(Request $request, EntityInterface $entity)
+    protected function createPostDeleteResponse(Request $request, $entity): Response
     {
         return $this->redirectToRoute($this->getListRoute());
     }
 
-    /**
-     * @param EntityInterface $entity
-     *
-     * @return \DateTime|null
-     */
-    protected function getLastModified(EntityInterface $entity)
+    protected function getLastModified($entity): ?DateTime
     {
         if (is_a($entity, UpdatedEntityInterface::class)) {
             /** @var UpdatedEntityInterface $updatedEntity */
@@ -369,56 +351,136 @@ abstract class AbstractEntityController extends Controller implements EntityCont
 
     protected function checkListActionAuthorization(Request $request)
     {
+        if (!$this->isGranted(CrudAction::READ, $this->getEntityClass())) {
+            throw new AccessDeniedException();
+        }
     }
 
-    protected function checkDetailActionAuthorization(Request $request, EntityInterface $entity)
+    protected function checkDetailActionAuthorization(Request $request, $entity)
     {
+        if (!$this->isGranted(CrudAction::READ, $entity)) {
+            throw new AccessDeniedException();
+        }
     }
 
     protected function checkCreateActionAuthorization(Request $request)
     {
+        if (!$this->isGranted(CrudAction::CREATE, $this->getEntityClass())) {
+            throw new AccessDeniedException();
+        }
     }
 
-    protected function checkEditActionAuthorization(Request $request, EntityInterface $entity)
+    protected function checkEditActionAuthorization(Request $request, $entity)
     {
+        if (!$this->isGranted(CrudAction::UPDATE, $entity)) {
+            throw new AccessDeniedException();
+        }
     }
 
-    protected function checkDeleteActionAuthorization(Request $request, EntityInterface $entity)
+    protected function checkDeleteActionAuthorization(Request $request, $entity)
     {
+        if (!$this->isGranted(CrudAction::DELETE, $entity)) {
+            throw new AccessDeniedException();
+        }
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return int
-     */
-    protected function getPerPage(Request $request)
+    protected function getPerPage(Request $request): int
     {
         return $request->query->get('perpage', 10);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return int
-     */
-    protected function getPage(Request $request)
+    protected function getPage(Request $request): int
     {
         return $request->query->get('page', 1);
     }
 
-    protected function postProcessSubmittedEntity(Request $request, EntityInterface $entity)
+    protected function postProcessSubmittedEntity(Request $request, $entity)
     {
         /*Hook*/
     }
 
-    /**
-     * @return string
-     */
-    protected abstract function getEntityClass();
+    protected abstract function getEntityClass(): string;
 
-    /**
-     * @return FormTypeInterface
-     */
-    protected abstract function getFormType();
+    protected abstract function getFormType(): string;
+
+    protected function render(string $name, array $context, ?Response $response = null): Response
+    {
+        $content = $this->twig->render($name, $context);
+        if (null === $response) {
+            $response = new Response();
+        }
+        $response->setContent($content);
+
+        return $response;
+    }
+
+    protected function getDoctrine(): ManagerRegistry
+    {
+        return $this->registry;
+    }
+
+    protected function isGranted($attributes, $subject = null): bool
+    {
+        return $this->authorizationChecker->isGranted($attributes, $subject);
+    }
+
+    protected function getUser(): ?UserInterface
+    {
+        if (null === $token = $this->tokenStorage->getToken()) {
+            return null;
+        }
+
+        if (!is_object($user = $token->getUser())) {
+            // e.g. anonymous authentication
+            return null;
+        }
+
+        return $user;
+    }
+
+    protected function createForm(string $type, $data = null, array $options = []): FormInterface
+    {
+        return $this->formFactory->create($type, $data, $options);
+    }
+
+    protected function findPaginated(int $page, int $perPage): Paginator
+    {
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder()
+            ->select('entity')
+            ->from($this->getEntityClass(), 'entity');
+
+        $queryBuilder->setFirstResult(($page - 1) * $perPage);
+        $queryBuilder->setMaxResults($perPage);
+
+        return new Paginator($queryBuilder);
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        $objectManager = $this->getDoctrine()->getManagerForClass($this->getEntityClass());
+        if (!$objectManager instanceof EntityManagerInterface) {
+            throw new RuntimeException('ObjectManager is not an EntityManager');
+        }
+
+        return $objectManager;
+    }
+
+    protected function redirectToRoute(string $route, array $parameters = [], int $status = 302): RedirectResponse
+    {
+        return $this->redirect($this->generateUrl($route, $parameters), $status);
+    }
+
+    protected function redirect(string $url, int $status = 302): RedirectResponse
+    {
+        return new RedirectResponse($url, $status);
+    }
+
+    protected function generateUrl(
+        string $route,
+        array $parameters = [],
+        int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
+    ): string {
+        return $this->router->generate($route, $parameters, $referenceType);
+    }
 }

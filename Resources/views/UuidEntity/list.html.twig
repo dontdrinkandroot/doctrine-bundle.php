@@ -1,16 +1,18 @@
 {% extends '@DdrDoctrine/base.html.twig' %}
 
 {% block ddr_doctrine_entity_content %}
-    <div class="page-header border-bottom pt-3 mb-3">
+    <div class="page-header">
         <div class="pull-right">
-            <a class="btn btn-primary action create" href="{{ path(routes.edit,{'id':'new'}) }}">
-                <i class="fa fa-plus"></i>
-            </a>
+            {% if is_granted('CREATE', entityClass) %}
+                <a class="btn btn-primary action create" href="{{ path(routes.edit,{'id':'new'}) }}">
+                    <i class="fa fa-plus"></i>
+                </a>
+            {% endif %}
         </div>
         <h1>List</h1>
     </div>
 
-    <div class="pull-right">
+    <div class="d-flex justify-content-center">
         {{ ddr_pagination(pagination, app.request) }}
     </div>
 
@@ -30,15 +32,21 @@
                     <td class="{{ field }} align-middle">{{ attribute(entity,field) }}</td>
                 {% endfor %}
                 <td class="actions">
-                    <a href="{{ path(routes.detail,{'id':entity.uuid}) }}" class="btn btn-sm btn-outline-secondary action detail">
-                        <i class="fa fa-search"></i>
-                    </a>
-                    <a href="{{ path(routes.edit,{'id':entity.uuid}) }}" class="btn btn-sm btn-outline-secondary action edit">
-                        <i class="fa fa-pencil"></i>
-                    </a>
-                    <a href="{{ path(routes.delete,{'id':entity.uuid}) }}" class="btn btn-sm btn-outline-secondary action delete">
-                        <i class="fa fa-trash-o"></i>
-                    </a>
+                    {% if is_granted('READ', entity) %}
+                        <a href="{{ path(routes.detail,{'id':entity.uuid}) }}" class="btn btn-sm btn-outline-secondary action detail">
+                            <i class="fa fa-search"></i>
+                        </a>
+                    {% endif %}
+                    {% if is_granted('UPDATE', entity) %}
+                        <a href="{{ path(routes.edit,{'id':entity.uuid}) }}" class="btn btn-sm btn-outline-secondary action edit">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    {% endif %}
+                    {% if is_granted('DELETE', entity) %}
+                        <a href="{{ path(routes.delete,{'id':entity.uuid}) }}" class="btn btn-sm btn-outline-secondary action delete">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

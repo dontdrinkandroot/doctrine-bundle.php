@@ -28,6 +28,8 @@ services:
         class: Dontdrinkandroot\DoctrineBundle\Configuration\Routing\EntityLoader
         arguments:
             - '@kernel'
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
         tags:
             - { name: routing.loader }
 

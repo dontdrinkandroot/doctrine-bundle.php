@@ -6,44 +6,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface EntityControllerInterface
 {
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function listAction(Request $request);
+    public function listAction(Request $request): Response;
 
-    /**
-     * @param Request $request
-     * @param mixed   $id
-     *
-     * @return Response
-     */
-    public function detailAction(Request $request, $id);
+    public function detailAction(Request $request, $id): Response;
 
-    /**
-     * @param Request           $request
-     * @param mixed|null|string $id
-     *
-     * @return Response
-     */
-    public function editAction(Request $request, $id = null);
+    public function editAction(Request $request, $id = null): Response;
 
-    /**
-     * @param Request $request
-     * @param mixed   $id
-     *
-     * @return Response
-     */
-    public function deleteAction(Request $request, $id);
+    public function deleteAction(Request $request, $id): Response;
 
-    /**
-     * @return string
-     */
-    public function getRoutePrefix();
+    public function getRoutePrefix(): string;
 
-    /**
-     * @return string
-     */
-    public function getPathPrefix();
+    public function getPathPrefix(): string;
 }

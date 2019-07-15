@@ -1,14 +1,18 @@
 {% extends '@DdrDoctrine/base.html.twig' %}
 
 {% block ddr_doctrine_entity_content %}
-    <div class="page-header border-bottom pt-3 mb-3">
+    <div class="page-header">
         <div class="pull-right">
-            <a class="btn btn-primary action edit" href="{{ path(routes.edit,{'id':entity.uuid}) }}">
-                <i class="fa fa-pencil"></i>
-            </a>
-            <a class="btn btn-outline-danger action delete" href="{{ path(routes.delete,{'id':entity.uuid}) }}">
-                <i class="fa fa-trash-o"></i>
-            </a>
+            {% if is_granted('UPDATE', entity) %}
+                <a class="btn btn-primary action edit" href="{{ path(routes.edit,{'id':entity.uuid}) }}">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            {% endif %}
+            {% if is_granted('DELETE', entity) %}
+                <a class="btn btn-outline-danger action delete" href="{{ path(routes.delete,{'id':entity.uuid}) }}">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            {% endif %}
         </div>
         <h1>{{ entity.uuid }}</h1>
     </div>

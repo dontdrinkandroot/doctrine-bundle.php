@@ -3,17 +3,27 @@
 namespace Dontdrinkandroot\DoctrineBundle\Configuration\Routing;
 
 use Dontdrinkandroot\DoctrineBundle\Controller\EntityControllerInterface;
+use Exception;
+use InvalidArgumentException;
+use ReflectionClass;
 use Symfony\Component\Config\Loader\Loader;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class EntityLoader extends Loader
+class EntityLoader extends Loader implements ContainerAwareInterface
 {
     /**
      * @var KernelInterface
      */
     private $kernel;
+
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
     public function __construct(KernelInterface $kernel)
     {
@@ -28,14 +38,14 @@ class EntityLoader extends Loader
         $controllerClass = $this->resolveControllerClass($resource);
 
         /** @var EntityControllerInterface $controller */
-        $controller = new $controllerClass;
+        $controller = $this->container->get($controllerClass);
 
         $routes = $this->createRouteCollection($controller, $resource);
 
         return $routes;
     }
 
-    protected function resolveControllerClass($resource)
+    protected function resolveControllerClass($resource): string
     {
         $controllerClass = null;
         if (false !== strpos($resource, ':')) {
@@ -44,19 +54,19 @@ class EntityLoader extends Loader
             $controllerClass = $resource;
         }
 
-        $reflectionClass = new \ReflectionClass($controllerClass);
+        $reflectionClass = new ReflectionClass($controllerClass);
         if (!$reflectionClass->implementsInterface($this->getControllerClass())) {
-            throw new \Exception('Controller must implement ' . $this->getControllerClass());
+            throw new Exception('Controller must implement ' . $this->getControllerClass());
         }
 
         return $controllerClass;
     }
 
-    private function resolveControllerClassByBundle($resource)
+    private function resolveControllerClassByBundle($resource): string
     {
         $parts = explode(':', $resource);
         if (2 !== count($parts)) {
-            throw new \Exception('Can not process bundle resource string');
+            throw new Exception('Can not process bundle resource string');
         }
 
         $bundle = $parts[0];
@@ -64,8 +74,8 @@ class EntityLoader extends Loader
 
         try {
             $allBundles = $this->kernel->getBundle($bundle, false);
-        } catch (\InvalidArgumentException $e) {
-            throw new \Exception(sprintf('Bundle "%s" not found', $bundle));
+        } catch (InvalidArgumentException $e) {
+            throw new Exception(sprintf('Bundle "%s" not found', $bundle));
         }
 
         $candidates = [];
@@ -79,11 +89,11 @@ class EntityLoader extends Loader
         }
 
         if (0 === count($candidates)) {
-            throw new \Exception(sprintf('Controller not found: %s', $resource));
+            throw new Exception(sprintf('Controller not found: %s', $resource));
         }
 
         if (count($candidates) > 1) {
-            throw new \Exception(sprintf('More than one matching candidate found: %s', $resource));
+            throw new Exception(sprintf('More than one matching candidate found: %s', $resource));
         }
 
         return $candidates[0];
@@ -97,18 +107,12 @@ class EntityLoader extends Loader
         return $this->getType() === $type;
     }
 
-    /**
-     * @return string
-     */
-    protected function getType()
+    protected function getType(): string
     {
         return 'ddr_entity';
     }
 
-    /**
-     * @return string
-     */
-    protected function getControllerClass()
+    protected function getControllerClass(): string
     {
         return EntityControllerInterface::class;
     }
@@ -145,5 +149,13 @@ class EntityLoader extends Loader
         );
 
         return $routes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
     }
 }

@@ -5,14 +5,16 @@ namespace Dontdrinkandroot\DoctrineBundle\Controller;
 use Dontdrinkandroot\Entity\EntityInterface;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 abstract class AbstractUuidEntityController extends AbstractEntityController
 {
     /**
      * {@inheritdoc}
      */
-    protected function getViewPrefix()
+    protected function getViewPrefix(): string
     {
         if (null !== $this->viewPrefix) {
             return $this->viewPrefix;
@@ -26,7 +28,9 @@ abstract class AbstractUuidEntityController extends AbstractEntityController
      */
     protected function fetchEntity($id)
     {
-        $entity = $this->getRepository()->findOneBy(['uuid' => $id]);
+        $entity = $this->getDoctrine()->getRepository($this->getEntityClass())->findOneBy(
+            [$this->getUuidPath() => $id]
+        );
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -37,11 +41,21 @@ abstract class AbstractUuidEntityController extends AbstractEntityController
     /**
      * {@inheritdoc}
      */
-    protected function createPostEditResponse(Request $request, EntityInterface $entity)
+    protected function createPostEditResponse(Request $request, $entity): Response
     {
         /** @var UuidEntityInterface $uuidEntity */
         $uuidEntity = $entity;
 
-        return $this->redirectToRoute($this->getDetailRoute(), ['id' => $uuidEntity->getUuid()]);
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        return $this->redirectToRoute(
+            $this->getDetailRoute(),
+            ['id' => $propertyAccessor->getValue($entity, $this->getUuidPath())]
+        );
+    }
+
+    protected function getUuidPath()
+    {
+        return 'uuid';
     }
 }
