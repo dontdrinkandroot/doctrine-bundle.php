@@ -7,7 +7,9 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Dontdrinkandroot\Entity\EntityInterface;
 use Dontdrinkandroot\Entity\UpdatedEntityInterface;
+use Dontdrinkandroot\Entity\UuidEntityInterface;
 use Dontdrinkandroot\Pagination\Pagination;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use function is_object;
@@ -89,7 +91,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
     {
         $this->checkListActionAuthorization($request);
 
-        $view = $this->getListView();
+        $view = $this->getListTemplate();
         $model = $this->getListModel($request);
 
         return $this->render($view, $model);
@@ -116,7 +118,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
         }
 
         $model = $this->getDetailModel($request, $entity);
-        $view = $this->getDetailView();
+        $view = $this->getDetailTemplate();
 
         return $this->render($view, $model, $response);
     }
@@ -153,7 +155,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
             return $this->createPostEditResponse($request, $entity);
         }
 
-        $view = $this->getEditView();
+        $view = $this->getEditTemplate();
 
         return $this->render($view, ['entity' => $entity, 'form' => $form->createView()]);
     }
@@ -217,7 +219,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
         $this->pathPrefix = $pathPrefix;
     }
 
-    protected function getListView(): string
+    protected function getListTemplate(): string
     {
         return $this->getViewPrefix() . '/list.html.twig';
     }
@@ -232,14 +234,14 @@ abstract class AbstractEntityController implements EntityControllerInterface
         return [
             'pagination'  => new Pagination($page, $perPage, $total),
             'entities'    => $paginator->getIterator()->getArrayCopy(),
-            'title' => $this->getListTitle(),
+            'title'       => $this->getListTitle(),
             'fields'      => $this->getListFields(),
             'routes'      => $this->getRoutes(),
             'entityClass' => $this->getEntityClass(),
         ];
     }
 
-    protected function getDetailView(): string
+    protected function getDetailTemplate(): string
     {
         return $this->getViewPrefix() . '/detail.html.twig';
     }
@@ -248,13 +250,14 @@ abstract class AbstractEntityController implements EntityControllerInterface
     {
         return [
             'entity'      => $entity,
+            'title'       => $this->getDetailTitle($entity),
             'routes'      => $this->getRoutes(),
             'fields'      => $this->getDetailFields(),
             'entityClass' => $this->getEntityClass(),
         ];
     }
 
-    protected function getEditView(): string
+    protected function getEditTemplate(): string
     {
         return $this->getViewPrefix() . '/edit.html.twig';
     }
@@ -488,5 +491,14 @@ abstract class AbstractEntityController implements EntityControllerInterface
     protected function getListTitle(): string
     {
         return 'List';
+    }
+
+    protected function getDetailTitle(object $entity): string
+    {
+        if (is_a($entity, EntityInterface::class)) {
+            return $entity->getId();
+        }
+
+        return 'Detail';
     }
 }

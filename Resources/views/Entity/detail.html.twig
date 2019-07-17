@@ -2,7 +2,7 @@
 
 {% block ddr_doctrine_entity_content %}
     <div class="ddr-page-header">
-        <h1>{{ entity.id }}</h1>
+        <h1>{{ title }}</h1>
         <div class="ddr-actions">
             {% if is_granted('UPDATE', entity) %}
                 <a class="btn btn-lg btn-primary ddr-btn-icon action edit" href="{{ path(routes.edit,{'id':entity.id}) }}">

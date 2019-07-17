@@ -58,4 +58,16 @@ abstract class AbstractUuidEntityController extends AbstractEntityController
     {
         return 'uuid';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getDetailTitle(object $entity): string
+    {
+        if (is_a($entity, UuidEntityInterface::class)) {
+            return $entity->getUuid();
+        }
+
+        return parent::getDetailTitle($entity);
+    }
 }

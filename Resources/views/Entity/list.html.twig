@@ -12,10 +12,6 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-center">
-        {{ ddr_pagination(pagination, app.request) }}
-    </div>
-
     <table class="table table-sm ddr-entity-table">
         <thead>
         <tr>
@@ -54,4 +50,8 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="d-flex justify-content-center">
+        {{ ddr_pagination(pagination, app.request) }}
+    </div>
 {% endblock ddr_doctrine_entity_content %}
