@@ -1,22 +1,22 @@
 {% extends '@DdrDoctrine/base.html.twig' %}
 
 {% block ddr_doctrine_entity_content %}
-    <div class="page-header">
-        <div class="pull-right">
+    <div class="ddr-page-header">
+        <h1>{{ title }}</h1>
+        <div class="ddr-actions">
             {% if is_granted('CREATE', entityClass) %}
-                <a class="btn btn-default action create" href="{{ path(routes.edit,{'id':'new'}) }}">
-                    <i class="fa fa-plus"></i>
+                <a class="btn btn-lg btn-primary ddr-btn-icon action create" href="{{ path(routes.edit,{'id':'new'}) }}">
+                    <span class="fas fa-fw fa-plus"></span>
                 </a>
             {% endif %}
         </div>
-        <h1>List</h1>
     </div>
 
     <div class="d-flex justify-content-center">
         {{ ddr_pagination(pagination, app.request) }}
     </div>
 
-    <table class="table table-sm">
+    <table class="table table-sm ddr-entity-table">
         <thead>
         <tr>
             {% for field,displayName in fields %}
@@ -32,21 +32,23 @@
                     <td class="{{ field }} align-middle">{{ attribute(entity,field) }}</td>
                 {% endfor %}
                 <td class="actions">
-                    {% if is_granted('READ', entity) %}
-                        <a href="{{ path(routes.detail,{'id':entity.id}) }}" class="btn btn-outline-secondary btn-sm action detail">
-                            <i class="fa fa-search"></i>
-                        </a>
-                    {% endif %}
-                    {% if is_granted('UPDATE', entity) %}
-                        <a href="{{ path(routes.edit,{'id':entity.id}) }}" class="btn btn-outline-secondary btn-sm action edit">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                    {% endif %}
-                    {% if is_granted('DELETE', entity) %}
-                        <a href="{{ path(routes.delete,{'id':entity.id}) }}" class="btn btn-outline-secondary btn-sm action delete">
-                            <i class="fa fa-trash-o"></i>
-                        </a>
-                    {% endif %}
+                    <div class="btn-group">
+                        {% if is_granted('READ', entity) %}
+                            <a href="{{ path(routes.detail,{'id':entity.id}) }}" class="btn btn-outline-secondary btn-sm ddr-btn-icon action detail">
+                                <span class="fas fa-fw fa-search"></span>
+                            </a>
+                        {% endif %}
+                        {% if is_granted('UPDATE', entity) %}
+                            <a href="{{ path(routes.edit,{'id':entity.id}) }}" class="btn btn-outline-secondary btn-sm ddr-btn-icon action edit">
+                                <span class="fas fa-fw fa-pen"></span>
+                            </a>
+                        {% endif %}
+                        {% if is_granted('DELETE', entity) %}
+                            <a href="{{ path(routes.delete,{'id':entity.id}) }}" class="btn btn-outline-danger btn-sm ddr-btn-icon action delete">
+                                <span class="fas fa-fw fa-trash-alt"></span>
+                            </a>
+                        {% endif %}
+                    </div>
                 </td>
             </tr>
         {% endfor %}

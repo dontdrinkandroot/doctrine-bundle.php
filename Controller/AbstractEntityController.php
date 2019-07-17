@@ -232,6 +232,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
         return [
             'pagination'  => new Pagination($page, $perPage, $total),
             'entities'    => $paginator->getIterator()->getArrayCopy(),
+            'title' => $this->getListTitle(),
             'fields'      => $this->getListFields(),
             'routes'      => $this->getRoutes(),
             'entityClass' => $this->getEntityClass(),
@@ -482,5 +483,10 @@ abstract class AbstractEntityController implements EntityControllerInterface
         int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
     ): string {
         return $this->router->generate($route, $parameters, $referenceType);
+    }
+
+    protected function getListTitle(): string
+    {
+        return 'List';
     }
 }
