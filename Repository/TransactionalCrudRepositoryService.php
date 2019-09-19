@@ -4,13 +4,13 @@ namespace Dontdrinkandroot\DoctrineBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Dontdrinkandroot\Repository\TransactionalUuidCrudRepository;
+use Dontdrinkandroot\Repository\TransactionalCrudRepository;
 use LogicException;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class TransactionalCrudRepositoryService extends TransactionalUuidCrudRepository
+class TransactionalCrudRepositoryService extends TransactionalCrudRepository
     implements ServiceEntityRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry, $entityClass)
