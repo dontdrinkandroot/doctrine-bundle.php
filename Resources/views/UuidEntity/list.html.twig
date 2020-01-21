@@ -18,7 +18,7 @@
             {% for field,displayName in fields %}
                 <th class="{{ field }}">{{ displayName }}</th>
             {% endfor %}
-            <th class="actions">Actions</th>
+            <th class="actions"></th>
         </tr>
         </thead>
         <tbody>
@@ -27,21 +27,24 @@
                 {% for field, displayName in fields %}
                     <td class="{{ field }} align-middle">{{ attribute(entity,field) }}</td>
                 {% endfor %}
-                <td class="actions">
-                    <div class="btn-group">
+                <td class="actions dropdown">
+                    <a href="#" class="dropdown-toggle ddr-no-caret" data-toggle="dropdown">
+                        <span class="fas fa-fw fa-ellipsis-v"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
                         {% if is_granted('READ', entity) %}
-                            <a href="{{ path(routes.detail,{'id':entity.uuid}) }}" class="btn btn-outline-secondary btn-sm ddr-btn-icon action detail">
-                                <span class="fas fa-fw fa-search"></span>
+                            <a href="{{ path(routes.detail,{'id':attribute(entity, idProperty)}) }}" class="dropdown-item">
+                                <span class="fas fa-fw fa-search mr-1"></span> Show
                             </a>
                         {% endif %}
                         {% if is_granted('UPDATE', entity) %}
-                            <a href="{{ path(routes.edit,{'id':entity.uuid}) }}" class="btn btn-outline-secondary btn-sm ddr-btn-icon action edit">
-                                <span class="fas fa-fw fa-pen"></span>
+                            <a href="{{ path(routes.edit,{'id':entity.uuid}) }}" class="dropdown-item">
+                                <span class="fas fa-fw fa-pen mr-1"></span> Edit
                             </a>
                         {% endif %}
                         {% if is_granted('DELETE', entity) %}
-                            <a href="{{ path(routes.delete,{'id':entity.uuid}) }}" class="btn btn-outline-danger btn-sm ddr-btn-icon action delete">
-                                <span class="fas fa-fw fa-trash-alt"></span>
+                            <a href="{{ path(routes.delete,{'id':entity.uuid}) }}" class="dropdown-item">
+                                <span class="fas fa-fw fa-trash-alt mr-1"></span> Delete
                             </a>
                         {% endif %}
                     </div>
@@ -52,6 +55,6 @@
     </table>
 
     <div class="d-flex justify-content-center">
-        {{ ddr_pagination(pagination, app.request) }}
+        {{ ddr_bs_paginator_pagination(entities, page, perPage) }}
     </div>
 {% endblock ddr_doctrine_entity_content %}

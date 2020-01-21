@@ -3,7 +3,7 @@
 {% block ddr_doctrine_entity_content %}
     <div class="page-header">
         {% if entity is not null %}
-            <h1>Edit {{ entity.id }}</h1>
+            <h1>Edit {{ attribute(entity, idProperty) }}</h1>
         {% else %}
             <h1>Create</h1>
         {% endif %}

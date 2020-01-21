@@ -12,6 +12,7 @@ use Dontdrinkandroot\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\Entity\UuidEntityInterface;
 use Dontdrinkandroot\Pagination\Pagination;
 use Dontdrinkandroot\Utils\ClassNameUtils;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use function is_object;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,50 +39,38 @@ abstract class AbstractEntityController implements EntityControllerInterface
 
     protected $pathPrefix = null;
 
-    /**
-     * @var Environment
-     */
+    /** @var Environment */
     private $twig;
 
-    /**
-     * @var ManagerRegistry
-     */
+    /** @var ManagerRegistry */
     private $registry;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
+    /** @var AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var FormFactoryInterface
-     */
+    /** @var FormFactoryInterface */
     private $formFactory;
 
-    /**
-     * @var RouterInterface
-     */
+    /** @var RouterInterface */
     private $router;
+
+    /** @var PropertyAccessorInterface */
+    protected $propertyAccessor;
 
     public function __construct(
         ManagerRegistry $registry,
         AuthorizationCheckerInterface $authorizationChecker,
-        TokenStorageInterface $tokenStorage,
         FormFactoryInterface $formFactory,
         RouterInterface $router,
-        Environment $twig
+        Environment $twig,
+        PropertyAccessorInterface $propertyAccessor
     ) {
         $this->twig = $twig;
         $this->registry = $registry;
         $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage = $tokenStorage;
         $this->formFactory = $formFactory;
         $this->router = $router;
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -157,7 +146,14 @@ abstract class AbstractEntityController implements EntityControllerInterface
 
         $view = $this->getEditTemplate();
 
-        return $this->render($view, ['entity' => $entity, 'form' => $form->createView()]);
+        return $this->render(
+            $view,
+            [
+                'entity'     => $entity,
+                'idProperty' => $this->getIdProperty(),
+                'form'       => $form->createView()
+            ]
+        );
     }
 
     /**
@@ -165,7 +161,6 @@ abstract class AbstractEntityController implements EntityControllerInterface
      */
     public function deleteAction(Request $request, $id): Response
     {
-        $user = $this->getUser();
         $entity = $this->fetchEntity($id);
         $this->checkDeleteActionAuthorization($request, $entity);
 
@@ -229,15 +224,16 @@ abstract class AbstractEntityController implements EntityControllerInterface
         $page = $this->getPage($request);
         $perPage = $this->getPerPage($request);
         $paginator = $this->findPaginated($page, $perPage);
-        $total = $paginator->count();
 
         return [
-            'pagination'  => new Pagination($page, $perPage, $total),
-            'entities'    => $paginator->getIterator()->getArrayCopy(),
+            'page'        => $page,
+            'perPage'     => $perPage,
+            'entities'    => $paginator,
             'title'       => $this->getListTitle(),
             'fields'      => $this->getListFields(),
             'routes'      => $this->getRoutes(),
             'entityClass' => $this->getEntityClass(),
+            'idProperty'  => $this->getIdProperty()
         ];
     }
 
@@ -254,6 +250,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
             'routes'      => $this->getRoutes(),
             'fields'      => $this->getDetailFields(),
             'entityClass' => $this->getEntityClass(),
+            'idProperty'  => $this->getIdProperty()
         ];
     }
 
@@ -333,7 +330,10 @@ abstract class AbstractEntityController implements EntityControllerInterface
 
     protected function createPostEditResponse(Request $request, $entity): Response
     {
-        return $this->redirectToRoute($this->getDetailRoute(), ['id' => $entity->getId()]);
+        return $this->redirectToRoute(
+            $this->getDetailRoute(),
+            ['id' => $this->propertyAccessor->getValue($entity, $this->getIdProperty())]
+        );
     }
 
     protected function createPostDeleteResponse(Request $request, $entity): Response
@@ -428,20 +428,6 @@ abstract class AbstractEntityController implements EntityControllerInterface
         return $this->authorizationChecker->isGranted($attributes, $subject);
     }
 
-    protected function getUser(): ?UserInterface
-    {
-        if (null === $token = $this->tokenStorage->getToken()) {
-            return null;
-        }
-
-        if (!is_object($user = $token->getUser())) {
-            // e.g. anonymous authentication
-            return null;
-        }
-
-        return $user;
-    }
-
     protected function createForm(string $type, $data = null, array $options = []): FormInterface
     {
         return $this->formFactory->create($type, $data, $options);
@@ -495,10 +481,11 @@ abstract class AbstractEntityController implements EntityControllerInterface
 
     protected function getDetailTitle(object $entity): string
     {
-        if (is_a($entity, EntityInterface::class)) {
-            return $entity->getId();
-        }
+        return $this->propertyAccessor->getValue($entity, $this->getIdProperty());
+    }
 
-        return 'Detail';
+    protected function getIdProperty()
+    {
+        return 'id';
     }
 }

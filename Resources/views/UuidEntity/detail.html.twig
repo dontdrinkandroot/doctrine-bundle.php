@@ -4,16 +4,23 @@
     <div class="ddr-page-header">
         <h1>{{ title }}</h1>
         <div class="ddr-actions">
-            {% if is_granted('UPDATE', entity) %}
-                <a class="btn btn-lg btn-primary ddr-btn-icon action edit" href="{{ path(routes.edit,{'id':entity.uuid}) }}">
-                    <i class="fas fa-fw fa-pen"></i>
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle ddr-no-caret" data-toggle="dropdown">
+                    <span class="fas fa-fw fa-ellipsis-v"></span>
                 </a>
-            {% endif %}
-            {% if is_granted('DELETE', entity) %}
-                <a class="btn btn-lg btn-outline-danger ddr-btn-icon action delete" href="{{ path(routes.delete,{'id':entity.uuid}) }}">
-                    <i class="fas fa-fw fa-trash-alt"></i>
-                </a>
-            {% endif %}
+                <div class="dropdown-menu dropdown-menu-right">
+                    {% if is_granted('UPDATE', entity) %}
+                        <a class="dropdown-item" href="{{ path(routes.edit,{'id':entity.uuid}) }}">
+                            <span class="fas fa-fw fa-pen mr-1"></span>Edit
+                        </a>
+                    {% endif %}
+                    {% if is_granted('DELETE', entity) %}
+                        <a class="dropdown-item" href="{{ path(routes.delete,{'id':entity.uuid}) }}">
+                            <span class="fas fa-fw fa-trash-alt mr-1"></span>Delete
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 

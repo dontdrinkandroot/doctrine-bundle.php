@@ -58,8 +58,6 @@ abstract class CrudVoter extends Voter
         }
     }
 
-    protected abstract function getSupportedClass(): string;
-
     protected function createGranted(object $subject = null): bool
     {
         return false;
@@ -79,4 +77,6 @@ abstract class CrudVoter extends Voter
     {
         return false;
     }
+
+    protected abstract function getSupportedClass(): string;
 }
