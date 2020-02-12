@@ -19,6 +19,7 @@ cache:
         - $HOME/.composer/cache
 
 before_script:
+    - phpenv config-rm xdebug.ini
     - composer self-update -q
     - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
     - if [ -z "$dependencies" ]; then COMPOSER_MEMORY_LIMIT=-1 composer install; fi;
