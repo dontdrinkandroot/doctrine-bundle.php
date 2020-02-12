@@ -4,11 +4,13 @@ namespace Dontdrinkandroot\DoctrineBundle\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\DoctrineCommandHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Exception;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,7 +25,22 @@ class RenderOrmDiagramCommand extends Command
     {
         $this
             ->setDescription('Renders an entity relationship diagram based on the ORM Metadata')
-            ->addOption('em', null, InputOption::VALUE_OPTIONAL, 'The entity manager to use for this command');
+            ->addOption('em', null, InputOption::VALUE_OPTIONAL, 'The entity manager to use for this command')
+            ->addOption(
+                'executable',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The graphviz executable to use (default \'dot\')',
+                'dot'
+            )
+            ->addOption('format', null, InputOption::VALUE_REQUIRED, 'The output format (png, svg, ...)', 'svg')
+            ->addOption(
+                'ignore-tables',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Comma separated list of table names to ignore'
+            )
+            ->addOption('hide-fields', null, InputOption::VALUE_NONE, 'Do not show the fields of the entities');
     }
 
     /**
@@ -32,20 +49,20 @@ class RenderOrmDiagramCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!class_exists(Graph::class)) {
-            throw new \Exception('You need to install graphp/graphviz in order to render diagrams');
+            throw new Exception('You need to install graphp/graphviz in order to render diagrams');
         }
+
+        $ignoreTableNames = $this->getIgnoreTableNames($input);
 
         DoctrineCommandHelper::setApplicationEntityManager($this->getApplication(), $input->getOption('em'));
         /** @var EntityManagerInterface $em */
         $em = $this->getHelper('em')->getEntityManager();
 
-        $entityClassNames = $em->getConfiguration()
-            ->getMetadataDriverImpl()
-            ->getAllClassNames();
+        $entityClassNames = $em->getConfiguration()->getMetadataDriverImpl()->getAllClassNames();
 
         $graph = new Graph();
         $graph->setAttribute('graphviz.graph.overlap', 'false');
-        $graph->setAttribute('graphviz.graph.splines', 'true');
+        $graph->setAttribute('graphviz.graph.splines', 'ortho');
 
         $vertices = [];
         $metaDatas = [];
@@ -59,10 +76,17 @@ class RenderOrmDiagramCommand extends Command
                 if ($output->isVerbose()) {
                     $output->writeln(sprintf('Adding entity %s with table name %s', $entityClassName, $tableName));
                 }
-                $vertex = $graph->createVertex($tableName);
-                $vertex->setAttribute('graphviz.shape', 'box');
-                $vertices[$tableName] = $vertex;
-                $metaDatas[$tableName] = $classMetaData;
+                if (!in_array($tableName, $ignoreTableNames)) {
+                    $vertex = $graph->createVertex($tableName);
+                    $vertex->setAttribute('graphviz.shape', 'none');
+                    $vertex->setAttribute(
+                        'graphviz.label',
+                        GraphViz::raw(
+                            $this->generateVertexLabel($classMetaData, (bool)$input->getOption('hide-fields'))
+                        )
+                    );
+                    $vertices[$tableName] = $vertex;
+                }
                 $classToTableNames[$classMetaData->getName()] = $tableName;
             }
         }
@@ -76,29 +100,53 @@ class RenderOrmDiagramCommand extends Command
                     if ($associationMapping['isOwningSide']) {
                         $sourceTableName = $classMetaData->getTableName();
                         $targetTableName = $classToTableNames[$associationMapping['targetEntity']];
+
+                        if (
+                            in_array($sourceTableName, $ignoreTableNames)
+                            || in_array($targetTableName, $ignoreTableNames)
+                        ) {
+                            continue;
+                        }
+
                         /** @var Vertex $sourceVertex */
                         $sourceVertex = $vertices[$sourceTableName];
                         /** @var Vertex $targetVertex */
                         $targetVertex = $vertices[$targetTableName];
-                        $edge = $sourceVertex->createEdge($targetVertex);
                         switch ($associationMapping['type']) {
                             case ClassMetadataInfo::MANY_TO_MANY:
+                                $edge = $sourceVertex->createEdge($targetVertex);
                                 $edge->setAttribute('graphviz.headlabel', '*');
                                 $edge->setAttribute('graphviz.taillabel', '*');
                                 break;
                             case ClassMetadataInfo::ONE_TO_MANY:
-                                throw new \Exception(
-                                    'One to many not supported yet: '.$sourceTableName.':'.$associationMapping['fieldName']
+                                throw new Exception(
+                                    'One to many not supported yet: ' . $sourceTableName . ':' . $associationMapping['fieldName']
                                 );
                                 break;
                             case ClassMetadataInfo::MANY_TO_ONE:
+                                $edge = $sourceVertex->createEdgeTo($targetVertex);
                                 if ($this->isNullableAssociation($associationMapping)) {
                                     $edge->setAttribute('graphviz.headlabel', '0,1');
                                 } else {
                                     $edge->setAttribute('graphviz.headlabel', '1');
                                 }
                                 $edge->setAttribute('graphviz.taillabel', '*');
+                                $edge->setAttribute('graphviz.arrowhead', 'none');
                                 break;
+                            case ClassMetadataInfo::ONE_TO_ONE:
+                                $edge = $sourceVertex->createEdge($targetVertex);
+                                if ($this->isNullableAssociation($associationMapping)) {
+                                    $edge->setAttribute('graphviz.headlabel', '0,1');
+                                    $edge->setAttribute('graphviz.taillabel', '0,1');
+                                } else {
+                                    $edge->setAttribute('graphviz.headlabel', '1');
+                                    $edge->setAttribute('graphviz.taillabel', '1');
+                                }
+                                break;
+                            default:
+                                throw new RuntimeException(
+                                    'Unhandled Association Type: ' . $associationMapping['type']
+                                );
                         }
                     }
                 }
@@ -106,7 +154,8 @@ class RenderOrmDiagramCommand extends Command
         }
 
         $graphviz = new GraphViz();
-        $graphviz->setExecutable('neato');
+        $graphviz->setFormat($input->getOption('format'));
+        $graphviz->setExecutable($input->getOption('executable'));
         $output->writeln($graphviz->createScript($graph));
         $graphviz->display($graph);
     }
@@ -115,12 +164,68 @@ class RenderOrmDiagramCommand extends Command
     {
         $joinColumns = $associationMapping['joinColumns'];
         if (count($joinColumns) > 1) {
-            throw new \Exception('More than one join Column currently not supported');
+            throw new Exception('More than one join Column currently not supported');
         }
         if (!array_key_exists('nullable', $joinColumns[0])) {
             return true;
         }
 
         return $joinColumns[0]['nullable'];
+    }
+
+    private function generateVertexLabel(ClassMetadata $classMetaData, bool $hideFields = false): string
+    {
+        $label = '<<table cellspacing="0" border="1" cellborder="0">';
+        $label .= '<tr><td bgcolor="#dedede" colspan="4"><b>' . $classMetaData->getTableName() . '</b></td></tr>';
+
+        if (!$hideFields) {
+            $fieldNames = $classMetaData->fieldNames;
+            $idFieldNames = $classMetaData->getIdentifierFieldNames();
+            foreach ($fieldNames as $fieldName) {
+                $fieldMapping = $classMetaData->getFieldMapping($fieldName);
+                $label .= '<tr>';
+                if (in_array($fieldName, $idFieldNames)) {
+                    $label .= '<td align="left"><u>' . $fieldMapping['columnName'] . '</u></td>';
+                } else {
+                    $label .= '<td align="left">' . $fieldMapping['columnName'] . '</td>';
+                }
+                $label .= '<td align="left">' . $fieldMapping['type'] . '</td>';
+                $label .= '<td align="left">' . ($this->isNullable($fieldMapping) ? '' : 'notnull') . '</td>';
+                $label .= '<td align="left">' . ($this->isUnique($fieldMapping) ? 'unique' : '') . '</td>';
+                $label .= '</tr>';
+            }
+        }
+
+        $label .= '</table>>';
+
+        return $label;
+    }
+
+    private function getIgnoreTableNames(InputInterface $input)
+    {
+        $ignoreTablesInputOption = $input->getOption('ignore-tables');
+        if (null === $ignoreTablesInputOption) {
+            return [];
+        }
+
+        return explode(',', $ignoreTablesInputOption);
+    }
+
+    private function isNullable(array $fieldMapping): bool
+    {
+        if (!array_key_exists('nullable', $fieldMapping)) {
+            return false;
+        }
+
+        return $fieldMapping['nullable'] === true;
+    }
+
+    private function isUnique(array $fieldMapping): bool
+    {
+        if (!array_key_exists('unique', $fieldMapping)) {
+            return false;
+        }
+
+        return $fieldMapping['unique'] === true;
     }
 }
