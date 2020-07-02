@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Security;
 
-use Dontdrinkandroot\Repository\CrudAction;
+use Dontdrinkandroot\Repository\CrudOperation;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -14,23 +14,26 @@ abstract class CrudVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
-        return
-            ($this->getSupportedClass() === $subject || is_a($subject, $this->getSupportedClass()))
-            && in_array($attribute, CrudAction::all());
+        return self::handlesCrudFor($attribute, $subject, $this->getSupportedClass());
+    }
+
+    public static function handlesCrudFor($attribute, $subject, string $subjectClass): bool
+    {
+        return is_a($subject, $subjectClass, true) && in_array($attribute, CrudOperation::all(), true);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         if ($this->getSupportedClass() === $subject) {
             switch ($attribute) {
-                case CrudAction::CREATE:
+                case CrudOperation::CREATE:
                     return $this->createGranted();
-                case CrudAction::READ:
+                case CrudOperation::READ:
                     return $this->readGranted();
                     break;
                 default:
@@ -38,19 +41,18 @@ abstract class CrudVoter extends Voter
             }
         }
 
-        assert(is_a($subject, $this->getSupportedClass()));
-
+        assert(is_a($subject, $this->getSupportedClass(), true));
         switch ($attribute) {
-            case CrudAction::CREATE:
+            case CrudOperation::CREATE:
                 return $this->createGranted($subject);
                 break;
-            case CrudAction::READ:
+            case CrudOperation::READ:
                 return $this->readGranted($subject);
                 break;
-            case CrudAction::UPDATE:
+            case CrudOperation::UPDATE:
                 return $this->updateGranted($subject);
                 break;
-            case CrudAction::DELETE:
+            case CrudOperation::DELETE:
                 return $this->deleteGranted($subject);
                 break;
             default:

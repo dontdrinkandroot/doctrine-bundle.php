@@ -22,11 +22,9 @@ use Symfony\Component\HttpKernel\Event\TerminateEvent;
  */
 class TransactionalKernelEventListener
 {
-    /** @var LoggerInterface; */
-    private $logger;
+    private LoggerInterface $logger;
 
-    /** @var TransactionManager */
-    private $transactionManager;
+    private TransactionManager $transactionManager;
 
     private $rollbackCodes = [
         Response::HTTP_BAD_REQUEST,
