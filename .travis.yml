@@ -2,14 +2,6 @@ language: php
 
 matrix:
     include:
-        -   php: "7.2"
-            env: dependencies=lowest
-        -   php: "7.2"
-            env: dependencies=highest
-        -   php: "7.3"
-            env: dependencies=lowest
-        -   php: "7.3"
-            env: dependencies=highest
         -   php: "7.4"
             env: dependencies=lowest
         -   php: "7.4"
@@ -28,4 +20,4 @@ before_script:
     - composer install
 
 script:
-    - (export SYMFONY_DEPRECATIONS_HELPER="weak" && vendor/bin/phpunit)
+    - SYMFONY_DEPRECATIONS_HELPER="weak" vendor/bin/phpunit
