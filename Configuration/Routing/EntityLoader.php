@@ -15,15 +15,9 @@ use Symfony\Component\Routing\RouteCollection;
 
 class EntityLoader extends Loader implements ContainerAwareInterface
 {
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
+    private KernelInterface $kernel;
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ?ContainerInterface $container = null;
 
     public function __construct(KernelInterface $kernel)
     {
@@ -33,16 +27,14 @@ class EntityLoader extends Loader implements ContainerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function load($resource, $type = null)
+    public function load($resource, string $type = null)
     {
         $controllerClass = $this->resolveControllerClass($resource);
 
         /** @var EntityControllerInterface $controller */
         $controller = $this->container->get($controllerClass);
 
-        $routes = $this->createRouteCollection($controller, $resource);
-
-        return $routes;
+        return $this->createRouteCollection($controller, $resource);
     }
 
     protected function resolveControllerClass($resource): string
@@ -73,7 +65,7 @@ class EntityLoader extends Loader implements ContainerAwareInterface
         $controllerName = $parts[1];
 
         try {
-            $allBundles = $this->kernel->getBundle($bundle, false);
+            $allBundles = $this->kernel->getBundle($bundle);
         } catch (InvalidArgumentException $e) {
             throw new Exception(sprintf('Bundle "%s" not found', $bundle));
         }
@@ -102,7 +94,7 @@ class EntityLoader extends Loader implements ContainerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($resource, $type = null)
+    public function supports($resource, string $type = null)
     {
         return $this->getType() === $type;
     }
