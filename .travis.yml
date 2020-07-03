@@ -1,23 +1,26 @@
 language: php
 
+env:
+    global:
+        -   SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
+
 matrix:
     include:
         -   php: "7.4"
             env: dependencies=lowest
         -   php: "7.4"
             env: dependencies=highest
+
 cache:
     directories:
         - $HOME/.composer/cache
 
 before_script:
     - phpenv config-rm xdebug.ini
-    - composer self-update -q
-    - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
     - if [ -z "$dependencies" ]; then COMPOSER_MEMORY_LIMIT=-1 composer install; fi;
     - if [ "$dependencies" = "lowest" ]; then COMPOSER_MEMORY_LIMIT=-1 composer update --prefer-lowest -n; fi;
     - if [ "$dependencies" = "highest" ]; then COMPOSER_MEMORY_LIMIT=-1 composer update -n; fi;
     - composer install
 
 script:
-    - SYMFONY_DEPRECATIONS_HELPER="weak" vendor/bin/phpunit
+    - vendor/bin/phpunit
