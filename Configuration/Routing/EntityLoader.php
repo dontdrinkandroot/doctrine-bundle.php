@@ -27,7 +27,7 @@ class EntityLoader extends Loader implements ContainerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function load($resource, string $type = null)
+    public function load($resource, $type = null)
     {
         $controllerClass = $this->resolveControllerClass($resource);
 
@@ -94,7 +94,7 @@ class EntityLoader extends Loader implements ContainerAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($resource, string $type = null)
+    public function supports($resource, $type = null)
     {
         return $this->getType() === $type;
     }
