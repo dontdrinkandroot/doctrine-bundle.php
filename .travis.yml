@@ -14,7 +14,7 @@ addons:
 
 cache:
     directories:
-        - $HOME/.composer/cache
+        - $HOME/.composer/cache/files
 
 before_script:
     - phpenv config-rm xdebug.ini
