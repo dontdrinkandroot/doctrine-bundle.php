@@ -1,9 +1,5 @@
 language: php
 
-env:
-    global:
-        -   SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
-
 matrix:
     include:
         -   php: "7.4"
@@ -21,12 +17,12 @@ cache:
         - $HOME/.composer/cache
 
 before_script:
-    - phpenv config-rm xdebug.ini
+    - pecl install pcov
     - if [ -z "$dependencies" ]; then COMPOSER_MEMORY_LIMIT=-1 composer install; fi;
     - if [ "$dependencies" = "lowest" ]; then COMPOSER_MEMORY_LIMIT=-1 composer update --prefer-lowest -n; fi;
     - if [ "$dependencies" = "highest" ]; then COMPOSER_MEMORY_LIMIT=-1 composer update -n; fi;
     - composer install
 
 script:
-    - vendor/bin/phpunit --coverage-clover=coverage.clover.xml --log-junit log.junit.xml
+    - php -d pcov.enabled=1 vendor/bin/phpunit --coverage-clover=coverage.clover.xml --log-junit log.junit.xml
     - if [ "$dependencies" = "highest" ]; then sonar-scanner; fi;
