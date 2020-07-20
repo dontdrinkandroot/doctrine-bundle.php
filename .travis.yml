@@ -17,6 +17,8 @@ cache:
         - $HOME/.composer/cache
 
 before_script:
+    - php -m
+    - phpenv config-rm xdebug.ini
     - pecl install pcov
     - if [ -z "$dependencies" ]; then COMPOSER_MEMORY_LIMIT=-1 composer install; fi;
     - if [ "$dependencies" = "lowest" ]; then COMPOSER_MEMORY_LIMIT=-1 composer update --prefer-lowest -n; fi;

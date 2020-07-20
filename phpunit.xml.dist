@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit colors="true" bootstrap="vendor/autoload.php">
+<phpunit
+        backupGlobals="false"
+        colors="true"
+>
+
+    <php>
+        <ini name="memory_limit" value="-1" />
+        <env name="APP_SECRET" value="c2143e0e6fa7397bf72e127fc8ccf2b5" />
+        <env name="SHELL_VERBOSITY" value="-1" />
+        <env name="KERNEL_CLASS" value="Dontdrinkandroot\DoctrineBundle\Tests\TestApp\TestKernel" />
+    </php>
 
     <testsuites>
-        <testsuite name="Unit Tests">
-            <directory>./Tests/Unit</directory>
-        </testsuite>
-        <testsuite name="Integration Tests">
-            <directory>./Tests/Integration</directory>
-        </testsuite>
-        <testsuite name="Acceptance Tests">
-            <directory>./Tests/Acceptance</directory>
+        <testsuite name="Project Test Suite">
+            <directory>Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -24,5 +28,9 @@
             </exclude>
         </whitelist>
     </filter>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
 
 </phpunit>
