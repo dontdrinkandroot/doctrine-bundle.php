@@ -35,26 +35,21 @@ abstract class CrudVoter extends Voter
                     return $this->createGranted();
                 case CrudOperation::READ:
                     return $this->readGranted();
-                    break;
                 default:
                     return false;
             }
         }
 
-        assert(is_a($subject, $this->getSupportedClass(), true));
+        assert(is_a($subject, $this->getSupportedClass()));
         switch ($attribute) {
             case CrudOperation::CREATE:
                 return $this->createGranted($subject);
-                break;
             case CrudOperation::READ:
                 return $this->readGranted($subject);
-                break;
             case CrudOperation::UPDATE:
                 return $this->updateGranted($subject);
-                break;
             case CrudOperation::DELETE:
                 return $this->deleteGranted($subject);
-                break;
             default:
                 return false;
         }
