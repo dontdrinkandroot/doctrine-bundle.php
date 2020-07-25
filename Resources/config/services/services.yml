@@ -1,0 +1,38 @@
+parameters:
+
+services:
+
+    Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManagerRegistry:
+        arguments:
+            - '@doctrine'
+
+    Dontdrinkandroot\DoctrineBundle\Event\Listener\UuidEntityListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    Dontdrinkandroot\DoctrineBundle\Event\Listener\CreatedEntityListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    Dontdrinkandroot\DoctrineBundle\Event\Listener\UpdatedEntityListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+
+    Dontdrinkandroot\DoctrineBundle\Configuration\Routing\EntityLoader:
+        arguments:
+            - '@kernel'
+        calls:
+            - [ setContainer, [ '@service_container' ] ]
+        tags:
+            - { name: routing.loader }
+
+    Dontdrinkandroot\DoctrineBundle\Command\RenderDbalDiagramCommand:
+        arguments:
+            - '@doctrine'
+        tags:
+            - { name: 'console.command', command: 'ddr:doctrine:render-dbal-diagram' }
+
+    Dontdrinkandroot\DoctrineBundle\Command\RenderOrmDiagramCommand:
+        tags:
+            - { name: 'console.command', command: 'ddr:doctrine:render-orm-diagram' }

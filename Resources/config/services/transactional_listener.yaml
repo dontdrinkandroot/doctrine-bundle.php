@@ -1,8 +1,10 @@
 services:
-    ddr_doctrine.event.listener.kernel:
-        class: Dontdrinkandroot\DoctrineBundle\Event\Listener\TransactionalKernelEventListener
+
+    Dontdrinkandroot\DoctrineBundle\Event\Listener\TransactionalKernelEventListener:
         arguments:
-            - '@Dontdrinkandroot\Repository\TransactionManager'
+            - '@Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManagerRegistry'
+            - '%ddr_doctrine.transactional_listener.managers%'
+            - '%ddr_doctrine.transactional_listener.rollback_codes%'
         calls:
             - ['setLogger', ['@logger']]
         tags:

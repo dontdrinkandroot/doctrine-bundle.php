@@ -17,7 +17,19 @@ class Configuration implements ConfigurationInterface
 
         // @formatter:off
         $rootNode->children()
-            ->booleanNode('wrap_request_in_transaction')->defaultFalse()->end()
+            ->arrayNode('transactional_listener')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->booleanNode('enabled')->defaultFalse()->end()
+                    ->arrayNode('managers')
+                        ->scalarPrototype()->end()
+                    ->end()
+                    ->arrayNode('rollback_codes')
+                        ->integerPrototype()->end()
+                        ->defaultValue([400, 500])
+                    ->end()
+                ->end()
+            ->end()
         ->end();
         // @formatter:on
 
