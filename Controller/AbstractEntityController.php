@@ -180,7 +180,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
             return $this->routePrefix;
         }
 
-        $entityShortName = ClassNameUtils::getShortName($this->getEntityClass());
+        $entityShortName = ClassNameUtils::getTableizedShortName($this->getEntityClass());
 
         return 'entity.' . $entityShortName;
     }
@@ -194,7 +194,7 @@ abstract class AbstractEntityController implements EntityControllerInterface
             return $this->pathPrefix;
         }
 
-        $entityShortName = ClassNameUtils::getShortName($this->getEntityClass());
+        $entityShortName = ClassNameUtils::getTableizedShortName($this->getEntityClass());
 
         return '/' . $entityShortName . 's/';
     }
