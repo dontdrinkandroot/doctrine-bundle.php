@@ -15,7 +15,7 @@ use Ramsey\Uuid\UuidInterface;
 class DefaultUuidEntity extends DefaultEntity implements UuidEntityInterface
 {
     /**
-     * @ORM\Column(type="uuid", nullable=false)
+     * @ORM\Column(type="uuid", nullable=false, unique=true)
      */
     protected ?UuidInterface $uuid = null;
 
