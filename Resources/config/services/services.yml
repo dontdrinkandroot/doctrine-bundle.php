@@ -19,14 +19,6 @@ services:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
 
-    Dontdrinkandroot\DoctrineBundle\Configuration\Routing\EntityLoader:
-        arguments:
-            - '@kernel'
-        calls:
-            - [ setContainer, [ '@service_container' ] ]
-        tags:
-            - { name: routing.loader }
-
     Dontdrinkandroot\DoctrineBundle\Command\RenderDbalDiagramCommand:
         arguments:
             - '@doctrine'
