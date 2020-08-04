@@ -1,0 +1,8 @@
+services:
+
+    _defaults:
+        autoconfigure: true
+        autowire: true
+
+    Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\:
+        resource: '../Repository'
