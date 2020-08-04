@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": ">=7.4",
-        "doctrine/doctrine-bundle": "^2.0",
+        "doctrine/doctrine-bundle": "^2.0.3",
         "ramsey/uuid-doctrine": "^1.6",
         "symfony/config": "^4.4",
         "symfony/dependency-injection": "^4.4",
