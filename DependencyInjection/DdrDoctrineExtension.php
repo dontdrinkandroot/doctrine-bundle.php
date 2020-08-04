@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\DependencyInjection;
 
+use Dontdrinkandroot\DoctrineBundle\Type\MicrotimeType;
 use Ramsey\Uuid\Doctrine\UuidType;
 use RuntimeException;
 use Symfony\Component\Config\FileLocator;
@@ -29,6 +30,7 @@ class DdrDoctrineExtension extends Extension implements PrependExtensionInterfac
                 'dbal' => [
                     'types' => [
                         'uuid' => UuidType::class,
+                        'microtime' => MicrotimeType::class
                     ],
                 ],
             ]
