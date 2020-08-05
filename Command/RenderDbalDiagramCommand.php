@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RenderDbalDiagramCommand extends Command
 {
+    protected static $defaultName = 'ddr:doctrine:render-dbal-diagram';
+
     private Registry $registry;
 
     public function __construct(Registry $registry)

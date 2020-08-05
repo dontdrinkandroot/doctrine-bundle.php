@@ -7,12 +7,12 @@ use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\ExampleEntity;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ExampleEntityRepository;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class ExampleEntityRepositoryTest extends WebTestCase
+class ExampleEntityRepositoryTest extends KernelTestCase
 {
     private ExampleEntityRepository $exampleEntityRepository;
 

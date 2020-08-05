@@ -18,6 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RenderOrmDiagramCommand extends Command
 {
+    protected static $defaultName = 'ddr:doctrine:render-orm-diagram';
+
     /**
      * {@inheritdoc}
      */
@@ -40,7 +42,8 @@ class RenderOrmDiagramCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Comma separated list of table names to ignore'
             )
-            ->addOption('hide-fields', null, InputOption::VALUE_NONE, 'Do not show the fields of the entities');
+            ->addOption('hide-fields', null, InputOption::VALUE_NONE, 'Do not show the fields of the entities')
+            ->addOption('skip-rendering', null, InputOption::VALUE_NONE, 'Only output the source');
     }
 
     /**
@@ -154,10 +157,13 @@ class RenderOrmDiagramCommand extends Command
         }
 
         $graphviz = new GraphViz();
-        $graphviz->setFormat($input->getOption('format'));
-        $graphviz->setExecutable($input->getOption('executable'));
         $output->writeln($graphviz->createScript($graph));
-        $graphviz->display($graph);
+
+        if (false === $input->getOption('skip-rendering')) {
+            $graphviz->setFormat($input->getOption('format'));
+            $graphviz->setExecutable($input->getOption('executable'));
+            $graphviz->display($graph);
+        }
     }
 
     private function isNullableAssociation($associationMapping)
