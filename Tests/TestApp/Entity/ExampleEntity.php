@@ -37,6 +37,11 @@ class ExampleEntity extends DefaultUuidEntity
      */
     private ?int $updatedTimestamp = null;
 
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
     /**
      * {@inheritdoc}
      */
