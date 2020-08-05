@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\DoctrineBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Dontdrinkandroot\DoctrineBundle\Repository\CrudRepositoryInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -59,5 +58,10 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         $queryBuilder->setMaxResults($perPage);
 
         return new Paginator($queryBuilder);
+    }
+
+    public function flush()
+    {
+        $this->getEntityManager()->flush();
     }
 }

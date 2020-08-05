@@ -2,10 +2,8 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use Dontdrinkandroot\DoctrineBundle\Repository\CrudRepository;
 use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManager;
 use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManagerRegistry;
 
@@ -85,10 +83,4 @@ class TransactionalCrudRepository extends CrudRepository
     {
         return $this->transactionManager;
     }
-
-    public function flush()
-    {
-        $this->getEntityManager()->flush();
-    }
-
 }

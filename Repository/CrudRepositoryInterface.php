@@ -20,4 +20,6 @@ interface CrudRepositoryInterface extends ObjectRepository
         array $criteria = [],
         array $orderBy = null
     ): Paginator;
+
+    public function flush();
 }
