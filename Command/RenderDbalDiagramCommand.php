@@ -45,5 +45,7 @@ class RenderDbalDiagramCommand extends Command
         $graphvizVisitor = new Graphviz();
         $schema->visit($graphvizVisitor);
         $output->writeln($graphvizVisitor->getOutput());
+
+        return 0;
     }
 }

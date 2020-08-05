@@ -164,6 +164,8 @@ class RenderOrmDiagramCommand extends Command
             $graphviz->setExecutable($input->getOption('executable'));
             $graphviz->display($graph);
         }
+
+        return 0;
     }
 
     private function isNullableAssociation($associationMapping)
