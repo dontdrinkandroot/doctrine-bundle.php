@@ -10,6 +10,10 @@ use Doctrine\Persistence\ObjectRepository;
  */
 interface CrudRepositoryInterface extends ObjectRepository
 {
+    public function fetch($id, $lockMode = null, $lockVersion = null);
+
+    public function fetchOneBy(array $criteria, array $orderBy = null);
+
     public function create($entity, bool $flush = true);
 
     public function delete($entity, bool $flush = true);

@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\DoctrineBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -10,6 +11,26 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class CrudRepository extends ServiceEntityRepository implements CrudRepositoryInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function fetch($id, $lockMode = null, $lockVersion = null)
+    {
+        $result = parent::find($id, $lockMode, $lockVersion);
+        $this->assertResultFound($result);
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function fetchOneBy(array $criteria, array $orderBy = null)
+    {
+        $result = parent::findOneBy($criteria, $orderBy);
+        $this->assertResultFound($result);
+        return $result;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -63,5 +84,17 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     public function flush()
     {
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @param object|null $result
+     *
+     * @throws NoResultException
+     */
+    protected function assertResultFound(?object $result): void
+    {
+        if (null === $result) {
+            throw new NoResultException();
+        }
     }
 }
