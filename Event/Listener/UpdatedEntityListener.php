@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampEntityInterface;
+use Dontdrinkandroot\DoctrineBundle\Utils\DateUtils;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -32,7 +33,7 @@ class UpdatedEntityListener
 
         if (is_a($entity, UpdatedTimestampEntityInterface::class)) {
             if (null === $entity->getUpdatedTimestamp()) {
-                $entity->setUpdatedTimestamp((int)(microtime(true) * 1000));
+                $entity->setUpdatedTimestamp(DateUtils::getCurrentTimeInMilliseconds());
             }
         }
     }

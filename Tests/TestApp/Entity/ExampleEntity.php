@@ -28,12 +28,12 @@ class ExampleEntity extends DefaultUuidEntity
     private ?DateTimeInterface $updated = null;
 
     /**
-     * @ORM\Column(type="microtime")
+     * @ORM\Column(type="milliseconds")
      */
     private ?int $createdTimestamp = null;
 
     /**
-     * @ORM\Column(type="microtime")
+     * @ORM\Column(type="milliseconds")
      */
     private ?int $updatedTimestamp = null;
 

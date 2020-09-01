@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping as ORM;
-use Dontdrinkandroot\Entity\EntityInterface;
 
 /**
  * @ORM\MappedSuperclass()
@@ -16,7 +15,7 @@ class DefaultEntity
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", nullable=false)
+     * @ORM\Column(type="bigint", nullable=false, options={"unsigned"=true})
      */
     protected ?int $id = null;
 

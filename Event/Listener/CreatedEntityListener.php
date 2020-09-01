@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedEntityInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampEntityInterface;
+use Dontdrinkandroot\DoctrineBundle\Utils\DateUtils;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -24,7 +25,7 @@ class CreatedEntityListener
 
         if (is_a($entity, CreatedTimestampEntityInterface::class)) {
             if (null === $entity->getCreatedTimestamp()) {
-                $entity->setCreatedTimestamp((int)(microtime(true) * 1000));
+                $entity->setCreatedTimestamp(DateUtils::getCurrentTimeInMilliseconds());
             }
         }
     }
