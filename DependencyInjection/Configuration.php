@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode('enabled')->defaultFalse()->end()
                     ->arrayNode('managers')
                         ->scalarPrototype()->end()
+                        ->defaultValue(['default'])
                     ->end()
                     ->arrayNode('rollback_codes')
                         ->integerPrototype()->end()
