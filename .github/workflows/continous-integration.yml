@@ -36,6 +36,8 @@ jobs:
                     dependency-versions: "${{ matrix.deps }}"
             -   name: "Run PHPUnit"
                 run: "vendor/bin/phpunit --coverage-clover=coverage.clover.xml --log-junit log.junit.xml"
+            -   name: "List contents"
+                run: "ls -la"
             -   name: "Upload coverage"
                 uses: "actions/upload-artifact@v2"
                 if: matrix.php-version == '8.0' && matrix.deps == 'highest'
@@ -59,7 +61,7 @@ jobs:
                 with:
                     name: coverage
             -   name: SonarCloud Scan
-                uses: sonarsource/sonarcloud-github-action@master
+                uses: sonarsource/sonarcloud-github-action@1.6
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
