@@ -2,5 +2,5 @@
 /.idea/
 /composer.lock
 /.phpunit.result.cache
-/.coverage.clover.xml
+/coverage.clover.xml
 /log.junit.xml
