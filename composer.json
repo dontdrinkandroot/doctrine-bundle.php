@@ -30,8 +30,9 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.0",
-        "liip/test-fixtures-bundle": "^1.0",
         "graphp/graphviz": "^0.2.1",
+        "liip/test-fixtures-bundle": "^1.0",
+        "phpunit/phpunit": "^9.5.10",
         "symfony/framework-bundle": "^4.4",
         "symfony/phpunit-bridge": "^4.4.31"
     },
