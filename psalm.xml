@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="3"
+        resolveFromConfigFile="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="Command" />
+        <directory name="DependencyInjection" />
+        <directory name="Entity" />
+        <directory name="Event" />
+        <directory name="Repository" />
+        <directory name="Service" />
+        <directory name="Tests" />
+        <directory name="Type" />
+        <directory name="Utils" />
+        <file name="DdrDoctrineBundle.php" />
+        <ignoreFiles>
+            <directory name="vendor" />
+            <file name="DependencyInjection/Configuration.php" />
+        </ignoreFiles>
+    </projectFiles>
+</psalm>

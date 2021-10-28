@@ -7,7 +7,9 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
- * @author Philip Washington Sorst <philip@sorst.net>
+ * @template T
+ * @implements CrudRepositoryInterface<T>
+ * @extends ServiceEntityRepository<T>
  */
 class CrudRepository extends ServiceEntityRepository implements CrudRepositoryInterface
 {
@@ -34,7 +36,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     /**
      * {@inheritdoc}
      */
-    public function create($entity, bool $flush = true)
+    public function create($entity, bool $flush = true): void
     {
         $this->getEntityManager()->persist($entity);
         if ($flush) {
@@ -45,7 +47,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     /**
      * {@inheritdoc}
      */
-    public function delete($entity, bool $flush = true)
+    public function delete($entity, bool $flush = true): void
     {
         $this->getEntityManager()->remove($entity);
         if ($flush) {

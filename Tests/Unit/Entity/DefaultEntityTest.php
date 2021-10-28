@@ -6,12 +6,9 @@ use Dontdrinkandroot\DoctrineBundle\Entity\DefaultUuidEntity;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\ExampleEntity;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultEntityTest extends TestCase
 {
-    public function testEquals()
+    public function testEquals(): void
     {
         $thisEntity = new ExampleEntity();
         $this->assertFalse($thisEntity->equals(null));

@@ -6,17 +6,41 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ObjectRepository;
 
 /**
- * @author Philip Washington Sorst <philip@sorst.net>
+ * @template T
+ * @implements ObjectRepository<T>
  */
 interface CrudRepositoryInterface extends ObjectRepository
 {
+    /**
+     * @param mixed $id
+     * @param null  $lockMode
+     * @param null  $lockVersion
+     *
+     * @return T
+     */
     public function fetch($id, $lockMode = null, $lockVersion = null);
 
+    /**
+     * @param array<string, mixed>       $criteria
+     * @param array<string, string>|null $orderBy
+     *
+     * @return T|null
+     */
     public function fetchOneBy(array $criteria, array $orderBy = null);
 
-    public function create($entity, bool $flush = true);
+    /**
+     * @param T    $entity
+     * @param bool $flush
+     *
+     * @return mixed
+     */
+    public function create($entity, bool $flush = true): void;
 
-    public function delete($entity, bool $flush = true);
+    /**
+     * @param T    $entity
+     * @param bool $flush
+     */
+    public function delete($entity, bool $flush = true): void;
 
     public function findPaginatedBy(
         int $page = 1,

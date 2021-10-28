@@ -16,9 +16,10 @@ class DdrDoctrineExtension extends Extension implements PrependExtensionInterfac
     /**
      * {@inheritdoc}
      */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container): void
     {
         $bundles = $container->getParameter('kernel.bundles');
+        assert(is_array($bundles));
         if (!array_key_exists('DoctrineBundle', $bundles)) {
             throw new RuntimeException('Please enable DoctrineBundle in your bundles.php');
         }
@@ -40,7 +41,7 @@ class DdrDoctrineExtension extends Extension implements PrependExtensionInterfac
     /**
      * {@inheritdoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

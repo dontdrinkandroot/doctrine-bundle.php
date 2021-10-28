@@ -9,9 +9,6 @@ use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\ExampleEntity;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ExampleEntityRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class ExampleEntityRepositoryTest extends KernelTestCase
 {
     private ExampleEntityRepository $exampleEntityRepository;
@@ -38,7 +35,7 @@ class ExampleEntityRepositoryTest extends KernelTestCase
         $this->exampleEntityRepository = $exampleEntityRepository;
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $exampleEntity = new ExampleEntity();
         $this->exampleEntityRepository->create($exampleEntity);

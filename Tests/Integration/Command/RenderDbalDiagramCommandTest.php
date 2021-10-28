@@ -6,12 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class RenderDbalDiagramCommandTest extends KernelTestCase
 {
-    public function testExecute()
+    public function testExecute(): void
     {
         $kernel = static::createKernel();
         $application = new Application($kernel);

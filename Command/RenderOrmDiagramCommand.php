@@ -11,6 +11,7 @@ use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
 use RuntimeException;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -57,11 +58,15 @@ class RenderOrmDiagramCommand extends Command
 
         $ignoreTableNames = $this->getIgnoreTableNames($input);
 
-        DoctrineCommandHelper::setApplicationEntityManager($this->getApplication(), $input->getOption('em'));
+        $application = $this->getApplication();
+        assert($application instanceof Application);
+        DoctrineCommandHelper::setApplicationEntityManager($application, $input->getOption('em'));
         /** @var EntityManagerInterface $em */
         $em = $this->getHelper('em')->getEntityManager();
 
-        $entityClassNames = $em->getConfiguration()->getMetadataDriverImpl()->getAllClassNames();
+        $mappingDriver = $em->getConfiguration()->getMetadataDriverImpl();
+        assert(null !== $mappingDriver);
+        $entityClassNames = $mappingDriver->getAllClassNames();
 
         $graph = new Graph();
         $graph->setAttribute('graphviz.graph.overlap', 'false');
@@ -79,8 +84,8 @@ class RenderOrmDiagramCommand extends Command
                 if ($output->isVerbose()) {
                     $output->writeln(sprintf('Adding entity %s with table name %s', $entityClassName, $tableName));
                 }
-                if (!in_array($tableName, $ignoreTableNames)) {
-                    $vertex = $graph->createVertex($tableName);
+                if (!in_array($tableName, $ignoreTableNames, true)) {
+                    $vertex = $graph->createVertex();
                     $vertex->setAttribute('graphviz.shape', 'none');
                     $vertex->setAttribute(
                         'graphviz.label',
@@ -192,10 +197,12 @@ class RenderOrmDiagramCommand extends Command
             foreach ($fieldNames as $fieldName) {
                 $fieldMapping = $classMetaData->getFieldMapping($fieldName);
                 $label .= '<tr>';
+                $columnName = $fieldMapping['columnName'] ?? null;
+                assert(null !== $columnName);
                 if (in_array($fieldName, $idFieldNames)) {
-                    $label .= '<td align="left"><u>' . $fieldMapping['columnName'] . '</u></td>';
+                    $label .= '<td align="left"><u>' . $columnName . '</u></td>';
                 } else {
-                    $label .= '<td align="left">' . $fieldMapping['columnName'] . '</td>';
+                    $label .= '<td align="left">' . $columnName . '</td>';
                 }
                 $label .= '<td align="left">' . $fieldMapping['type'] . '</td>';
                 $label .= '<td align="left">' . ($this->isNullable($fieldMapping) ? '' : 'notnull') . '</td>';

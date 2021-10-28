@@ -12,8 +12,6 @@ use Symfony\Component\HttpKernel\Event\TerminateEvent;
 
 /**
  * Implements the Session in View Pattern.
- *
- * @author Philip Washington Sorst <philip@sorst.net>
  */
 class TransactionalKernelEventListener
 {
@@ -22,6 +20,8 @@ class TransactionalKernelEventListener
     private TransactionManagerRegistry $transactionManagerRegistry;
 
     private array $enabledManagerNames;
+
+    private array $rollbackCodes;
 
     public function __construct(
         TransactionManagerRegistry $transactionManagerRegistry,
@@ -34,7 +34,7 @@ class TransactionalKernelEventListener
         $this->rollbackCodes = $rollbackCodes;
     }
 
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         if ($event->isMasterRequest()) {
             foreach ($this->enabledManagerNames as $enabledManagerName) {
@@ -45,7 +45,7 @@ class TransactionalKernelEventListener
         }
     }
 
-    public function onKernelFinishRequest(FinishRequestEvent $event)
+    public function onKernelFinishRequest(FinishRequestEvent $event): void
     {
         if ($event->isMasterRequest()) {
             foreach ($this->enabledManagerNames as $enabledManagerName) {
@@ -56,12 +56,12 @@ class TransactionalKernelEventListener
         }
     }
 
-    public function onKernelTerminate(TerminateEvent $event)
+    public function onKernelTerminate(TerminateEvent $event): void
     {
         if ($event->isMasterRequest()) {
             $response = $event->getResponse();
             $statusCode = $response->getStatusCode();
-            if (in_array($statusCode, $this->rollbackCodes)) {
+            if (in_array($statusCode, $this->rollbackCodes, true)) {
                 foreach ($this->enabledManagerNames as $enabledManagerName) {
                     $transactionManager = $this->transactionManagerRegistry->getByName($enabledManagerName);
                     $this->getLogger()->info(
@@ -74,7 +74,7 @@ class TransactionalKernelEventListener
         }
     }
 
-    public function onKernelException(ExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event): void
     {
         if ($event->isMasterRequest()) {
             foreach ($this->enabledManagerNames as $enabledManagerName) {
@@ -93,7 +93,7 @@ class TransactionalKernelEventListener
         return $this->logger;
     }
 
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }

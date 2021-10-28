@@ -85,9 +85,9 @@ class ExampleEntity extends DefaultUuidEntity
     /**
      * {@inheritdoc}
      */
-    public function setCreatedTimestamp(?int $createdTimestamp): void
+    public function setCreatedTimestamp(?int $timestamp): void
     {
-        $this->createdTimestamp = $createdTimestamp;
+        $this->createdTimestamp = $timestamp;
     }
 
     /**
@@ -101,8 +101,8 @@ class ExampleEntity extends DefaultUuidEntity
     /**
      * {@inheritdoc}
      */
-    public function setUpdatedTimestamp(?int $updatedTimestamp): void
+    public function setUpdatedTimestamp(?int $timestamp): void
     {
-        $this->updatedTimestamp = $updatedTimestamp;
+        $this->updatedTimestamp = $timestamp;
     }
 }

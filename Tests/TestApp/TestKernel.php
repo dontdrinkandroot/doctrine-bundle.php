@@ -13,7 +13,7 @@ class TestKernel extends Kernel
 {
     use MicroKernelTrait;
 
-    const CONFIG_EXTS = '.{php,xml,yaml,yml}';
+    public const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class TestKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    protected function configureRoutes(RouteCollectionBuilder $routes)
+    protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
         $confDir = $this->getProjectDir() . '/Tests/TestApp/config';
 
@@ -43,7 +43,7 @@ class TestKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader)
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->addResource(new FileResource($this->getProjectDir() . '/Tests/TestApp/config/bundles.php'));
         // Feel free to remove the "container.autowiring.strict_mode" parameter

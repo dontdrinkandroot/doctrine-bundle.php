@@ -8,12 +8,18 @@ use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManage
 use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManagerRegistry;
 
 /**
- * @author Philip Washington Sorst <philip@sorst.net>
+ * @template T
+ * @extends CrudRepository<T>
  */
 class TransactionalCrudRepository extends CrudRepository
 {
     private TransactionManager $transactionManager;
 
+    /**
+     * @param ManagerRegistry            $registry
+     * @param class-string<T>            $entityClass
+     * @param TransactionManagerRegistry $transactionManagerRegistry
+     */
     public function __construct(
         ManagerRegistry $registry,
         string $entityClass,
@@ -80,7 +86,7 @@ class TransactionalCrudRepository extends CrudRepository
     /**
      * {@inheritdoc}
      */
-    public function create($entity, bool $flush = true)
+    public function create($entity, bool $flush = true): void
     {
         $this->transactionManager->transactional(fn() => $this->getEntityManager()->persist($entity), $flush);
     }
@@ -88,7 +94,7 @@ class TransactionalCrudRepository extends CrudRepository
     /**
      * {@inheritdoc}
      */
-    public function delete($entity, bool $flush = true)
+    public function delete($entity, bool $flush = true): void
     {
         $this->transactionManager->transactional(fn() => $this->getEntityManager()->remove($entity), $flush);
     }
