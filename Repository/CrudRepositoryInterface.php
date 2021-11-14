@@ -7,7 +7,7 @@ use Doctrine\Persistence\ObjectRepository;
 
 /**
  * @template T
- * @implements ObjectRepository<T>
+ * @extends ObjectRepository<T>
  */
 interface CrudRepositoryInterface extends ObjectRepository
 {
@@ -42,6 +42,14 @@ interface CrudRepositoryInterface extends ObjectRepository
      */
     public function delete($entity, bool $flush = true): void;
 
+    /**
+     * @param int        $page
+     * @param int        $perPage
+     * @param array<string, mixed>       $criteria
+     * @param array<string, string>|null $orderBy
+     *
+     * @return Paginator<T>
+     */
     public function findPaginatedBy(
         int $page = 1,
         int $perPage = 10,
