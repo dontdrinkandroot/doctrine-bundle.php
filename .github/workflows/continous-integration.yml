@@ -5,7 +5,7 @@ on: push
 jobs:
     phpunit:
         name: "PHPUnit"
-        runs-on: "ubuntu-20.04"
+        runs-on: ubuntu-latest
         env:
             fail-fast: false
             SYMFONY_REQUIRE: ${{matrix.symfony-require}}
@@ -48,6 +48,15 @@ jobs:
                     path: |
                         coverage.clover.xml
                         log.junit.xml
+
+    psalm:
+        name: Psalm
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
+            -   name: Psalm
+                uses: docker://vimeo/psalm-github-actions
 
     sonarcloud:
         name: "SonarCloud"
