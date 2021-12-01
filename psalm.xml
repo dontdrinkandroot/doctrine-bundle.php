@@ -13,7 +13,6 @@
         <directory name="Event" />
         <directory name="Repository" />
         <directory name="Service" />
-        <directory name="Tests" />
         <directory name="Type" />
         <directory name="Utils" />
         <file name="DdrDoctrineBundle.php" />
