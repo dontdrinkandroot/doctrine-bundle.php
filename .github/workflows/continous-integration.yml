@@ -2,19 +2,22 @@ name: "Continuous Integration"
 
 on: push
 
-env:
-    fail-fast: true
-
 jobs:
     phpunit:
         name: "PHPUnit"
         runs-on: "ubuntu-20.04"
-
+        env:
+            fail-fast: false
+            SYMFONY_REQUIRE: ${{matrix.symfony-require}}
         strategy:
             matrix:
                 php-version:
                     - "7.4"
                     - "8.0"
+                    - "8.1"
+                symfony-require:
+                    - "4.4.*"
+                    - "5.4.*"
                 deps:
                     - "highest"
                     - "lowest"
@@ -28,15 +31,18 @@ jobs:
                     php-version: "${{ matrix.php-version }}"
                     coverage: "pcov"
                     ini-values: "zend.assertions=1"
+            -   name: "Globally install symfony/flex"
+                run: "composer global require --no-progress --no-scripts --no-plugins symfony/flex"
             -   name: "Install dependencies with Composer"
                 uses: "ramsey/composer-install@v1"
                 with:
                     dependency-versions: "${{ matrix.deps }}"
             -   name: "Run PHPUnit"
                 run: "vendor/bin/phpunit --coverage-clover=coverage.clover.xml --log-junit log.junit.xml"
+                continue-on-error: "${{ matrix.php-version == '8.0' || matrix.php-version == '8.1' || matrix.symfony-require == '5.4.*' }}"
             -   name: "Upload coverage"
                 uses: "actions/upload-artifact@v2"
-                if: matrix.php-version == '8.0' && matrix.deps == 'highest'
+                if: matrix.php-version == '8.0' && matrix.deps == 'highest' && symfony-require == '4.4.*'
                 with:
                     name: "coverage"
                     path: |
