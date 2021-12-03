@@ -88,6 +88,11 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         $this->getEntityManager()->flush();
     }
 
+    public function clear()
+    {
+        $this->getEntityManager()->clear($this->getClassMetadata()->rootEntityName);
+    }
+
     /**
      * @param object|null $result
      *
