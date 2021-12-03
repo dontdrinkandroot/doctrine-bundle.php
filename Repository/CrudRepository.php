@@ -83,12 +83,12 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         return new Paginator($queryBuilder);
     }
 
-    public function flush()
+    public function flush(): void
     {
         $this->getEntityManager()->flush();
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->getEntityManager()->clear($this->getClassMetadata()->rootEntityName);
     }
