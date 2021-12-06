@@ -6,5 +6,5 @@ interface UpdatedTimestampEntityInterface
 {
     public function getUpdatedTimestamp(): ?int;
 
-    public function setUpdatedTimestamp(int $timestamp);
+    public function setUpdatedTimestamp(int $timestamp): static;
 }

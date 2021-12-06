@@ -6,7 +6,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ObjectRepository;
 
 /**
- * @template T
+ * @template T of object
  * @extends ObjectRepository<T>
  */
 interface CrudRepositoryInterface extends ObjectRepository
@@ -31,8 +31,6 @@ interface CrudRepositoryInterface extends ObjectRepository
     /**
      * @param T    $entity
      * @param bool $flush
-     *
-     * @return mixed
      */
     public function create($entity, bool $flush = true): void;
 
@@ -57,5 +55,5 @@ interface CrudRepositoryInterface extends ObjectRepository
         array $orderBy = null
     ): Paginator;
 
-    public function flush();
+    public function flush(): void;
 }

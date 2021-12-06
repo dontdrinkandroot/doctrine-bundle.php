@@ -24,7 +24,7 @@ class RenderOrmDiagramCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Renders an entity relationship diagram based on the ORM Metadata')
@@ -50,7 +50,7 @@ class RenderOrmDiagramCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!class_exists(Graph::class)) {
             throw new Exception('You need to install graphp/graphviz in order to render diagrams');
@@ -173,7 +173,7 @@ class RenderOrmDiagramCommand extends Command
         return 0;
     }
 
-    private function isNullableAssociation($associationMapping)
+    private function isNullableAssociation(array $associationMapping): bool
     {
         $joinColumns = $associationMapping['joinColumns'];
         if (count($joinColumns) > 1) {
@@ -216,7 +216,8 @@ class RenderOrmDiagramCommand extends Command
         return $label;
     }
 
-    private function getIgnoreTableNames(InputInterface $input)
+    /** @return list<string> */
+    private function getIgnoreTableNames(InputInterface $input): array
     {
         $ignoreTablesInputOption = $input->getOption('ignore-tables');
         if (null === $ignoreTablesInputOption) {

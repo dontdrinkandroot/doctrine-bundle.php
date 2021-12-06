@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\DoctrineBundle\Service\TransactionManager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -64,16 +63,22 @@ class TransactionManager
         return 0 !== $this->entityManager->getConnection()->getTransactionNestingLevel();
     }
 
+    /**
+     * @template T
+     *
+     * @param callable(TransactionManager):T $func
+     * @param bool                           $forceFlush
+     * @param bool                           $closeOnException
+     *
+     * @return T
+     * @throws Exception
+     */
     public function transactional(callable $func, bool $forceFlush = false, bool $closeOnException = true)
     {
-        if (!is_callable($func)) {
-            throw new InvalidArgumentException('Expected argument of type "callable", got "' . gettype($func) . '"');
-        }
-
         $this->beginTransaction();
 
         try {
-            $return = call_user_func($func, $this);
+            $return = $func($this);
 
             $this->commitTransaction($forceFlush);
 

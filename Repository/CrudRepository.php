@@ -7,7 +7,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
- * @template T
+ * @template T of object
  * @implements CrudRepositoryInterface<T>
  * @extends ServiceEntityRepository<T>
  */
@@ -80,6 +80,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         $queryBuilder->setFirstResult(($page - 1) * $perPage);
         $queryBuilder->setMaxResults($perPage);
 
+        /** @var Paginator<T> */
         return new Paginator($queryBuilder);
     }
 
@@ -94,7 +95,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     }
 
     /**
-     * @param object|null $result
+     * @param T|null $result
      *
      * @throws NoResultException
      */

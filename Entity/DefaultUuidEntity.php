@@ -26,8 +26,9 @@ class DefaultUuidEntity extends DefaultEntity implements UuidEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function setUuid(UuidInterface $uuid)
+    public function setUuid(UuidInterface $uuid): static
     {
         $this->uuid = $uuid;
+        return $this;
     }
 }

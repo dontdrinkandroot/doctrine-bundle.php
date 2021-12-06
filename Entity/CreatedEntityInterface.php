@@ -8,5 +8,5 @@ interface CreatedEntityInterface
 {
     public function getCreated(): ?DateTimeInterface;
 
-    public function setCreated(DateTimeInterface $created);
+    public function setCreated(DateTimeInterface $created): static;
 }

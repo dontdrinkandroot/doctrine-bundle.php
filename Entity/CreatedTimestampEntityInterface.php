@@ -6,5 +6,5 @@ interface CreatedTimestampEntityInterface
 {
     public function getCreatedTimestamp(): ?int;
 
-    public function setCreatedTimestamp(int $timestamp);
+    public function setCreatedTimestamp(int $timestamp): static;
 }

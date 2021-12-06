@@ -24,7 +24,7 @@ class RenderDbalDiagramCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Renders an entity relationship diagram based on the current database schema');
@@ -33,13 +33,13 @@ class RenderDbalDiagramCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connectionName = $this->registry->getDefaultConnectionName();
         /** @var Connection $connection */
         $connection = $this->registry->getConnection($connectionName);
 
-        $schemaManager = $connection->getSchemaManager();
+        $schemaManager = $connection->createSchemaManager();
         $schema = $schemaManager->createSchema();
 
         $graphvizVisitor = new Graphviz();
