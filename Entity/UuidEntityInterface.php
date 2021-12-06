@@ -4,9 +4,6 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use Ramsey\Uuid\UuidInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 interface UuidEntityInterface
 {
     public function getUuid(): ?UuidInterface;

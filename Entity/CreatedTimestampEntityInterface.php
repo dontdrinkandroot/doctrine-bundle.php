@@ -2,9 +2,6 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 interface CreatedTimestampEntityInterface
 {
     public function getCreatedTimestamp(): ?int;

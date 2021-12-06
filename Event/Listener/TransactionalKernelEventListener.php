@@ -17,21 +17,12 @@ class TransactionalKernelEventListener
 {
     private LoggerInterface $logger;
 
-    private TransactionManagerRegistry $transactionManagerRegistry;
-
-    private array $enabledManagerNames;
-
-    private array $rollbackCodes;
-
     public function __construct(
-        TransactionManagerRegistry $transactionManagerRegistry,
-        array $enabledManagerNames = [],
-        array $rollbackCodes = []
+        private TransactionManagerRegistry $transactionManagerRegistry,
+        private array $enabledManagerNames = [],
+        private array $rollbackCodes = []
     ) {
         $this->logger = new NullLogger();
-        $this->transactionManagerRegistry = $transactionManagerRegistry;
-        $this->enabledManagerNames = $enabledManagerNames;
-        $this->rollbackCodes = $rollbackCodes;
     }
 
     public function onKernelRequest(RequestEvent $event): void

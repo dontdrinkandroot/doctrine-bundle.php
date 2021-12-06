@@ -7,8 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\MappedSuperclass()
- *
- * @author Philip Washington Sorst <philip@sorst.net>
  */
 class DefaultEntity
 {

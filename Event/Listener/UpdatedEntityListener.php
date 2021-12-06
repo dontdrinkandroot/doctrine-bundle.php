@@ -4,13 +4,10 @@ namespace Dontdrinkandroot\DoctrineBundle\Event\Listener;
 
 use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Dontdrinkandroot\Common\DateUtils;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampEntityInterface;
-use Dontdrinkandroot\DoctrineBundle\Utils\DateUtils;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class UpdatedEntityListener
 {
     public function prePersist(LifecycleEventArgs $args): void
@@ -31,10 +28,11 @@ class UpdatedEntityListener
             $entity->setUpdated(new DateTime());
         }
 
-        if (is_a($entity, UpdatedTimestampEntityInterface::class)) {
-            if (null === $entity->getUpdatedTimestamp()) {
-                $entity->setUpdatedTimestamp(DateUtils::getCurrentTimeInMilliseconds());
-            }
+        if (
+            is_a($entity, UpdatedTimestampEntityInterface::class)
+            && null === $entity->getUpdatedTimestamp()
+        ) {
+            $entity->setUpdatedTimestamp(DateUtils::currentMillis());
         }
     }
 }

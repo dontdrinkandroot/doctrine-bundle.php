@@ -8,18 +8,12 @@ use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class TransactionManager
 {
     private LoggerInterface $logger;
 
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
         $this->logger = new NullLogger();
     }
 

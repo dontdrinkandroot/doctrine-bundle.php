@@ -4,21 +4,16 @@ namespace Dontdrinkandroot\DoctrineBundle\Service\TransactionManager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManager;
+use Dontdrinkandroot\Common\Asserted;
 use RuntimeException;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class TransactionManagerRegistry
 {
-    private ManagerRegistry $registry;
+    /** @var array<string,TransactionManager> */
+    private array $transactionManagersByName = [];
 
-    private $transactionManagersByName = [];
-
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private ManagerRegistry $registry)
     {
-        $this->registry = $registry;
     }
 
     public function getDefault(): TransactionManager
@@ -30,13 +25,12 @@ class TransactionManagerRegistry
 
     public function getByName(string $name): TransactionManager
     {
-        $objectManager = $this->registry->getManager($name);
         if (array_key_exists($name, $this->transactionManagersByName)) {
             return $this->transactionManagersByName[$name];
         }
 
-        assert($objectManager instanceof EntityManagerInterface);
-        $transactionManager = new TransactionManager($objectManager);
+        $entityManager = Asserted::instanceOf($this->registry->getManager($name), EntityManagerInterface::class);
+        $transactionManager = new TransactionManager($entityManager);
         $this->transactionManagersByName[$name] = $transactionManager;
 
         return $transactionManager;

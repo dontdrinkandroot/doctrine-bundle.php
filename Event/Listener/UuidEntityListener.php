@@ -6,9 +6,6 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\DoctrineBundle\Entity\UuidEntityInterface;
 use Ramsey\Uuid\Uuid;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class UuidEntityListener
 {
     public function prePersist(LifecycleEventArgs $args): void
