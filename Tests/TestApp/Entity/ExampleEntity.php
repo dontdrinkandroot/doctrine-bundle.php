@@ -53,9 +53,10 @@ class ExampleEntity extends DefaultUuidEntity
     /**
      * {@inheritdoc}
      */
-    public function setCreated(?DateTimeInterface $created): void
+    public function setCreated(?DateTimeInterface $created): static
     {
         $this->created = $created;
+        return $this;
     }
 
     /**
@@ -69,9 +70,10 @@ class ExampleEntity extends DefaultUuidEntity
     /**
      * {@inheritdoc}
      */
-    public function setUpdated(?DateTimeInterface $updated): void
+    public function setUpdated(?DateTimeInterface $updated): static
     {
         $this->updated = $updated;
+        return $this;
     }
 
     /**
@@ -85,9 +87,10 @@ class ExampleEntity extends DefaultUuidEntity
     /**
      * {@inheritdoc}
      */
-    public function setCreatedTimestamp(?int $timestamp): void
+    public function setCreatedTimestamp(?int $timestamp): static
     {
         $this->createdTimestamp = $timestamp;
+        return $this;
     }
 
     /**
@@ -101,8 +104,9 @@ class ExampleEntity extends DefaultUuidEntity
     /**
      * {@inheritdoc}
      */
-    public function setUpdatedTimestamp(?int $timestamp): void
+    public function setUpdatedTimestamp(?int $timestamp): static
     {
         $this->updatedTimestamp = $timestamp;
+        return $this;
     }
 }

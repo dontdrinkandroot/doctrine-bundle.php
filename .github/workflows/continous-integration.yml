@@ -51,6 +51,8 @@ jobs:
     psalm:
         name: Psalm
         runs-on: ubuntu-latest
+        env:
+            SYMFONY_REQUIRE: "4.4.*"
         steps:
             -   name: "Checkout code"
                 uses: "actions/checkout@v2"
@@ -58,6 +60,8 @@ jobs:
                 uses: "shivammathur/setup-php@v2"
                 with:
                     php-version: "8.1"
+            -   name: "Globally install symfony/flex"
+                run: "composer global require --no-progress --no-scripts --no-plugins symfony/flex"
             -   name: "Install dependencies with Composer"
                 uses: "ramsey/composer-install@v1"
             -   name: "Install psalm"
