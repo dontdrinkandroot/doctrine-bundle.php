@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 
 /**
  * @ORM\MappedSuperclass()
