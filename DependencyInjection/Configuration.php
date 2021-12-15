@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class Configuration implements ConfigurationInterface
 {
@@ -27,7 +28,11 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->arrayNode('rollback_codes')
                         ->integerPrototype()->end()
-                        ->defaultValue([400, 500])
+                        ->defaultValue([
+                            Response::HTTP_BAD_REQUEST,
+                            Response::HTTP_UNPROCESSABLE_ENTITY,
+                            Response::HTTP_INTERNAL_SERVER_ERROR
+                        ])
                     ->end()
                 ->end()
             ->end()

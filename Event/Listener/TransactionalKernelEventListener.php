@@ -32,7 +32,7 @@ class TransactionalKernelEventListener
 
     public function onKernelRequest(RequestEvent $event): void
     {
-        if ($event->isMasterRequest()) {
+        if ($event->isMainRequest()) {
             foreach ($this->enabledManagerNames as $enabledManagerName) {
                 $transactionManager = $this->transactionManagerRegistry->getByName($enabledManagerName);
                 $this->getLogger()->info('Kernel Transaction: Begin', ['entitymanager' => $enabledManagerName]);
@@ -43,7 +43,7 @@ class TransactionalKernelEventListener
 
     public function onKernelFinishRequest(FinishRequestEvent $event): void
     {
-        if ($event->isMasterRequest()) {
+        if ($event->isMainRequest()) {
             foreach ($this->enabledManagerNames as $enabledManagerName) {
                 $transactionManager = $this->transactionManagerRegistry->getByName($enabledManagerName);
                 $this->getLogger()->info('Kernel Transaction: Commit', ['entitymanager' => $enabledManagerName]);
@@ -54,7 +54,7 @@ class TransactionalKernelEventListener
 
     public function onKernelTerminate(TerminateEvent $event): void
     {
-        if ($event->isMasterRequest()) {
+        if ($event->isMainRequest()) {
             $response = $event->getResponse();
             $statusCode = $response->getStatusCode();
             if (in_array($statusCode, $this->rollbackCodes, true)) {
@@ -72,7 +72,7 @@ class TransactionalKernelEventListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if ($event->isMasterRequest()) {
+        if ($event->isMainRequest()) {
             foreach ($this->enabledManagerNames as $enabledManagerName) {
                 $transactionManager = $this->transactionManagerRegistry->getByName($enabledManagerName);
                 $this->getLogger()->info(
