@@ -32,6 +32,13 @@ class TransactionManager
             return false;
         }
 
+        /* EntityManager closed */
+        if (!$this->getEntityManager()->isOpen()) {
+            $this->logger->warning('The EntityManager was already closed');
+
+            return false;
+        }
+
         /* Topmost transaction, flush */
         $flushed = false;
         if ($forceFlush || 1 === $nestingLevel) {
