@@ -19,6 +19,8 @@ trait CreatedTimestampTrait
     #[ORM\PrePersist]
     public function generateCreated(): void
     {
-        $this->created = DateUtils::currentMillis();
+        if (null === $this->created) {
+            $this->created = DateUtils::currentMillis();
+        }
     }
 }
