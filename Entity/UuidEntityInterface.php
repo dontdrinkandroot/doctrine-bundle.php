@@ -2,11 +2,11 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
-use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Uid\Uuid;
 
 interface UuidEntityInterface
 {
-    public function getUuid(): ?UuidInterface;
+    public function getUuid(): ?Uuid;
 
-    public function setUuid(UuidInterface $uuid): static;
+    public function setUuid(Uuid $uuid): static;
 }

@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\DoctrineBundle\DependencyInjection;
 
 use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
-use Ramsey\Uuid\Doctrine\UuidType;
 use RuntimeException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,7 +29,6 @@ class DdrDoctrineExtension extends Extension implements PrependExtensionInterfac
             [
                 'dbal' => [
                     'types' => [
-                        'uuid' => UuidType::class,
                         'milliseconds' => MillisecondsType::class
                     ],
                 ],

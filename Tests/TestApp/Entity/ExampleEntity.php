@@ -12,7 +12,6 @@ use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampEntityInterface;
 
 /**
  * @ORM\Entity()
- * @author Philip Washington Sorst <philip@sorst.net>
  */
 class ExampleEntity extends DefaultUuidEntity
     implements CreatedEntityInterface, UpdatedEntityInterface, CreatedTimestampEntityInterface, UpdatedTimestampEntityInterface

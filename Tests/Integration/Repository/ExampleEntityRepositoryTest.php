@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Tests\Integration\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\ManagerRegistry;
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\ExampleEntity;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ExampleEntityRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -19,19 +20,25 @@ class ExampleEntityRepositoryTest extends KernelTestCase
     protected function setUp(): void
     {
         self::bootKernel();
-        $managerRegistry = self::$container->get(ManagerRegistry::class);
-        assert($managerRegistry instanceof ManagerRegistry);
+        $managerRegistry = Asserted::instanceOf(
+            self::getContainer()->get(ManagerRegistry::class),
+            ManagerRegistry::class
+        );
 
-        $entityManager = $managerRegistry->getManagerForClass(ExampleEntity::class);
-        assert($entityManager instanceof EntityManagerInterface);
+        $entityManager = Asserted::instanceOf(
+            $managerRegistry->getManagerForClass(ExampleEntity::class),
+            EntityManagerInterface::class
+        );
         $metadataFactory = $entityManager->getMetadataFactory();
         $classes = $metadataFactory->getAllMetadata();
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->dropDatabase();
         $schemaTool->createSchema($classes);
 
-        $exampleEntityRepository = self::$container->get(ExampleEntityRepository::class);
-        assert($exampleEntityRepository instanceof ExampleEntityRepository);
+        $exampleEntityRepository = Asserted::instanceOf(
+            self::getContainer()->get(ExampleEntityRepository::class),
+            ExampleEntityRepository::class
+        );
         $this->exampleEntityRepository = $exampleEntityRepository;
     }
 

@@ -3,7 +3,7 @@
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\MappedSuperclass()
@@ -13,12 +13,12 @@ class DefaultUuidEntity extends DefaultEntity implements UuidEntityInterface
     /**
      * @ORM\Column(type="uuid", nullable=false, unique=true)
      */
-    protected ?UuidInterface $uuid = null;
+    protected ?Uuid $uuid = null;
 
     /**
      * {@inheritdoc}
      */
-    public function getUuid(): ?UuidInterface
+    public function getUuid(): ?Uuid
     {
         return $this->uuid;
     }
@@ -26,7 +26,7 @@ class DefaultUuidEntity extends DefaultEntity implements UuidEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function setUuid(UuidInterface $uuid): static
+    public function setUuid(Uuid $uuid): static
     {
         $this->uuid = $uuid;
         return $this;

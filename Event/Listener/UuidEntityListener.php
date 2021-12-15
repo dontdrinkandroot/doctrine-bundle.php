@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Event\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Dontdrinkandroot\DoctrineBundle\Entity\UuidEntityInterface;
-use Ramsey\Uuid\Uuid;
+use Symfony\Component\Uid\Uuid;
 
 class UuidEntityListener
 {
@@ -14,7 +14,7 @@ class UuidEntityListener
 
         if (is_a($entity, UuidEntityInterface::class)) {
             if (null === $entity->getUuid()) {
-                $entity->setUuid(Uuid::uuid4());
+                $entity->setUuid(Uuid::v4());
             }
         }
     }
