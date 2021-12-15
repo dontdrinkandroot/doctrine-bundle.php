@@ -18,15 +18,15 @@ interface CrudRepositoryInterface extends ObjectRepository
      *
      * @return T
      */
-    public function fetch($id, $lockMode = null, $lockVersion = null);
+    public function fetch($id, $lockMode = null, $lockVersion = null): object;
 
     /**
      * @param array<string, mixed>       $criteria
      * @param array<string, string>|null $orderBy
      *
-     * @return T|null
+     * @return T
      */
-    public function fetchOneBy(array $criteria, array $orderBy = null);
+    public function fetchOneBy(array $criteria, array $orderBy = null): object;
 
     /**
      * @param T    $entity

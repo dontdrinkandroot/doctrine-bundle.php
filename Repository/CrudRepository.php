@@ -16,7 +16,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     /**
      * {@inheritdoc}
      */
-    public function fetch($id, $lockMode = null, $lockVersion = null)
+    public function fetch($id, $lockMode = null, $lockVersion = null): object
     {
         $result = parent::find($id, $lockMode, $lockVersion);
         $this->assertResultFound($result);
@@ -26,7 +26,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     /**
      * {@inheritdoc}
      */
-    public function fetchOneBy(array $criteria, array $orderBy = null)
+    public function fetchOneBy(array $criteria, array $orderBy = null): object
     {
         $result = parent::findOneBy($criteria, $orderBy);
         $this->assertResultFound($result);

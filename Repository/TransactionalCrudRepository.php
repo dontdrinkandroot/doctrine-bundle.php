@@ -32,7 +32,7 @@ class TransactionalCrudRepository extends CrudRepository
     /**
      * {@inheritdoc}
      */
-    public function find($id, $lockMode = null, $lockVersion = null): ?object
+    public function find($id, $lockMode = null, $lockVersion = null)
     {
         return $this->getTransactionManager()->transactional(fn() => parent::find($id, $lockMode, $lockVersion));
     }
@@ -40,7 +40,7 @@ class TransactionalCrudRepository extends CrudRepository
     /**
      * {@inheritdoc}
      */
-    public function fetch($id, $lockMode = null, $lockVersion = null)
+    public function fetch($id, $lockMode = null, $lockVersion = null): object
     {
         return $this->getTransactionManager()->transactional(
             fn() => parent::fetch($id, $lockMode, $lockVersion)
@@ -68,7 +68,7 @@ class TransactionalCrudRepository extends CrudRepository
     /**
      * {@inheritdoc}
      */
-    public function findOneBy(array $criteria, array $orderBy = null): ?object
+    public function findOneBy(array $criteria, array $orderBy = null)
     {
         return $this->getTransactionManager()->transactional(fn() => parent::findOneBy($criteria, $orderBy));
     }
@@ -76,7 +76,7 @@ class TransactionalCrudRepository extends CrudRepository
     /**
      * {@inheritdoc}
      */
-    public function fetchOneBy(array $criteria, array $orderBy = null)
+    public function fetchOneBy(array $criteria, array $orderBy = null): object
     {
         return $this->getTransactionManager()->transactional(
             fn() => parent::fetchOneBy($criteria, $orderBy)
