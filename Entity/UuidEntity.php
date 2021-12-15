@@ -8,7 +8,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @ORM\MappedSuperclass()
  */
-class DefaultUuidEntity extends DefaultEntity implements UuidEntityInterface
+class UuidEntity extends Entity implements UuidEntityInterface
 {
     /**
      * @ORM\Column(type="uuid", nullable=false, unique=true)

@@ -50,8 +50,7 @@ class ExampleEntityRepositoryTest extends KernelTestCase
         $this->assertNotNull($exampleEntity->getId());
         $this->assertNotNull($exampleEntity->getUuid());
         $this->assertNotNull($exampleEntity->getCreated());
-        $this->assertNotNull($exampleEntity->getCreatedTimestamp());
         $this->assertNotNull($exampleEntity->getUpdated());
-        $this->assertNotNull($exampleEntity->getUpdatedTimestamp());
+        $this->assertTrue($exampleEntity->isPersisted());
     }
 }

@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\MappedSuperclass]
-class DefaultEntity
+class Entity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -47,7 +47,7 @@ class DefaultEntity
             return false;
         }
 
-        /** @var DefaultEntity $otherEntity */
+        /** @var Entity $otherEntity */
         $otherEntity = $other;
 
         return $this->getId() === $otherEntity->getId();

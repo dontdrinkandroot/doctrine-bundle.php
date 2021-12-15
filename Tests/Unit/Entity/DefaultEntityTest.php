@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Tests\Unit\Entity;
 
-use Dontdrinkandroot\DoctrineBundle\Entity\DefaultUuidEntity;
+use Dontdrinkandroot\DoctrineBundle\Entity\UuidEntity;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\ExampleEntity;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ class DefaultEntityTest extends TestCase
         $thisEntity = new ExampleEntity();
         $this->assertFalse($thisEntity->equals(null));
         $this->assertFalse($thisEntity->equals('somestring'));
-        $this->assertFalse($thisEntity->equals(new DefaultUuidEntity()));
+        $this->assertFalse($thisEntity->equals(new UuidEntity()));
 
         $otherEntity = new ExampleEntity();
         $this->assertTrue($thisEntity->equals($otherEntity));
