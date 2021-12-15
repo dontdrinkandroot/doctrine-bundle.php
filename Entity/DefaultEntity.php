@@ -3,18 +3,15 @@
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\MappedSuperclass()
- */
+#[ORM\MappedSuperclass]
 class DefaultEntity
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="bigint", nullable=false, options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::BIGINT, nullable: false)]
     protected ?int $id = null;
 
     public function getId(): ?int
@@ -54,5 +51,10 @@ class DefaultEntity
         $otherEntity = $other;
 
         return $this->getId() === $otherEntity->getId();
+    }
+
+    public function isPersisted(): bool
+    {
+        return null !== $this->getId();
     }
 }

@@ -3,37 +3,32 @@
 namespace Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity;
 
 use DateTimeInterface;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedEntityInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampEntityInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\DefaultUuidEntity;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedEntityInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampEntityInterface;
+use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ExampleEntityRepository;
+use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity(repositoryClass: ExampleEntityRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class ExampleEntity extends DefaultUuidEntity
-    implements CreatedEntityInterface, UpdatedEntityInterface, CreatedTimestampEntityInterface, UpdatedTimestampEntityInterface
+    implements CreatedEntityInterface, UpdatedEntityInterface, CreatedTimestampEntityInterface,
+               UpdatedTimestampEntityInterface
 {
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $created = null;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $updated = null;
 
-    /**
-     * @ORM\Column(type="milliseconds")
-     */
+    #[ORM\Column(type: MillisecondsType::NAME)]
     private ?int $createdTimestamp = null;
 
-    /**
-     * @ORM\Column(type="milliseconds")
-     */
+    #[ORM\Column(type: MillisecondsType::NAME, nullable: true)]
     private ?int $updatedTimestamp = null;
 
     public function setId(?int $id): void
