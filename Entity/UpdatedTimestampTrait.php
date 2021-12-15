@@ -23,7 +23,7 @@ trait UpdatedTimestampTrait
         if (null === $this->updated) {
             return null;
         }
-        return new DateTime('@' . ($this->updated / 1000));
+        return DateUtils::fromMillis($this->updated);
     }
 
     #[ORM\PrePersist]

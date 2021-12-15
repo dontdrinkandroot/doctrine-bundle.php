@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\DateUtils;
 use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
+use Symfony\Component\Validator\Constraints\Date;
 
 trait CreatedTimestampTrait
 {
@@ -23,7 +24,7 @@ trait CreatedTimestampTrait
         if (null === $this->created) {
             return null;
         }
-        return new DateTime('@' . ($this->created / 1000));
+        return DateUtils::fromMillis($this->created);
     }
 
     #[ORM\PrePersist]
