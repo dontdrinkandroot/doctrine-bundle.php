@@ -25,9 +25,6 @@
         "dontdrinkandroot/common": "dev-master",
         "symfony/config": "^5.4",
         "symfony/dependency-injection": "^5.4",
-        "symfony/form": "^5.4",
-        "symfony/property-access": "^5.4",
-        "symfony/security-core": "^5.4",
         "symfony/uid": "^5.4",
         "symfony/yaml": "^5.4"
     },
