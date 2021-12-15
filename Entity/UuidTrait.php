@@ -18,6 +18,8 @@ trait UuidTrait
     #[ORM\PrePersist]
     public function generateUuid(): void
     {
-        $this->uuid = Uuid::v4();
+        if (null === $this->uuid) {
+            $this->uuid = Uuid::v4();
+        }
     }
 }
