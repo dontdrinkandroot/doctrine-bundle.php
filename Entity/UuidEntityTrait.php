@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
-trait UuidTrait
+trait UuidEntityTrait
 {
     #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
     protected ?Uuid $uuid = null;

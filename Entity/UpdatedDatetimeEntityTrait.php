@@ -6,19 +6,20 @@ use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-trait CreatedDatetimeTrait
+trait UpdatedDatetimeEntityTrait
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
-    protected ?DateTime $created = null;
+    protected ?DateTime $updated = null;
 
-    public function getCreated(): ?DateTime
+    public function getUpdated(): ?DateTime
     {
-        return $this->created;
+        return $this->updated;
     }
 
     #[ORM\PrePersist]
-    public function generateCreated(): void
+    #[ORM\PreUpdate]
+    public function generateUpdated(): void
     {
-        $this->created = new DateTime();
+        $this->updated = new DateTime();
     }
 }

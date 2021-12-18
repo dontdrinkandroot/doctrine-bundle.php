@@ -2,13 +2,12 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\DateUtils;
 use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
 
-trait UpdatedTimestampTrait
+trait UpdatedTimestampEntityTrait
 {
     #[ORM\Column(type: MillisecondsType::NAME, nullable: false)]
     protected ?int $updated = null;

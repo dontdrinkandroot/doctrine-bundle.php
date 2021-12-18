@@ -2,14 +2,12 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\DateUtils;
 use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
-use Symfony\Component\Validator\Constraints\Date;
 
-trait CreatedTimestampTrait
+trait CreatedTimestampEntityTrait
 {
     #[ORM\Column(type: MillisecondsType::NAME, nullable: false)]
     protected ?int $created = null;
