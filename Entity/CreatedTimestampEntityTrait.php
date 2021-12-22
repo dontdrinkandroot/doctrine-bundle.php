@@ -9,7 +9,7 @@ use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
 
 trait CreatedTimestampEntityTrait
 {
-    #[ORM\Column(type: MillisecondsType::NAME, nullable: false)]
+    #[ORM\Column(type: MillisecondsType::NAME, nullable: false, options: ["unsigned" => true])]
     protected ?int $created = null;
 
     public function getCreated(): ?int

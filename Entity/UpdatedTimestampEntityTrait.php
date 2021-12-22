@@ -9,7 +9,7 @@ use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
 
 trait UpdatedTimestampEntityTrait
 {
-    #[ORM\Column(type: MillisecondsType::NAME, nullable: false)]
+    #[ORM\Column(type: MillisecondsType::NAME, nullable: false, options: ["unsigned" => true])]
     protected ?int $updated = null;
 
     public function getUpdated(): ?int
