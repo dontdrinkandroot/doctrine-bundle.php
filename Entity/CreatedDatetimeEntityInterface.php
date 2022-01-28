@@ -6,5 +6,5 @@ use DateTime;
 
 interface CreatedDatetimeEntityInterface
 {
-    public function getCreated(): ?DateTime;
+    public function getCreated(): DateTime;
 }

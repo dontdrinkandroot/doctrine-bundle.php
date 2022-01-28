@@ -9,9 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 trait CreatedDatetimeEntityTrait
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
-    protected ?DateTime $created = null;
+    public DateTime $created;
 
-    public function getCreated(): ?DateTime
+    public function getCreated(): DateTime
     {
         return $this->created;
     }

@@ -4,5 +4,5 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 interface CreatedTimestampEntityInterface
 {
-    public function getCreated(): ?int;
+    public function getCreated(): int;
 }

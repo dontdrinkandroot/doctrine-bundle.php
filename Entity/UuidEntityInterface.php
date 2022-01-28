@@ -6,5 +6,5 @@ use Symfony\Component\Uid\Uuid;
 
 interface UuidEntityInterface
 {
-    public function getUuid(): ?Uuid;
+    public function getUuid(): Uuid;
 }

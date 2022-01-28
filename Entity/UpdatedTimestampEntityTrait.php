@@ -10,18 +10,15 @@ use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
 trait UpdatedTimestampEntityTrait
 {
     #[ORM\Column(type: MillisecondsType::NAME, nullable: false, options: ["unsigned" => true])]
-    protected ?int $updated = null;
+    public int $updated;
 
-    public function getUpdated(): ?int
+    public function getUpdated(): int
     {
         return $this->updated;
     }
 
-    public function getUpdatedDateTime(): ?DateTimeInterface
+    public function getUpdatedDateTime(): DateTimeInterface
     {
-        if (null === $this->updated) {
-            return null;
-        }
         return DateUtils::fromMillis($this->updated);
     }
 

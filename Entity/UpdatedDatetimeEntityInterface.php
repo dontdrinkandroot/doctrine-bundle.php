@@ -6,5 +6,5 @@ use DateTime;
 
 interface UpdatedDatetimeEntityInterface
 {
-    public function getUpdated(): ?DateTime;
+    public function getUpdated(): DateTime;
 }

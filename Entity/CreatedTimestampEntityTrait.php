@@ -10,26 +10,21 @@ use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
 trait CreatedTimestampEntityTrait
 {
     #[ORM\Column(type: MillisecondsType::NAME, nullable: false, options: ["unsigned" => true])]
-    protected ?int $created = null;
+    public int $created;
 
-    public function getCreated(): ?int
+    public function getCreated(): int
     {
         return $this->created;
     }
 
-    public function getCreatedDateTime(): ?DateTimeInterface
+    public function getCreatedDateTime(): DateTimeInterface
     {
-        if (null === $this->created) {
-            return null;
-        }
         return DateUtils::fromMillis($this->created);
     }
 
     #[ORM\PrePersist]
     public function generateCreated(): void
     {
-        if (null === $this->created) {
-            $this->created = DateUtils::currentMillis();
-        }
+        $this->created = DateUtils::currentMillis();
     }
 }

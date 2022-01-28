@@ -4,5 +4,5 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 interface UpdatedTimestampEntityInterface
 {
-    public function getUpdated(): ?int;
+    public function getUpdated(): int;
 }

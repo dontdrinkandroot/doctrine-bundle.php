@@ -9,9 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 trait UpdatedDatetimeEntityTrait
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
-    protected ?DateTime $updated = null;
+    public DateTime $updated;
 
-    public function getUpdated(): ?DateTime
+    public function getUpdated(): DateTime
     {
         return $this->updated;
     }
