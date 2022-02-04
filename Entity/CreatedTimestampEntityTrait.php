@@ -25,6 +25,9 @@ trait CreatedTimestampEntityTrait
     #[ORM\PrePersist]
     public function generateCreated(): void
     {
-        $this->created = DateUtils::currentMillis();
+        /* Checking it is already set in case it was assigned manually */
+        if (!isset($this->created)) {
+            $this->created = DateUtils::currentMillis();
+        }
     }
 }
