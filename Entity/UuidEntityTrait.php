@@ -16,10 +16,12 @@ trait UuidEntityTrait
     }
 
     #[ORM\PrePersist]
-    public function generateUuid(): void
+    public function generateUuid(): Uuid
     {
         if (!isset($this->uuid)) {
             $this->uuid = Uuid::v4();
         }
+
+        return $this->uuid;
     }
 }
