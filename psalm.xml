@@ -7,17 +7,43 @@
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
-        <directory name="Command" />
-        <directory name="DependencyInjection" />
-        <directory name="Entity" />
-        <directory name="Event" />
-        <directory name="Repository" />
-        <directory name="Service" />
-        <directory name="Type" />
-        <file name="DdrDoctrineBundle.php" />
+        <directory name="." />
         <ignoreFiles>
             <directory name="vendor" />
-            <file name="DependencyInjection/Configuration.php" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <file name="Tests/Integration/Command/RenderDbalDiagramCommandTest.php" />
+                <file name="Tests/Integration/Command/RenderOrmDiagramCommandTest.php" />
+                <file name="Tests/Integration/Repository/ExampleEntityRepositoryTest.php" />
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+        <DeprecatedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Doctrine\DBAL\Schema\Visitor\Graphviz" />
+            </errorLevel>
+        </DeprecatedClass>
+        <PossiblyUndefinedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children" />
+            </errorLevel>
+        </PossiblyUndefinedMethod>
+        <RedundantPropertyInitializationCheck>
+            <errorLevel type="suppress">
+                <file name="Entity/CreatedTimestampEntityTrait.php" />
+                <file name="Entity/UuidEntityTrait.php" />
+            </errorLevel>
+        </RedundantPropertyInitializationCheck>
+        <MissingConstructor>
+            <errorLevel type="suppress">
+                <file name="Entity/CreatedTimestampEntityTrait.php" />
+                <file name="Entity/GeneratedIdEntityTrait.php" />
+                <file name="Entity/UpdatedTimestampEntityTrait.php" />
+                <file name="Entity/UuidEntityTrait.php" />
+            </errorLevel>
+        </MissingConstructor>
+    </issueHandlers>
 </psalm>

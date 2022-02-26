@@ -8,6 +8,8 @@
         "ORM",
         "Utils"
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "license": "Apache-2.0",
     "authors": [
         {
@@ -22,7 +24,7 @@
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/orm": "^2.10",
         "doctrine/persistence": "^2.2",
-        "dontdrinkandroot/common": "dev-master",
+        "dontdrinkandroot/common": "^0.2",
         "symfony/config": "^5.4",
         "symfony/dependency-injection": "^5.4",
         "symfony/uid": "^5.4",
@@ -31,7 +33,7 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "graphp/graphviz": "^0.2.1",
-        "liip/test-fixtures-bundle": "^1.0",
+        "liip/test-fixtures-bundle": "^2.2",
         "phpunit/phpunit": "^9.5.10",
         "symfony/framework-bundle": "^5.4",
         "symfony/phpunit-bridge": "^5.4"
@@ -50,5 +52,10 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.3.x-dev"
+        }
     }
 }
