@@ -9,7 +9,7 @@ use Dontdrinkandroot\DoctrineBundle\Type\BigInt64Type;
 trait AssignedIdEntityTrait
 {
     #[ORM\Id]
-    #[ORM\Column(type: BigInt64Type::NAME, nullable: false, options: ["unsigned" => true])]
+    #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
     public int $id;
 
     public function getId(): int
