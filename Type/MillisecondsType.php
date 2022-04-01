@@ -2,9 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Type;
 
-use Doctrine\DBAL\Types\BigIntType;
-
-class MillisecondsType extends BigIntType
+class MillisecondsType extends BigInt64Type
 {
     public const NAME = 'milliseconds';
 

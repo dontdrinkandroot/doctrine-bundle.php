@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\DependencyInjection;
 
+use Dontdrinkandroot\DoctrineBundle\Type\BigInt64Type;
 use Dontdrinkandroot\DoctrineBundle\Type\MillisecondsType;
 use RuntimeException;
 use Symfony\Component\Config\FileLocator;
@@ -29,7 +30,8 @@ class DdrDoctrineExtension extends Extension implements PrependExtensionInterfac
             [
                 'dbal' => [
                     'types' => [
-                        'milliseconds' => MillisecondsType::class
+                        MillisecondsType::NAME => MillisecondsType::class,
+                        BigInt64Type::NAME => BigInt64Type::class,
                     ],
                 ],
             ]
