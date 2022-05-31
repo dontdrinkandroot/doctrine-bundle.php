@@ -7,20 +7,13 @@
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
-        <directory name="." />
+        <directory name="src/" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
 
     <issueHandlers>
-        <PropertyNotSetInConstructor>
-            <errorLevel type="suppress">
-                <file name="Tests/Integration/Command/RenderDbalDiagramCommandTest.php" />
-                <file name="Tests/Integration/Command/RenderOrmDiagramCommandTest.php" />
-                <file name="Tests/Integration/Repository/ExampleEntityRepositoryTest.php" />
-            </errorLevel>
-        </PropertyNotSetInConstructor>
         <DeprecatedClass>
             <errorLevel type="suppress">
                 <referencedClass name="Doctrine\DBAL\Schema\Visitor\Graphviz" />
@@ -33,16 +26,16 @@
         </PossiblyUndefinedMethod>
         <RedundantPropertyInitializationCheck>
             <errorLevel type="suppress">
-                <file name="Entity/CreatedTimestampEntityTrait.php" />
-                <file name="Entity/UuidEntityTrait.php" />
+                <file name="src/Entity/CreatedTimestampEntityTrait.php" />
+                <file name="src/Entity/UuidEntityTrait.php" />
             </errorLevel>
         </RedundantPropertyInitializationCheck>
         <MissingConstructor>
             <errorLevel type="suppress">
-                <file name="Entity/CreatedTimestampEntityTrait.php" />
-                <file name="Entity/GeneratedIdEntityTrait.php" />
-                <file name="Entity/UpdatedTimestampEntityTrait.php" />
-                <file name="Entity/UuidEntityTrait.php" />
+                <file name="src/Entity/CreatedTimestampEntityTrait.php" />
+                <file name="src/Entity/GeneratedIdEntityTrait.php" />
+                <file name="src/Entity/UpdatedTimestampEntityTrait.php" />
+                <file name="src/Entity/UuidEntityTrait.php" />
             </errorLevel>
         </MissingConstructor>
     </issueHandlers>

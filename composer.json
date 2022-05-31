@@ -40,11 +40,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Dontdrinkandroot\\DoctrineBundle\\": ""
-        },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+            "Dontdrinkandroot\\DoctrineBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dontdrinkandroot\\DoctrineBundle\\Tests\\": "tests/"
+        }
     },
     "suggest": {
         "doctrine/data-fixtures": "For data fixture testing",
