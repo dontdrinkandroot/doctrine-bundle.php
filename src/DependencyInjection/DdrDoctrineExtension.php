@@ -23,7 +23,7 @@ class DdrDoctrineExtension extends Extension implements PrependExtensionInterfac
             throw new RuntimeException('Please enable DoctrineBundle in your bundles.php');
         }
 
-        /* Register uuid type */
+        /* Register BingInt64 type */
         $container->prependExtensionConfig(
             'doctrine',
             [
