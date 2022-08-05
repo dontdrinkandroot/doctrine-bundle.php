@@ -19,9 +19,9 @@ class Configuration implements ConfigurationInterface
         // @formatter:off
         $rootNode->children()
             ->arrayNode('transactional_listener')
+                ->canBeDisabled()
                 ->addDefaultsIfNotSet()
                 ->children()
-                    ->booleanNode('enabled')->defaultFalse()->end()
                     ->arrayNode('managers')
                         ->scalarPrototype()->end()
                         ->defaultValue(['default'])
