@@ -10,15 +10,12 @@
         <directory name="src/" />
         <ignoreFiles>
             <directory name="vendor" />
+            <file name="src/Command/RenderOrmDiagramCommand.php" />
+            <file name="src/Command/RenderDbalDiagramCommand.php" />
         </ignoreFiles>
     </projectFiles>
 
     <issueHandlers>
-        <DeprecatedClass>
-            <errorLevel type="suppress">
-                <referencedClass name="Doctrine\DBAL\Schema\Visitor\Graphviz" />
-            </errorLevel>
-        </DeprecatedClass>
         <PossiblyUndefinedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children" />

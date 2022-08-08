@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Command\Proxy\DoctrineCommandHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Dontdrinkandroot\Common\Asserted;
 use Exception;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
@@ -52,7 +53,7 @@ class RenderOrmDiagramCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!class_exists(Graph::class)) {
+        if (!class_exists('Fhaculty\Graph\Graph')) {
             throw new Exception('You need to install graphp/graphviz in order to render diagrams');
         }
 
@@ -64,8 +65,7 @@ class RenderOrmDiagramCommand extends Command
         /** @var EntityManagerInterface $em */
         $em = $this->getHelper('em')->getEntityManager();
 
-        $mappingDriver = $em->getConfiguration()->getMetadataDriverImpl();
-        assert(null !== $mappingDriver);
+        $mappingDriver = Asserted::notNull($em->getConfiguration()->getMetadataDriverImpl());
         $entityClassNames = $mappingDriver->getAllClassNames();
 
         $graph = new Graph();
