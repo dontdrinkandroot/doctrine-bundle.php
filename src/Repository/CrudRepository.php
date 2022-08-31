@@ -91,7 +91,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
 
     public function clear(): void
     {
-        $this->getEntityManager()->clear($this->getClassMetadata()->rootEntityName);
+        $this->getEntityManager()->clear();
     }
 
     /**
