@@ -1,0 +1,4 @@
+doctrine:
+    dbal:
+        types:
+            bigint: Dontdrinkandroot\DoctrineBundle\Type\BigInt64Type

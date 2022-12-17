@@ -2,39 +2,13 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\DependencyInjection;
 
-use Dontdrinkandroot\DoctrineBundle\Type\BigInt64Type;
-use RuntimeException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class DdrDoctrineExtension extends Extension implements PrependExtensionInterface
+class DdrDoctrineExtension extends Extension
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function prepend(ContainerBuilder $container): void
-    {
-        $bundles = $container->getParameter('kernel.bundles');
-        assert(is_array($bundles));
-        if (!array_key_exists('DoctrineBundle', $bundles)) {
-            throw new RuntimeException('Please enable DoctrineBundle in your bundles.php');
-        }
-
-        /* Register BingInt64 type */
-        $container->prependExtensionConfig(
-            'doctrine',
-            [
-                'dbal' => [
-                    'types' => [
-                        'bigint' => BigInt64Type::class,
-                    ],
-                ],
-            ]
-        );
-    }
 
     /**
      * {@inheritdoc}
