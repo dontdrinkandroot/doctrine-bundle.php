@@ -60,6 +60,10 @@
         }
     },
     "extra": {
+        "symfony": {
+            "require": "5.4.*",
+            "allow-contrib": true
+        },
         "branch-alias": {
             "dev-master": "0.3.x-dev"
         }
