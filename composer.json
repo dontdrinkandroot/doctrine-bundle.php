@@ -27,7 +27,6 @@
         "dontdrinkandroot/common": "^0.2",
         "symfony/config": "^5.4",
         "symfony/dependency-injection": "^5.4",
-        "symfony/flex": "^2.2",
         "symfony/uid": "^5.4",
         "symfony/yaml": "^5.4"
     },
