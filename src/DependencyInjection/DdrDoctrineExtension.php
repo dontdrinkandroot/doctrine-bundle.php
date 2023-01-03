@@ -18,8 +18,8 @@ class DdrDoctrineExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
-        $loader->load('services.yml');
+        $loader = new Loader\PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
+        $loader->load('services.php');
 
         if ($config['transactional_listener']['enabled']) {
             $container->setParameter(
@@ -30,7 +30,7 @@ class DdrDoctrineExtension extends Extension
                 'ddr_doctrine.transactional_listener.rollback_codes',
                 $config['transactional_listener']['rollback_codes']
             );
-            $loader->load('transactional_listener.yaml');
+            $loader->load('transactional_listener.php');
         }
     }
 }

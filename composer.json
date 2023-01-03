@@ -18,6 +18,16 @@
             "homepage": "https://sorst.net"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Dontdrinkandroot\\DoctrineBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dontdrinkandroot\\DoctrineBundle\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "php": "^8.1",
         "doctrine/dbal": "^3.5",
@@ -37,16 +47,6 @@
         "phpunit/phpunit": "^9.5.27",
         "symfony/framework-bundle": "^5.4",
         "symfony/phpunit-bridge": "^5.4"
-    },
-    "autoload": {
-        "psr-4": {
-            "Dontdrinkandroot\\DoctrineBundle\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Dontdrinkandroot\\DoctrineBundle\\Tests\\": "tests/"
-        }
     },
     "suggest": {
         "doctrine/data-fixtures": "For data fixture testing",
