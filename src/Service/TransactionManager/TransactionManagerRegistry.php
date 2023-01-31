@@ -13,7 +13,7 @@ class TransactionManagerRegistry
     /** @var array<string,TransactionManager> */
     private array $transactionManagersByName = [];
 
-    public function __construct(private ManagerRegistry $registry)
+    public function __construct(private readonly ManagerRegistry $registry)
     {
     }
 

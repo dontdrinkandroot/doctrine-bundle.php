@@ -11,7 +11,7 @@ class TransactionManager
 {
     private LoggerInterface $logger;
 
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
         $this->logger = new NullLogger();
     }
@@ -74,8 +74,6 @@ class TransactionManager
      * @template T
      *
      * @param callable(TransactionManager):T $func
-     * @param bool                           $forceFlush
-     * @param bool                           $closeOnException
      *
      * @return T
      * @throws Exception

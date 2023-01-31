@@ -13,12 +13,11 @@ use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManage
  */
 class TransactionalCrudRepository extends CrudRepository
 {
-    private TransactionManager $transactionManager;
+    private readonly TransactionManager $transactionManager;
 
     /**
      * @param ManagerRegistry            $registry
      * @param class-string<T>            $entityClass
-     * @param TransactionManagerRegistry $transactionManagerRegistry
      */
     public function __construct(
         ManagerRegistry $registry,
@@ -43,7 +42,7 @@ class TransactionalCrudRepository extends CrudRepository
     public function fetch($id, $lockMode = null, $lockVersion = null): object
     {
         return $this->getTransactionManager()->transactional(
-            fn() => parent::fetch($id, $lockMode, $lockVersion)
+            fn(): object => parent::fetch($id, $lockMode, $lockVersion)
         );
     }
 
@@ -79,7 +78,7 @@ class TransactionalCrudRepository extends CrudRepository
     public function fetchOneBy(array $criteria, array $orderBy = null): object
     {
         return $this->getTransactionManager()->transactional(
-            fn() => parent::fetchOneBy($criteria, $orderBy)
+            fn(): object => parent::fetchOneBy($criteria, $orderBy)
         );
     }
 

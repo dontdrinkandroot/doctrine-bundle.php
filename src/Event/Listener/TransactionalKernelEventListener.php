@@ -18,14 +18,13 @@ class TransactionalKernelEventListener
     private LoggerInterface $logger;
 
     /**
-     * @param TransactionManagerRegistry $transactionManagerRegistry
      * @param list<string>               $enabledManagerNames
      * @param list<int>                  $rollbackCodes
      */
     public function __construct(
-        private TransactionManagerRegistry $transactionManagerRegistry,
-        private array $enabledManagerNames = [],
-        private array $rollbackCodes = []
+        private readonly TransactionManagerRegistry $transactionManagerRegistry,
+        private readonly array $enabledManagerNames = [],
+        private readonly array $rollbackCodes = []
     ) {
         $this->logger = new NullLogger();
     }

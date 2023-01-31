@@ -21,15 +21,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RenderOrmDiagramCommand extends Command
 {
     protected static $defaultName = 'ddr:doctrine:render-orm-diagram';
+    protected static $defaultDescription = 'Renders an entity relationship diagram based on the ORM Metadata';
 
     /**
      * {@inheritdoc}
      */
     protected function configure(): void
     {
-        $this
-            ->setDescription('Renders an entity relationship diagram based on the ORM Metadata')
-            ->addOption('em', null, InputOption::VALUE_OPTIONAL, 'The entity manager to use for this command')
+        $this->addOption('em', null, InputOption::VALUE_OPTIONAL, 'The entity manager to use for this command')
             ->addOption(
                 'executable',
                 null,
@@ -170,13 +169,13 @@ class RenderOrmDiagramCommand extends Command
             $graphviz->display($graph);
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 
     private function isNullableAssociation(array $associationMapping): bool
     {
         $joinColumns = $associationMapping['joinColumns'];
-        if (count($joinColumns) > 1) {
+        if ((is_countable($joinColumns) ? count($joinColumns) : 0) > 1) {
             throw new Exception('More than one join Column currently not supported');
         }
         if (!array_key_exists('nullable', $joinColumns[0])) {
@@ -224,7 +223,7 @@ class RenderOrmDiagramCommand extends Command
             return [];
         }
 
-        return explode(',', $ignoreTablesInputOption);
+        return explode(',', (string)$ignoreTablesInputOption);
     }
 
     private function isNullable(array $fieldMapping): bool

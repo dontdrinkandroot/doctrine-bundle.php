@@ -12,13 +12,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RenderDbalDiagramCommand extends Command
 {
     protected static $defaultName = 'ddr:doctrine:render-dbal-diagram';
+    protected static $defaultDescription = 'Renders an entity relationship diagram based on the current database schema';
 
-    private Registry $registry;
-
-    public function __construct(Registry $registry)
+    public function __construct(private readonly Registry $registry)
     {
         parent::__construct();
-        $this->registry = $registry;
     }
 
     /**
@@ -26,8 +24,6 @@ class RenderDbalDiagramCommand extends Command
      */
     protected function configure(): void
     {
-        $this
-            ->setDescription('Renders an entity relationship diagram based on the current database schema');
     }
 
     /**
@@ -46,6 +42,6 @@ class RenderDbalDiagramCommand extends Command
         $schema->visit($graphvizVisitor);
         $output->writeln($graphvizVisitor->getOutput());
 
-        return 0;
+        return Command::SUCCESS;
     }
 }
