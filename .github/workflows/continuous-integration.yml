@@ -3,38 +3,13 @@ name: "Continuous Integration"
 on: push
 
 jobs:
-    phpunit:
-        uses: dontdrinkandroot/github-actions/.github/workflows/php-phpunit-symfony-bundle.yml@main
+    phpunit-and-psalm:
+        uses: dontdrinkandroot/github-actions/.github/workflows/php-symfony-bundle.yml@main
         secrets: inherit
-
-    psalm:
-        name: Psalm
-        runs-on: ubuntu-latest
-        env:
-            SYMFONY_REQUIRE: "5.4.*"
-        steps:
-            -   name: "Checkout code"
-                uses: "actions/checkout@v2"
-            -   name: "Install PHP"
-                uses: "shivammathur/setup-php@v2"
-                with:
-                    php-version: "8.1"
-            -   name: "Allow symfony/flex globally"
-                run: "composer global config --no-plugins allow-plugins.symfony/flex true"
-            -   name: "Globally install symfony/flex and psalm"
-                run: |
-                    composer global config --no-plugins allow-plugins.symfony/flex true
-                    composer global require --no-progress --no-scripts --no-plugins symfony/flex vimeo/psalm
-            -   name: "Validate composer"
-                run: "composer validate"
-            -   name: "Install dependencies with Composer"
-                uses: "ramsey/composer-install@v2"
-            -   name: "Run psalm"
-                run: "psalm"
 
     sonarcloud:
         uses: dontdrinkandroot/github-actions/.github/workflows/php-sonarcloud.yml@main
-        needs: phpunit
+        needs: phpunit-and-psalm
         with:
             project-key: "dontdrinkandroot_doctrine-bundle.php"
         secrets: inherit
