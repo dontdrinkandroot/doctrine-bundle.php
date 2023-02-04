@@ -4,7 +4,7 @@ on: push
 
 jobs:
     phpunit:
-        uses: dontdrinkandroot/github-actions/.github/workflows/php-ogbozbut.symfony-bundle.yml@main
+        uses: dontdrinkandroot/github-actions/.github/workflows/php-phpunit-symfony-bundle.yml@main
         secrets: inherit
 
     psalm:
