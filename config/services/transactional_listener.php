@@ -20,8 +20,6 @@ return function (ContainerConfigurator $configurator): void {
         ])
         ->call('setLogger', [service('logger')])
         ->tag('kernel.event_listener', ['event' => 'kernel.request', 'priority' => 2048])
-        ->tag('kernel.event_listener', ['event' => 'kernel.finish_request'])
         ->tag('kernel.event_listener', ['event' => 'kernel.terminate'])
-        ->tag('kernel.event_listener', ['event' => 'kernel.exception'])
         ->tag('monolog.logger', ['channel' => 'doctrine']);
 };

@@ -6,3 +6,11 @@ services:
 
     Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\:
         resource: '../Repository'
+
+    Dontdrinkandroot\DoctrineBundle\Tests\TestApp\DataFixtures\:
+        resource: '../DataFixtures'
+
+    Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Controller\TestController:
+        public: true
+        tags:
+            - { name: controller.service_arguments }

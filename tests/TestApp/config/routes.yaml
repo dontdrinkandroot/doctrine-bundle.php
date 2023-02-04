@@ -1,0 +1,3 @@
+test:
+    path: /test/{id}
+    controller: Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Controller\TestController
