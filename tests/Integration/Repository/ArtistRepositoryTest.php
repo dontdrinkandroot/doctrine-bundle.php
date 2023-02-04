@@ -6,13 +6,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
-use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\ExampleEntity;
-use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ExampleEntityRepository;
+use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\Artist;
+use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ArtistRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class ExampleEntityRepositoryTest extends KernelTestCase
+class ArtistRepositoryTest extends KernelTestCase
 {
-    private ExampleEntityRepository $exampleEntityRepository;
+    private ArtistRepository $artistRepository;
 
     /**
      * {@inheritdoc}
@@ -26,7 +26,7 @@ class ExampleEntityRepositoryTest extends KernelTestCase
         );
 
         $entityManager = Asserted::instanceOf(
-            $managerRegistry->getManagerForClass(ExampleEntity::class),
+            $managerRegistry->getManagerForClass(Artist::class),
             EntityManagerInterface::class
         );
         $metadataFactory = $entityManager->getMetadataFactory();
@@ -35,22 +35,22 @@ class ExampleEntityRepositoryTest extends KernelTestCase
         $schemaTool->dropDatabase();
         $schemaTool->createSchema($classes);
 
-        $exampleEntityRepository = Asserted::instanceOf(
-            self::getContainer()->get(ExampleEntityRepository::class),
-            ExampleEntityRepository::class
+        $artistRepository = Asserted::instanceOf(
+            self::getContainer()->get(ArtistRepository::class),
+            ArtistRepository::class
         );
-        $this->exampleEntityRepository = $exampleEntityRepository;
+        $this->artistRepository = $artistRepository;
     }
 
     public function testCreate(): void
     {
-        $exampleEntity = new ExampleEntity();
-        $this->exampleEntityRepository->create($exampleEntity);
+        $artist = new Artist('Tool');
+        $this->artistRepository->create($artist);
 
-        $this->assertNotNull($exampleEntity->getId());
-        $this->assertNotNull($exampleEntity->getUuid());
-        $this->assertNotNull($exampleEntity->getCreated());
-        $this->assertNotNull($exampleEntity->getUpdated());
-        $this->assertTrue($exampleEntity->isPersisted());
+        $this->assertNotNull($artist->getId());
+        $this->assertNotNull($artist->getUuid());
+        $this->assertNotNull($artist->getCreated());
+        $this->assertNotNull($artist->getUpdated());
+        $this->assertTrue($artist->isPersisted());
     }
 }

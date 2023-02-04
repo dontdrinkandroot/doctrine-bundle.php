@@ -4,8 +4,8 @@ namespace Dontdrinkandroot\DoctrineBundle\Tests\Integration\Service;
 
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Dontdrinkandroot\Common\Asserted;
-use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\DataFixtures\ExampleEntityOne;
-use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ExampleEntityRepository;
+use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\DataFixtures\ArtistMuse;
+use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ArtistRepository;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -31,44 +31,44 @@ class TransactionalKernelEventListenerTest extends WebTestCase
 
     public function testCommit(): void
     {
-        $this->loadClientAndFixtures([ExampleEntityOne::class]);
+        $this->loadClientAndFixtures([ArtistMuse::class]);
         $this->client->request('GET', '/test/1');
         self::assertResponseStatusCodeSame(200);
         $this->assertEquals('Updated Value', $this->client->getResponse()->getContent());
 
-        $exampleEntityRepository = Asserted::instanceOf(
-            self::getContainer()->get(ExampleEntityRepository::class),
-            ExampleEntityRepository::class
+        $artistRepository = Asserted::instanceOf(
+            self::getContainer()->get(ArtistRepository::class),
+            ArtistRepository::class
         );
-        $exampleEntity = $exampleEntityRepository->find(1);
-        self::assertEquals('Updated Value', $exampleEntity->value);
+        $artist = $artistRepository->find(1);
+        self::assertEquals('Updated Value', $artist->value);
     }
 
     public function testRollbackWithException(): void
     {
-        $this->loadClientAndFixtures([ExampleEntityOne::class]);
+        $this->loadClientAndFixtures([ArtistMuse::class]);
         $this->client->request('GET', '/test/1', ['failWithCode' => 500]);
         self::assertResponseStatusCodeSame(500);
 
-        $exampleEntityRepository = Asserted::instanceOf(
-            self::getContainer()->get(ExampleEntityRepository::class),
-            ExampleEntityRepository::class
+        $artistRepository = Asserted::instanceOf(
+            self::getContainer()->get(ArtistRepository::class),
+            ArtistRepository::class
         );
-        $exampleEntity = $exampleEntityRepository->find(1);
-        self::assertNull($exampleEntity->value);
+        $artist = $artistRepository->find(1);
+        self::assertEquals('Muse', $artist->name);
     }
 
     public function testRollbackWithCode(): void
     {
-        $this->loadClientAndFixtures([ExampleEntityOne::class]);
+        $this->loadClientAndFixtures([ArtistMuse::class]);
         $this->client->request('GET', '/test/1', ['returnCode' => 500]);
         self::assertResponseStatusCodeSame(500);
 
-        $exampleEntityRepository = Asserted::instanceOf(
-            self::getContainer()->get(ExampleEntityRepository::class),
-            ExampleEntityRepository::class
+        $artistRepository = Asserted::instanceOf(
+            self::getContainer()->get(ArtistRepository::class),
+            ArtistRepository::class
         );
-        $exampleEntity = $exampleEntityRepository->find(1);
-        self::assertNull($exampleEntity->value);
+        $artist = $artistRepository->find(1);
+        self::assertEquals('Muse', $artist->name);
     }
 }
