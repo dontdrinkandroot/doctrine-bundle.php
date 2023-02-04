@@ -4,56 +4,8 @@ on: push
 
 jobs:
     phpunit:
-        name: "PHPUnit"
-        runs-on: ubuntu-latest
-        env:
-            fail-fast: false
-            SYMFONY_REQUIRE: ${{matrix.symfony-require}}
-            SYMFONY_DEPRECATIONS_HELPER: ${{matrix.symfony-deprecations-helper}}
-        strategy:
-            matrix:
-                include:
-                    -   php-version: "8.1"
-                        symfony-require: "5.4.*"
-                        deps: "lowest"
-                        symfony-deprecations-helper: "disabled=1"
-                    -   php-version: "8.1"
-                        symfony-require: "5.4.*"
-                        deps: "highest"
-                        symfony-deprecations-helper: "max[direct]=0"
-
-        steps:
-            -   name: "Checkout"
-                uses: "actions/checkout@v2"
-            -   name: "Install PHP"
-                uses: "shivammathur/setup-php@v2"
-                with:
-                    php-version: "${{ matrix.php-version }}"
-                    coverage: "pcov"
-                    ini-values: "zend.assertions=1"
-            -   name: "Allow symfony/flex globally"
-                run: "composer global config --no-plugins allow-plugins.symfony/flex true"
-            -   name: "Globally install symfony/flex"
-                run: |
-                    composer global config --no-plugins allow-plugins.symfony/flex true
-                    composer global require --no-progress --no-scripts --no-plugins symfony/flex
-            -   name: "Validate composer"
-                run: "composer validate"
-            -   name: "Install dependencies with Composer"
-                uses: "ramsey/composer-install@v2"
-                with:
-                    dependency-versions: "${{ matrix.deps }}"
-            -   name: "Run PHPUnit"
-                run: "vendor/bin/phpunit --coverage-clover=coverage.clover.xml --log-junit log.junit.xml"
-                continue-on-error: "${{ matrix.deps == 'lowest' }}"
-            -   name: "Upload coverage"
-                uses: "actions/upload-artifact@v2"
-                if: matrix.php-version == '8.1' && matrix.deps == 'highest' && matrix.symfony-require == '5.4.*'
-                with:
-                    name: "coverage"
-                    path: |
-                        coverage.clover.xml
-                        log.junit.xml
+        uses: dontdrinkandroot/github-actions/.github/workflows/php-ogbozbut.symfony-bundle.yml@main
+        secrets: inherit
 
     psalm:
         name: Psalm
