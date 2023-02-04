@@ -17,6 +17,13 @@ class Album implements EntityInterface
         public Artist $artist,
         #[ORM\Column(type: 'string', length: 255, nullable: false)]
         public string $title,
+
+        #[ORM\OneToOne(targetEntity: Album::class, inversedBy: 'nextAlbum')]
+        #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+        public ?Album $previousAlbum = null,
+
+        #[ORM\OneToOne(targetEntity: Album::class, mappedBy: 'previousAlbum')]
+        public ?Album $nextAlbum = null
     ) {
     }
 }
