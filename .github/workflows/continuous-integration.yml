@@ -84,3 +84,4 @@ jobs:
         uses: dontdrinkandroot/github-actions/.github/workflows/php-sonarcloud.yml@main
         with:
             sonar-project-key: "dontdrinkandroot_doctrine-bundle.php"
+        secrets: inherit
