@@ -19,7 +19,7 @@ class AbstractTestCase extends WebTestCase
         return $this->loadFixtures($classNames);
     }
 
-    protected function loadFixtures(array $classNames): ReferenceRepository
+    protected function loadFixtures(array $classNames = []): ReferenceRepository
     {
         $databaseToolCollection = Asserted::instanceOf(
             self::getContainer()->get(DatabaseToolCollection::class),

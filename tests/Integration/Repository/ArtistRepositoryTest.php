@@ -21,6 +21,7 @@ class ArtistRepositoryTest extends AbstractTestCase
 
     public function testCreate(): void
     {
+        $this->loadFixtures();
         $artist = new Artist('Tool');
         $this->getArtistRepository()->create($artist);
 
