@@ -81,6 +81,6 @@ jobs:
                 run: "psalm"
 
     sonarcloud:
-        uses: dontdrinkandroot/github-actions/.githbub/workflows/php/sonarcloud.yml@main
+        uses: dontdrinkandroot/github-actions/.github/workflows/php-sonarcloud.yml@main
         with:
             sonar-project-key: "dontdrinkandroot_doctrine-bundle.php"
