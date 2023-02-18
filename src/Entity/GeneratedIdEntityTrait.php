@@ -10,7 +10,7 @@ trait GeneratedIdEntityTrait
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
-    protected int $id;
+    private int $id;
 
     public function getId(): int
     {
