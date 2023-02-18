@@ -17,6 +17,7 @@ class TransactionalKernelEventListenerTest extends AbstractTestCase
 
         $artistRepository = self::getService(ArtistRepository::class);
         $artist = $artistRepository->find(1);
+        self::assertNotNull($artist);
         self::assertEquals('Updated Value', $artist->name);
     }
 
@@ -28,6 +29,7 @@ class TransactionalKernelEventListenerTest extends AbstractTestCase
 
         $artistRepository = self::getService(ArtistRepository::class);
         $artist = $artistRepository->find(1);
+        self::assertNotNull($artist);
         self::assertEquals('Muse', $artist->name);
     }
 
@@ -39,6 +41,7 @@ class TransactionalKernelEventListenerTest extends AbstractTestCase
 
         $artistRepository = self::getService(ArtistRepository::class);
         $artist = $artistRepository->find(1);
+        self::assertNotNull($artist);
         self::assertEquals('Muse', $artist->name);
     }
 }

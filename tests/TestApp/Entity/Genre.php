@@ -4,13 +4,20 @@ namespace Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedDatetimeEntityInterface;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedDatetimeEntityTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\EntityInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdEntityTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeEntityInterface;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeEntityTrait;
+use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\GenreRepository;
 
-#[ORM\Entity]
-class Genre implements EntityInterface
+#[ORM\Entity(repositoryClass: GenreRepository::class)]
+class Genre implements EntityInterface, CreatedDatetimeEntityInterface, UpdatedDatetimeEntityInterface
 {
     use GeneratedIdEntityTrait;
+    use CreatedDatetimeEntityTrait;
+    use UpdatedDatetimeEntityTrait;
 
     /** @var Collection<array-key,Artist> */
     #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'genres')]

@@ -16,7 +16,6 @@ use Dontdrinkandroot\DoctrineBundle\Entity\UuidEntityTrait;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ArtistRepository;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
-#[ORM\HasLifecycleCallbacks]
 class Artist
     implements EntityInterface, UuidEntityInterface, CreatedTimestampEntityInterface, UpdatedTimestampEntityInterface
 {

@@ -61,10 +61,11 @@ class ArtistRepositoryTest extends AbstractTestCase
         self::assertEquals('Muse', $artists[0]->name);
     }
 
-    public function tetFindOneBy(): void
+    public function testFindOneBy(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
         $artist = self::getService(ArtistRepository::class)->findOneBy(['name' => 'Muse']);
+        self::assertNotNull($artist);
         self::assertEquals('Muse', $artist->name);
     }
 

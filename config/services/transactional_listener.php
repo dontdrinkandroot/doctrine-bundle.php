@@ -12,7 +12,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
-    $services->set(TransactionalKernelEventListener::class, TransactionalKernelEventListener::class)
+    $services->set(TransactionalKernelEventListener::class)
         ->args([
             service(TransactionManagerRegistry::class),
             param('ddr_doctrine.transactional_listener.managers'),

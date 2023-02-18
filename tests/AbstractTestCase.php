@@ -35,7 +35,7 @@ class AbstractTestCase extends WebTestCase
     /**
      * @template T
      * @param class-string<T> $class
-     * return T
+     * @return T
      */
     protected static function getService(string $class, ?string $id = null): object
     {
@@ -43,7 +43,7 @@ class AbstractTestCase extends WebTestCase
             $id = $class;
         }
         $service = self::getContainer()->get($id);
-        self::assertNotNull($service);
+        self::assertInstanceOf($class, $service);
         return $service;
     }
 }

@@ -10,7 +10,7 @@ use Dontdrinkandroot\Common\DateUtils;
 trait UpdatedTimestampEntityTrait
 {
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
-    public int $updated;
+    private int $updated;
 
     public function getUpdated(): int
     {
@@ -20,12 +20,5 @@ trait UpdatedTimestampEntityTrait
     public function getUpdatedDateTime(): DateTimeInterface
     {
         return DateUtils::fromMillis($this->updated);
-    }
-
-    #[ORM\PrePersist]
-    #[ORM\PreUpdate]
-    public function generateUpdated(): void
-    {
-        $this->updated = DateUtils::currentMillis();
     }
 }
