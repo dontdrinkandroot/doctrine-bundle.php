@@ -7,33 +7,46 @@
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
-        <directory name="src/" />
+        <directory name="src/"/>
+        <directory name="tests/"/>
         <ignoreFiles>
-            <directory name="vendor" />
-            <file name="src/Command/RenderOrmDiagramCommand.php" />
-            <file name="src/Command/RenderDbalDiagramCommand.php" />
+            <directory name="vendor"/>
+            <file name="src/Command/RenderOrmDiagramCommand.php"/>
+            <file name="src/Command/RenderDbalDiagramCommand.php"/>
         </ignoreFiles>
     </projectFiles>
 
     <issueHandlers>
         <PossiblyUndefinedMethod>
             <errorLevel type="suppress">
-                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children" />
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
             </errorLevel>
         </PossiblyUndefinedMethod>
         <RedundantPropertyInitializationCheck>
             <errorLevel type="suppress">
-                <file name="src/Entity/CreatedTimestampEntityTrait.php" />
-                <file name="src/Entity/UuidEntityTrait.php" />
+                <file name="src/Entity/CreatedTimestampEntityTrait.php"/>
+                <file name="src/Entity/UuidEntityTrait.php"/>
             </errorLevel>
         </RedundantPropertyInitializationCheck>
         <MissingConstructor>
             <errorLevel type="suppress">
-                <file name="src/Entity/CreatedTimestampEntityTrait.php" />
-                <file name="src/Entity/GeneratedIdEntityTrait.php" />
-                <file name="src/Entity/UpdatedTimestampEntityTrait.php" />
-                <file name="src/Entity/UuidEntityTrait.php" />
+                <file name="src/Entity/CreatedTimestampEntityTrait.php"/>
+                <file name="src/Entity/GeneratedIdEntityTrait.php"/>
+                <file name="src/Entity/UpdatedTimestampEntityTrait.php"/>
+                <file name="src/Entity/UuidEntityTrait.php"/>
             </errorLevel>
         </MissingConstructor>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <file name="tests/TestApp/Entity/Genre.php"/>
+                <file name="tests/TestApp/Entity/Artist.php"/>
+                <file name="tests/TestApp/Entity/Album.php"/>
+                <referencedProperty name="PHPUnit\Framework\TestCase::$backupStaticAttributes"/>
+                <referencedProperty name="PHPUnit\Framework\TestCase::$runTestInSeparateProcess"/>
+                <referencedProperty
+                        name="Dontdrinkandroot\DoctrineBundle\Tests\AbstractTestCase::$referenceRepository"/>
+                <referencedProperty name="Dontdrinkandroot\DoctrineBundle\Tests\AbstractTestCase::$client"/>
+            </errorLevel>
+        </PropertyNotSetInConstructor>
     </issueHandlers>
 </psalm>

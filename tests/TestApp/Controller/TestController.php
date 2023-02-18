@@ -15,10 +15,10 @@ class TestController
     {
     }
 
-    public function __invoke(Request $request, $id): Response
+    public function __invoke(Request $request, int $id): Response
     {
         $artist = $this->artistRepository->find($id) ?? throw new NotFoundHttpException();
-        $artist->value = 'Updated Value';
+        $artist->name = 'Updated Value';
 
         $failWithCode = Asserted::integerishOrNull($request->query->get('failWithCode'));
         if (null !== $failWithCode) {
@@ -27,6 +27,6 @@ class TestController
 
         $returnCode = Asserted::integerishOrNull($request->query->get('returnCode'));
 
-        return new Response($artist->value, $returnCode ?? 200);
+        return new Response($artist->name, $returnCode ?? 200);
     }
 }

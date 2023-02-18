@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\DoctrineBundle\Tests\Integration\Repository;
 
 use Doctrine\ORM\NoResultException;
-use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\DoctrineBundle\Tests\AbstractTestCase;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\DataFixtures\ArtistMuse;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\Artist;
@@ -11,19 +10,11 @@ use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ArtistRepository;
 
 class ArtistRepositoryTest extends AbstractTestCase
 {
-    protected function getArtistRepository(): ArtistRepository
-    {
-        return Asserted::instanceOf(
-            self::getContainer()->get(ArtistRepository::class),
-            ArtistRepository::class
-        );
-    }
-
     public function testCreate(): void
     {
         $this->loadFixtures();
         $artist = new Artist('Tool');
-        $this->getArtistRepository()->create($artist);
+        self::getService(ArtistRepository::class)->create($artist);
 
         $this->assertNotNull($artist->getId());
         $this->assertNotNull($artist->getUuid());
@@ -35,7 +26,7 @@ class ArtistRepositoryTest extends AbstractTestCase
     public function testFindPaginatedBy(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
-        $artists = $this->getArtistRepository()->findPaginatedBy(1, 1,);
+        $artists = self::getService(ArtistRepository::class)->findPaginatedBy(1, 1,);
         $this->assertCount(1, $artists);
         $this->assertEquals('Muse', iterator_to_array($artists)[0]->name);
     }
@@ -43,7 +34,7 @@ class ArtistRepositoryTest extends AbstractTestCase
     public function testFetch(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
-        $artist = $this->getArtistRepository()->fetch(1);
+        $artist = self::getService(ArtistRepository::class)->fetch(1);
         self::assertEquals('Muse', $artist->name);
     }
 
@@ -51,13 +42,13 @@ class ArtistRepositoryTest extends AbstractTestCase
     {
         $this->loadFixtures([ArtistMuse::class]);
         $this->expectException(NoResultException::class);
-        $this->getArtistRepository()->fetch(2);
+        self::getService(ArtistRepository::class)->fetch(2);
     }
 
     public function testFindAll(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
-        $artists = $this->getArtistRepository()->findAll();
+        $artists = self::getService(ArtistRepository::class)->findAll();
         self::assertCount(1, $artists);
         self::assertEquals('Muse', $artists[0]->name);
     }
@@ -65,7 +56,7 @@ class ArtistRepositoryTest extends AbstractTestCase
     public function tstFindBy(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
-        $artists = $this->getArtistRepository()->findBy(['name' => 'Muse']);
+        $artists = self::getService(ArtistRepository::class)->findBy(['name' => 'Muse']);
         self::assertCount(1, $artists);
         self::assertEquals('Muse', $artists[0]->name);
     }
@@ -73,21 +64,21 @@ class ArtistRepositoryTest extends AbstractTestCase
     public function tetFindOneBy(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
-        $artist = $this->getArtistRepository()->findOneBy(['name' => 'Muse']);
+        $artist = self::getService(ArtistRepository::class)->findOneBy(['name' => 'Muse']);
         self::assertEquals('Muse', $artist->name);
     }
 
     public function testFindOneByNotFound(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
-        $artist = $this->getArtistRepository()->findOneBy(['name' => 'Scooter']);
+        $artist = self::getService(ArtistRepository::class)->findOneBy(['name' => 'Scooter']);
         self::assertNull($artist);
     }
 
     public function testFetchOneBy(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
-        $artist = $this->getArtistRepository()->fetchOneBy(['name' => 'Muse']);
+        $artist = self::getService(ArtistRepository::class)->fetchOneBy(['name' => 'Muse']);
         self::assertEquals('Muse', $artist->name);
     }
 
@@ -95,15 +86,16 @@ class ArtistRepositoryTest extends AbstractTestCase
     {
         $this->loadFixtures([ArtistMuse::class]);
         $this->expectException(NoResultException::class);
-        $this->getArtistRepository()->fetchOneBy(['name' => 'Scooter']);
+        self::getService(ArtistRepository::class)->fetchOneBy(['name' => 'Scooter']);
     }
 
     public function testDelete(): void
     {
         $this->loadFixtures([ArtistMuse::class]);
-        $artist = $this->getArtistRepository()->fetch(1);
-        $this->getArtistRepository()->delete($artist);
+        $artistRepository = self::getService(ArtistRepository::class);
+        $artist = $artistRepository->fetch(1);
+        $artistRepository->delete($artist);
         $this->expectException(NoResultException::class);
-        $this->getArtistRepository()->fetch(1);
+        $artistRepository->fetch(1);
     }
 }

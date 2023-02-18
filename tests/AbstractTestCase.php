@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Tests;
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Dontdrinkandroot\Common\Asserted;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -30,5 +31,28 @@ class AbstractTestCase extends WebTestCase
             ->getReferenceRepository();
 
         return $this->referenceRepository;
+    }
+
+    /**
+     * @template T
+     * @param class-string<T> $class
+     * return T
+     */
+    protected static function getService(string $class, ?string $id = null): object
+    {
+        if (null === $id) {
+            $id = $class;
+        }
+        $service = self::getContainer()->get($id);
+        self::assertNotNull($service);
+        return $service;
+    }
+
+    public static function setPropertyValue(object $object, string $propertyName, mixed $value): void
+    {
+        $reflectionClass = new ReflectionClass($object);
+        $reflectionProperty = $reflectionClass->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
     }
 }
