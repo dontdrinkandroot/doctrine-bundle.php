@@ -14,6 +14,8 @@ class EventsTest extends AbstractTestCase
     {
         $artistRepository = self::getService(ArtistRepository::class);
         $artist = new Artist('Test Artist');
+        self::assertFalse($artist->isPersisted());
+        self::assertFalse($artist->hasUuid());
         $artistRepository->create($artist);
 
         self::assertNotNull($artist->getId());
