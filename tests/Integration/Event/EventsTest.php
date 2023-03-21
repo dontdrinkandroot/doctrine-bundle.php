@@ -12,6 +12,8 @@ class EventsTest extends AbstractTestCase
 {
     public function testArtistListeners(): void
     {
+        $this->loadFixtures();
+
         $artistRepository = self::getService(ArtistRepository::class);
         $artist = new Artist('Test Artist');
         self::assertFalse($artist->isPersisted());
@@ -25,6 +27,8 @@ class EventsTest extends AbstractTestCase
 
         usleep(1000);
 
+        $artist = $artistRepository->find($artist->getId());
+        self::assertNotNull($artist);
         $artist->name = 'Changed Name';
         $artistRepository->flush();
         self::assertEquals($created, $artist->getCreated());
@@ -33,6 +37,8 @@ class EventsTest extends AbstractTestCase
 
     public function testGenreListeners(): void
     {
+        $this->loadFixtures();
+
         $genreRepository = self::getService(GenreRepository::class);
         $genre = new Genre('Test Genre');
         $genreRepository->create($genre);
@@ -43,6 +49,8 @@ class EventsTest extends AbstractTestCase
 
         usleep(1000);
 
+        $genre = $genreRepository->find($genre->getId());
+        self::assertNotNull($genre);
         $genre->name = 'Changed Name';
         $genreRepository->flush();
         self::assertEquals($created, $genre->getCreated());

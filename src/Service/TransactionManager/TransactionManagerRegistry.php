@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\DoctrineBundle\Service\TransactionManager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
 use Dontdrinkandroot\Common\Asserted;
 use RuntimeException;
 
@@ -39,7 +38,6 @@ class TransactionManagerRegistry
 
     public function getByEntityManager(EntityManagerInterface $entityManager): TransactionManager
     {
-        /** @var array<string,ObjectManager> $registeredManagers */
         $registeredManagers = $this->registry->getManagers();
 
         foreach ($registeredManagers as $name => $registeredManager) {
