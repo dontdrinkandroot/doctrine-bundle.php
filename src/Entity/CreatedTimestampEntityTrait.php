@@ -10,7 +10,7 @@ use Dontdrinkandroot\Common\DateUtils;
 trait CreatedTimestampEntityTrait
 {
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
-    private int $created;
+    protected int $created;
 
     public function getCreated(): int
     {

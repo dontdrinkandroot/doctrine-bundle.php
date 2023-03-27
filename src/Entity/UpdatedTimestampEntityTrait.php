@@ -10,7 +10,7 @@ use Dontdrinkandroot\Common\DateUtils;
 trait UpdatedTimestampEntityTrait
 {
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
-    private int $updated;
+    protected int $updated;
 
     public function getUpdated(): int
     {

@@ -19,16 +19,16 @@ class CreatedUpdatedListener
         $entity = $eventArgs->getObject();
         $currentTimestamp = DateUtils::currentMillis();
         $currentDateTime = new DateTime();
-        if (in_array(CreatedDatetimeEntityTrait::class, class_uses($entity), true)) {
+        if (ReflectionUtils::usesTrait($entity, CreatedDatetimeEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'created', $currentDateTime);
         }
-        if (in_array(CreatedTimestampEntityTrait::class, class_uses($entity), true)) {
+        if (ReflectionUtils::usesTrait($entity, CreatedTimestampEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'created', $currentTimestamp);
         }
-        if (in_array(UpdatedDatetimeEntityTrait::class, class_uses($entity), true)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedDatetimeEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', $currentDateTime);
         }
-        if (in_array(UpdatedTimestampEntityTrait::class, class_uses($entity), true)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedTimestampEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', $currentTimestamp);
         }
     }
@@ -36,10 +36,10 @@ class CreatedUpdatedListener
     public function preUpdate(PreUpdateEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getObject();
-        if (in_array(UpdatedDatetimeEntityTrait::class, class_uses($entity), true)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedDatetimeEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', new DateTime());
         }
-        if (in_array(UpdatedTimestampEntityTrait::class, class_uses($entity), true)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedTimestampEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', DateUtils::currentMillis());
         }
     }

@@ -12,7 +12,7 @@ class UuidListener
     public function prePersist(PrePersistEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getObject();
-        if (in_array(UuidEntityTrait::class, class_uses($entity), true) && !$entity->hasUuid()) {
+        if (ReflectionUtils::usesTrait($entity, UuidEntityTrait::class) && !$entity->hasUuid()) {
             ReflectionUtils::setPropertyValue($entity, 'uuid', Uuid::v4());
         }
     }
