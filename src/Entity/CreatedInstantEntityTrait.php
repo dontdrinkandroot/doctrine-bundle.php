@@ -12,7 +12,7 @@ use Dontdrinkandroot\DoctrineBundle\Type\InstantType;
 trait CreatedInstantEntityTrait
 {
     #[ORM\Column(type: InstantType::NAME, nullable: false)]
-    private Instant $created;
+    protected Instant $created;
 
     public function getCreated(): Instant
     {
