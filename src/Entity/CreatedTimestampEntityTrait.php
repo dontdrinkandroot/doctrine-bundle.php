@@ -7,6 +7,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\DateUtils;
 
+/**
+ * @psalm-require-implements CreatedTimestampEntityInterface
+ */
 trait CreatedTimestampEntityTrait
 {
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]

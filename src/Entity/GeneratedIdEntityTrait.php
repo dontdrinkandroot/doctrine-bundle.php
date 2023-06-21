@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @psalm-require-implements EntityInterface
+ */
 trait GeneratedIdEntityTrait
 {
     #[ORM\Id]

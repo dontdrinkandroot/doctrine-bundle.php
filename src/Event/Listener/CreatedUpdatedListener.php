@@ -6,10 +6,13 @@ use DateTime;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Dontdrinkandroot\Common\DateUtils;
+use Dontdrinkandroot\Common\Instant;
 use Dontdrinkandroot\Common\ReflectionUtils;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedDatetimeEntityTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedInstantEntityTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampEntityTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeEntityTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedInstantEntityTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampEntityTrait;
 
 class CreatedUpdatedListener
@@ -25,11 +28,17 @@ class CreatedUpdatedListener
         if (ReflectionUtils::usesTrait($entity, CreatedTimestampEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'created', $currentTimestamp);
         }
+        if (ReflectionUtils::usesTrait($entity, CreatedInstantEntityTrait::class)) {
+            ReflectionUtils::setPropertyValue($entity, 'created', new Instant($currentTimestamp));
+        }
         if (ReflectionUtils::usesTrait($entity, UpdatedDatetimeEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', $currentDateTime);
         }
         if (ReflectionUtils::usesTrait($entity, UpdatedTimestampEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', $currentTimestamp);
+        }
+        if (ReflectionUtils::usesTrait($entity, UpdatedInstantEntityTrait::class)) {
+            ReflectionUtils::setPropertyValue($entity, 'updated', new Instant($currentTimestamp));
         }
     }
 
@@ -41,6 +50,9 @@ class CreatedUpdatedListener
         }
         if (ReflectionUtils::usesTrait($entity, UpdatedTimestampEntityTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', DateUtils::currentMillis());
+        }
+        if (ReflectionUtils::usesTrait($entity, UpdatedInstantEntityTrait::class)) {
+            ReflectionUtils::setPropertyValue($entity, 'updated', new Instant());
         }
     }
 }

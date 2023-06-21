@@ -6,6 +6,9 @@ use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @psalm-require-implements CreatedDatetimeEntityInterface
+ */
 trait CreatedDatetimeEntityTrait
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]

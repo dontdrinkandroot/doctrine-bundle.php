@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @psalm-require-implements UuidEntityInterface
+ */
 trait UuidEntityTrait
 {
     #[ORM\Column(type: 'uuid', unique: true, nullable: false)]

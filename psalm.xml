@@ -48,5 +48,14 @@
                 <referencedProperty name="Dontdrinkandroot\DoctrineBundle\Tests\AbstractTestCase::$client"/>
             </errorLevel>
         </PropertyNotSetInConstructor>
+        <UndefinedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
+            </errorLevel>
+        </UndefinedMethod>
     </issueHandlers>
+
+    <plugins>
+        <plugin filename="./vendor/dontdrinkandroot/common/src/Psalm/CommonPlugin.php"/>
+    </plugins>
 </psalm>
