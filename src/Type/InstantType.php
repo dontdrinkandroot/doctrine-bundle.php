@@ -51,4 +51,12 @@ class InstantType extends BigIntType
 
         return Asserted::instanceOf($value, Instant::class)->getTimestamp();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        return true;
+    }
 }
