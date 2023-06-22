@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @psalm-require-implements UuidEntityInterface
+ * @psalm-require-implements UuidInterface
  */
-trait UuidEntityTrait
+trait UuidTrait
 {
     #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
     public Uuid $uuid;

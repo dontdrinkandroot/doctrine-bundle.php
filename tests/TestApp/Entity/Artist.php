@@ -5,24 +5,24 @@ namespace Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampEntityInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampEntityTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampInterface;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\EntityInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdEntityTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampEntityInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampEntityTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\UuidEntityInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\UuidEntityTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampInterface;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UuidInterface;
+use Dontdrinkandroot\DoctrineBundle\Entity\UuidTrait;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ArtistRepository;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 class Artist
-    implements EntityInterface, UuidEntityInterface, CreatedTimestampEntityInterface, UpdatedTimestampEntityInterface
+    implements EntityInterface, UuidInterface, CreatedTimestampInterface, UpdatedTimestampInterface
 {
-    use GeneratedIdEntityTrait;
-    use UuidEntityTrait;
-    use CreatedTimestampEntityTrait;
-    use UpdatedTimestampEntityTrait;
+    use GeneratedIdTrait;
+    use UuidTrait;
+    use CreatedTimestampTrait;
+    use UpdatedTimestampTrait;
 
     /** @var Collection<array-key,Genre> */
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'artists')]

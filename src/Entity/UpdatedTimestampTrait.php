@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\DateUtils;
 
 /**
- * @psalm-require-implements UpdatedTimestampEntityInterface
+ * @psalm-require-implements UpdatedTimestampInterface
  */
-trait UpdatedTimestampEntityTrait
+trait UpdatedTimestampTrait
 {
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
     protected int $updated;

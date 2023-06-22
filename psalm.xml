@@ -24,16 +24,16 @@
         </PossiblyUndefinedMethod>
         <RedundantPropertyInitializationCheck>
             <errorLevel type="suppress">
-                <file name="src/Entity/CreatedTimestampEntityTrait.php"/>
-                <file name="src/Entity/UuidEntityTrait.php"/>
+                <file name="src/Entity/CreatedTimestampTrait.php"/>
+                <file name="src/Entity/UuidTrait.php"/>
             </errorLevel>
         </RedundantPropertyInitializationCheck>
         <MissingConstructor>
             <errorLevel type="suppress">
-                <file name="src/Entity/CreatedTimestampEntityTrait.php"/>
-                <file name="src/Entity/GeneratedIdEntityTrait.php"/>
-                <file name="src/Entity/UpdatedTimestampEntityTrait.php"/>
-                <file name="src/Entity/UuidEntityTrait.php"/>
+                <file name="src/Entity/CreatedTimestampTrait.php"/>
+                <file name="src/Entity/GeneratedIdTrait.php"/>
+                <file name="src/Entity/UpdatedTimestampTrait.php"/>
+                <file name="src/Entity/UuidTrait.php"/>
             </errorLevel>
         </MissingConstructor>
         <PropertyNotSetInConstructor>

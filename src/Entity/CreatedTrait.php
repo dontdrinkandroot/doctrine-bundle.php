@@ -7,9 +7,9 @@ use Dontdrinkandroot\Common\Instant;
 use Dontdrinkandroot\DoctrineBundle\Type\InstantType;
 
 /**
- * @psalm-require-implements CreatedInstantEntityInterface
+ * @psalm-require-implements CreatedInterface
  */
-trait CreatedInstantEntityTrait
+trait CreatedTrait
 {
     #[ORM\Column(type: InstantType::NAME, nullable: false)]
     protected Instant $created;

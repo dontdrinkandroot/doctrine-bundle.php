@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
-interface CreatedTimestampEntityInterface
+interface CreatedTimestampInterface
 {
     public function getCreated(): int;
 }

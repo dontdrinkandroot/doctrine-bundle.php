@@ -7,9 +7,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @psalm-require-implements CreatedDatetimeEntityInterface
+ * @psalm-require-implements CreatedDatetimeInterface
  */
-trait CreatedDatetimeEntityTrait
+trait CreatedDatetimeTrait
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     protected DateTime $created;

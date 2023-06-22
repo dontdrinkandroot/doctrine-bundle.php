@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\DateUtils;
 
 /**
- * @psalm-require-implements CreatedTimestampEntityInterface
+ * @psalm-require-implements CreatedTimestampInterface
  */
-trait CreatedTimestampEntityTrait
+trait CreatedTimestampTrait
 {
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
     protected int $created;

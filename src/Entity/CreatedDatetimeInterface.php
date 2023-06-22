@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use DateTime;
 
-interface CreatedDatetimeEntityInterface
+interface CreatedDatetimeInterface
 {
     public function getCreated(): DateTime;
 }

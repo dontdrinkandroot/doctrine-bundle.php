@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
-interface UpdatedTimestampEntityInterface
+interface UpdatedTimestampInterface
 {
     public function getUpdated(): int;
 }

@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use DateTime;
 
-interface UpdatedDatetimeEntityInterface
+interface UpdatedDatetimeInterface
 {
     public function getUpdated(): DateTime;
 }

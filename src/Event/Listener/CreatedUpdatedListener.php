@@ -8,12 +8,12 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Dontdrinkandroot\Common\DateUtils;
 use Dontdrinkandroot\Common\Instant;
 use Dontdrinkandroot\Common\ReflectionUtils;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedDatetimeEntityTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedInstantEntityTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampEntityTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeEntityTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedInstantEntityTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampEntityTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedDatetimeTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTrait;
 
 class CreatedUpdatedListener
 {
@@ -22,22 +22,22 @@ class CreatedUpdatedListener
         $entity = $eventArgs->getObject();
         $currentTimestamp = DateUtils::currentMillis();
         $currentDateTime = new DateTime();
-        if (ReflectionUtils::usesTrait($entity, CreatedDatetimeEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, CreatedDatetimeTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'created', $currentDateTime);
         }
-        if (ReflectionUtils::usesTrait($entity, CreatedTimestampEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, CreatedTimestampTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'created', $currentTimestamp);
         }
-        if (ReflectionUtils::usesTrait($entity, CreatedInstantEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, CreatedTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'created', new Instant($currentTimestamp));
         }
-        if (ReflectionUtils::usesTrait($entity, UpdatedDatetimeEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedDatetimeTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', $currentDateTime);
         }
-        if (ReflectionUtils::usesTrait($entity, UpdatedTimestampEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedTimestampTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', $currentTimestamp);
         }
-        if (ReflectionUtils::usesTrait($entity, UpdatedInstantEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', new Instant($currentTimestamp));
         }
     }
@@ -45,13 +45,13 @@ class CreatedUpdatedListener
     public function preUpdate(PreUpdateEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getObject();
-        if (ReflectionUtils::usesTrait($entity, UpdatedDatetimeEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedDatetimeTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', new DateTime());
         }
-        if (ReflectionUtils::usesTrait($entity, UpdatedTimestampEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedTimestampTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', DateUtils::currentMillis());
         }
-        if (ReflectionUtils::usesTrait($entity, UpdatedInstantEntityTrait::class)) {
+        if (ReflectionUtils::usesTrait($entity, UpdatedTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', new Instant());
         }
     }
