@@ -29,7 +29,7 @@ class CreatedUpdatedListener
             ReflectionUtils::setPropertyValue($entity, 'created', $currentTimestamp);
         }
         if (ReflectionUtils::usesTrait($entity, CreatedTrait::class)) {
-            ReflectionUtils::setPropertyValue($entity, 'created', new Instant($currentTimestamp));
+            ReflectionUtils::setPropertyValue($entity, 'created', Instant::fromTimestamp($currentTimestamp));
         }
         if (ReflectionUtils::usesTrait($entity, UpdatedDatetimeTrait::class)) {
             ReflectionUtils::setPropertyValue($entity, 'updated', $currentDateTime);
@@ -38,7 +38,7 @@ class CreatedUpdatedListener
             ReflectionUtils::setPropertyValue($entity, 'updated', $currentTimestamp);
         }
         if (ReflectionUtils::usesTrait($entity, UpdatedTrait::class)) {
-            ReflectionUtils::setPropertyValue($entity, 'updated', new Instant($currentTimestamp));
+            ReflectionUtils::setPropertyValue($entity, 'updated', Instant::fromTimestamp($currentTimestamp));
         }
     }
 
@@ -52,7 +52,7 @@ class CreatedUpdatedListener
             ReflectionUtils::setPropertyValue($entity, 'updated', DateUtils::currentMillis());
         }
         if (ReflectionUtils::usesTrait($entity, UpdatedTrait::class)) {
-            ReflectionUtils::setPropertyValue($entity, 'updated', new Instant());
+            ReflectionUtils::setPropertyValue($entity, 'updated', Instant::now());
         }
     }
 }

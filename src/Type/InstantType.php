@@ -37,7 +37,7 @@ class InstantType extends BigIntType
             return null;
         }
 
-        return new Instant(Asserted::int($value));
+        return Instant::fromTimestamp(Asserted::int($value));
     }
 
     /**
