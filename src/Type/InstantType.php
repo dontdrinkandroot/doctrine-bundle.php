@@ -30,6 +30,9 @@ class InstantType extends BigIntType
 
     /**
      * {@inheritdoc}
+     *
+     * @param mixed $value
+     * @return Instant|null
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?Instant
     {

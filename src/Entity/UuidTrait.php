@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -11,15 +12,15 @@ use Symfony\Component\Uid\Uuid;
 trait UuidTrait
 {
     #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
-    public Uuid $uuid;
+    public ?Uuid $uuid = null;
 
     public function getUuid(): Uuid
     {
-        return $this->uuid;
+        return $this->uuid ?? throw new LogicException('Entity was not persisted yet');
     }
 
     public function hasUuid(): bool
     {
-        return isset($this->uuid);
+        return null !== $this->uuid;
     }
 }

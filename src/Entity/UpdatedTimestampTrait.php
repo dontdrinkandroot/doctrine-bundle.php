@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\DateUtils;
+use LogicException;
 
 /**
  * @psalm-require-implements UpdatedTimestampInterface
@@ -13,15 +14,20 @@ use Dontdrinkandroot\Common\DateUtils;
 trait UpdatedTimestampTrait
 {
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
-    protected int $updated;
+    protected ?int $updated = null;
 
     public function getUpdated(): int
     {
-        return $this->updated;
+        return $this->updated ?? throw new LogicException('Entity was not persisted yet');
     }
 
     public function getUpdatedDateTime(): DateTimeInterface
     {
-        return DateUtils::fromMillis($this->updated);
+        return DateUtils::fromMillis($this->getUpdated());
+    }
+
+    public function hasUpdated(): bool
+    {
+        return null !== $this->updated;
     }
 }

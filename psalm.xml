@@ -22,20 +22,6 @@
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
             </errorLevel>
         </PossiblyUndefinedMethod>
-        <RedundantPropertyInitializationCheck>
-            <errorLevel type="suppress">
-                <file name="src/Entity/CreatedTimestampTrait.php"/>
-                <file name="src/Entity/UuidTrait.php"/>
-            </errorLevel>
-        </RedundantPropertyInitializationCheck>
-        <MissingConstructor>
-            <errorLevel type="suppress">
-                <file name="src/Entity/CreatedTimestampTrait.php"/>
-                <file name="src/Entity/GeneratedIdTrait.php"/>
-                <file name="src/Entity/UpdatedTimestampTrait.php"/>
-                <file name="src/Entity/UuidTrait.php"/>
-            </errorLevel>
-        </MissingConstructor>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <file name="tests/TestApp/Entity/Genre.php"/>
