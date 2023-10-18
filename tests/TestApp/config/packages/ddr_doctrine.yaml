@@ -1,5 +1,0 @@
-doctrine:
-    dbal:
-        types:
-            bigint: Dontdrinkandroot\DoctrineBundle\Type\BigInt64Type
-            instant: Dontdrinkandroot\DoctrineBundle\Type\InstantType
