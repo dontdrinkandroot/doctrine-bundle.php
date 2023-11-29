@@ -10,10 +10,11 @@ class TransactionalKernelEventListenerTest extends AbstractTestCase
 {
     public function testCommit(): void
     {
-        $this->loadClientAndFixtures([ArtistMuse::class]);
-        $this->client->request('GET', '/test/1');
+        $client = self::createClient();
+        self::loadFixtures([ArtistMuse::class]);
+        $client->request('GET', '/test/1');
         self::assertResponseStatusCodeSame(200);
-        $this->assertEquals('Updated Value', $this->client->getResponse()->getContent());
+        $this->assertEquals('Updated Value', $client->getResponse()->getContent());
 
         $artistRepository = self::getService(ArtistRepository::class);
         $artist = $artistRepository->find(1);
@@ -23,8 +24,9 @@ class TransactionalKernelEventListenerTest extends AbstractTestCase
 
     public function testRollbackWithException(): void
     {
-        $this->loadClientAndFixtures([ArtistMuse::class]);
-        $this->client->request('GET', '/test/1', ['failWithCode' => 500]);
+        $client = self::createClient();
+        self::loadFixtures([ArtistMuse::class]);
+        $client->request('GET', '/test/1', ['failWithCode' => 500]);
         self::assertResponseStatusCodeSame(500);
 
         $artistRepository = self::getService(ArtistRepository::class);
@@ -35,8 +37,9 @@ class TransactionalKernelEventListenerTest extends AbstractTestCase
 
     public function testRollbackWithCode(): void
     {
-        $this->loadClientAndFixtures([ArtistMuse::class]);
-        $this->client->request('GET', '/test/1', ['returnCode' => 500]);
+        $client = self::createClient();
+        self::loadFixtures([ArtistMuse::class]);
+        $client->request('GET', '/test/1', ['returnCode' => 500]);
         self::assertResponseStatusCodeSame(500);
 
         $artistRepository = self::getService(ArtistRepository::class);

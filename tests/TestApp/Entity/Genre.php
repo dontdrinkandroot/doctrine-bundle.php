@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedDatetimeInterface;
@@ -27,5 +28,6 @@ class Genre implements EntityInterface, CreatedDatetimeInterface, UpdatedDatetim
         #[ORM\Column(type: 'string', length: 255, nullable: false)]
         public string $name,
     ) {
+        $this->artists = new ArrayCollection();
     }
 }

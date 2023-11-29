@@ -5,6 +5,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        findUnusedCode="false"
 >
     <projectFiles>
         <directory name="src/"/>
@@ -17,23 +18,6 @@
     </projectFiles>
 
     <issueHandlers>
-        <PossiblyUndefinedMethod>
-            <errorLevel type="suppress">
-                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
-            </errorLevel>
-        </PossiblyUndefinedMethod>
-        <PropertyNotSetInConstructor>
-            <errorLevel type="suppress">
-                <file name="tests/TestApp/Entity/Genre.php"/>
-                <file name="tests/TestApp/Entity/Artist.php"/>
-                <file name="tests/TestApp/Entity/Album.php"/>
-                <referencedProperty name="PHPUnit\Framework\TestCase::$backupStaticAttributes"/>
-                <referencedProperty name="PHPUnit\Framework\TestCase::$runTestInSeparateProcess"/>
-                <referencedProperty
-                        name="Dontdrinkandroot\DoctrineBundle\Tests\AbstractTestCase::$referenceRepository"/>
-                <referencedProperty name="Dontdrinkandroot\DoctrineBundle\Tests\AbstractTestCase::$client"/>
-            </errorLevel>
-        </PropertyNotSetInConstructor>
         <UndefinedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
