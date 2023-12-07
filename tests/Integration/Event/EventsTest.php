@@ -14,18 +14,22 @@ class EventsTest extends AbstractTestCase
 {
     public function testArtistListeners(): void
     {
-        $this->loadFixtures();
+        self::loadFixtures();
 
         $artistRepository = self::getService(ArtistRepository::class);
         $artist = new Artist('Test Artist');
         self::assertFalse($artist->isPersisted());
         self::assertFalse($artist->hasUuid());
+        self::assertFalse($artist->hasUpdated());
         $artistRepository->create($artist);
 
         self::assertNotNull($artist->getId());
         self::assertNotNull($artist->getUuid());
+        self::assertTrue($artist->hasUpdated());
         $created = $artist->getCreated();
+        $createdDateTime = $artist->getCreatedDateTime();
         $updated = $artist->getUpdated();
+        $updatedDateTime = $artist->getUpdatedDateTime();
 
         usleep(1000);
 
@@ -34,18 +38,22 @@ class EventsTest extends AbstractTestCase
         $artist->name = 'Changed Name';
         $artistRepository->flush();
         self::assertEquals($created, $artist->getCreated());
+        self::assertEquals($createdDateTime, $artist->getCreatedDateTime());
         self::assertGreaterThan($updated, $artist->getUpdated());
+        self::assertGreaterThan($updatedDateTime, $artist->getUpdatedDateTime());
     }
 
     public function testGenreListeners(): void
     {
-        $this->loadFixtures();
+        self::loadFixtures();
 
         $genreRepository = self::getService(GenreRepository::class);
         $genre = new Genre('Test Genre');
+        self::assertFalse($genre->hasUpdated());
         $genreRepository->create($genre);
 
         self::assertNotNull($genre->getId());
+        self::assertTrue($genre->hasUpdated());
         $created = $genre->getCreated();
         $updated = $genre->getUpdated();
 
@@ -67,9 +75,11 @@ class EventsTest extends AbstractTestCase
 
         $albumRepository = self::getService(AlbumRepository::class);
         $album = new Album($artist, 'The Fragile');
+        self::assertFalse($album->hasUpdated());
         $albumRepository->create($album);
 
         self::assertNotNull($album->getId());
+        self::assertTrue($album->hasUpdated());
         $created = $album->getCreated();
         $updated = $album->getUpdated();
 
