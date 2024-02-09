@@ -5,30 +5,26 @@ namespace Dontdrinkandroot\DoctrineBundle\Command;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Visitor\Graphviz;
+use Override;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand('ddr:doctrine:render-dbal-diagram', 'Renders an entity relationship diagram based on the current database schema')]
 class RenderDbalDiagramCommand extends Command
 {
-    protected static $defaultName = 'ddr:doctrine:render-dbal-diagram';
-    protected static $defaultDescription = 'Renders an entity relationship diagram based on the current database schema';
-
     public function __construct(private readonly Registry $registry)
     {
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function configure(): void
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $connectionName = $this->registry->getDefaultConnectionName();

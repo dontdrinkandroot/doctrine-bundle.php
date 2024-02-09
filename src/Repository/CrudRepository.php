@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Override;
 
 /**
  * @template T of object
@@ -13,9 +14,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class CrudRepository extends ServiceEntityRepository implements CrudRepositoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function fetch($id, $lockMode = null, $lockVersion = null): object
     {
         $result = parent::find($id, $lockMode, $lockVersion);
@@ -23,9 +22,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function fetchOneBy(array $criteria, array $orderBy = null): object
     {
         $result = parent::findOneBy($criteria, $orderBy);
@@ -33,9 +30,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function create($entity, bool $flush = true): void
     {
         $this->getEntityManager()->persist($entity);
@@ -44,9 +39,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function delete($entity, bool $flush = true): void
     {
         $this->getEntityManager()->remove($entity);
@@ -55,9 +48,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function findPaginatedBy(
         int $page = 1,
         int $perPage = 10,
@@ -84,11 +75,13 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         return new Paginator($queryBuilder);
     }
 
+    #[Override]
     public function flush(): void
     {
         $this->getEntityManager()->flush();
     }
 
+    #[Override]
     public function clear(): void
     {
         $this->getEntityManager()->clear();

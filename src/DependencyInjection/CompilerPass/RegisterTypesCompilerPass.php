@@ -6,14 +6,13 @@ use Doctrine\DBAL\Types\Types;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\DoctrineBundle\Type\BigInt64Type;
 use Dontdrinkandroot\DoctrineBundle\Type\InstantType;
+use Override;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class RegisterTypesCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function process(ContainerBuilder $container): void
     {
         if (!$container->hasParameter('doctrine.dbal.connection_factory.types')) {

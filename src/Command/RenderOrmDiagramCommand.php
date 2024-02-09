@@ -11,21 +11,19 @@ use Exception;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
+use Override;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand('ddr:doctrine:render-orm-diagram', 'Renders an entity relationship diagram based on the ORM Metadata')]
 class RenderOrmDiagramCommand extends Command
 {
-    protected static $defaultName = 'ddr:doctrine:render-orm-diagram';
-    protected static $defaultDescription = 'Renders an entity relationship diagram based on the ORM Metadata';
-
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function configure(): void
     {
         $this->addOption('em', null, InputOption::VALUE_OPTIONAL, 'The entity manager to use for this command')
@@ -47,12 +45,10 @@ class RenderOrmDiagramCommand extends Command
             ->addOption('skip-rendering', null, InputOption::VALUE_NONE, 'Only output the source');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (!class_exists('Fhaculty\Graph\Graph')) {
+        if (!class_exists(Graph::class)) {
             throw new Exception('You need to install graphp/graphviz in order to render diagrams');
         }
 

@@ -12,13 +12,11 @@ use Doctrine\Persistence\ObjectRepository;
 interface CrudRepositoryInterface extends ObjectRepository
 {
     /**
-     * @param mixed $id
      * @param null  $lockMode
      * @param null  $lockVersion
-     *
      * @return T
      */
-    public function fetch($id, $lockMode = null, $lockVersion = null): object;
+    public function fetch(mixed $id, $lockMode = null, $lockVersion = null): object;
 
     /**
      * @param array<string, mixed>       $criteria
@@ -30,19 +28,15 @@ interface CrudRepositoryInterface extends ObjectRepository
 
     /**
      * @param T    $entity
-     * @param bool $flush
      */
     public function create($entity, bool $flush = true): void;
 
     /**
      * @param T    $entity
-     * @param bool $flush
      */
     public function delete($entity, bool $flush = true): void;
 
     /**
-     * @param int        $page
-     * @param int        $perPage
      * @param array<string, mixed>       $criteria
      * @param array<string, string>|null $orderBy
      *
