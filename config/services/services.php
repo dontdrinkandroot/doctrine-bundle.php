@@ -33,5 +33,8 @@ return function (ContainerConfigurator $configurator): void {
         ->tag('doctrine.event_listener', ['event' => 'preUpdate']);
 
     $services->set(UuidListener::class)
+        ->args([
+            service('uuid.factory')
+        ])
         ->tag('doctrine.event_listener', ['event' => 'prePersist']);
 };
