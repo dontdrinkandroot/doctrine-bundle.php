@@ -13,7 +13,6 @@
         <ignoreFiles>
             <directory name="vendor"/>
             <file name="src/Command/RenderOrmDiagramCommand.php"/>
-            <file name="src/Command/RenderDbalDiagramCommand.php"/>
         </ignoreFiles>
     </projectFiles>
 

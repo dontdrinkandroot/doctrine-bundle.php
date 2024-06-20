@@ -4,33 +4,29 @@ namespace Dontdrinkandroot\DoctrineBundle\Type;
 
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\BigIntType;
+use Doctrine\DBAL\Types\Type;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\Instant;
 use Override;
 
-class InstantType extends BigIntType
+class InstantType extends Type
 {
     public const string NAME = 'instant';
 
     #[Override]
-    public function getName(): string
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
-        return self::NAME;
+        return $platform->getBigIntTypeDeclarationSQL($column);
     }
 
     #[Override]
-    public function getBindingType(): int
+    public function getBindingType(): ParameterType
     {
         return ParameterType::INTEGER;
     }
 
-    /**
-     * @param mixed $value
-     * @return Instant|null
-     */
     #[Override]
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?Instant
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?Instant
     {
         if (null === $value) {
             return null;
@@ -47,11 +43,5 @@ class InstantType extends BigIntType
         }
 
         return Asserted::instanceOf($value, Instant::class)->getTimestamp();
-    }
-
-    #[Override]
-    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
-    {
-        return true;
     }
 }

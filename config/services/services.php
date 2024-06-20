@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Config;
 
-use Dontdrinkandroot\DoctrineBundle\Command\RenderDbalDiagramCommand;
 use Dontdrinkandroot\DoctrineBundle\Command\RenderOrmDiagramCommand;
 use Dontdrinkandroot\DoctrineBundle\Event\Listener\CreatedUpdatedListener;
 use Dontdrinkandroot\DoctrineBundle\Event\Listener\UuidListener;
@@ -18,12 +17,6 @@ return function (ContainerConfigurator $configurator): void {
         ->args([
             service('doctrine')
         ]);
-
-    $services->set(RenderDbalDiagramCommand::class)
-        ->args([
-            service('doctrine')
-        ])
-        ->tag('console.command', ['command' => 'ddr:doctrine:render-dbal-diagram']);
 
     $services->set(RenderOrmDiagramCommand::class)
         ->args([
