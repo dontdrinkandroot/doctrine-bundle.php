@@ -11,7 +11,7 @@ use Override;
 
 class InstantType extends BigIntType
 {
-    public const NAME = 'instant';
+    public const string NAME = 'instant';
 
     #[Override]
     public function getName(): string

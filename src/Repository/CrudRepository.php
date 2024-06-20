@@ -81,7 +81,6 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         $this->getEntityManager()->flush();
     }
 
-    #[Override]
     public function clear(): void
     {
         $this->getEntityManager()->clear();

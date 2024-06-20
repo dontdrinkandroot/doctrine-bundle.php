@@ -26,6 +26,9 @@ return function (ContainerConfigurator $configurator): void {
         ->tag('console.command', ['command' => 'ddr:doctrine:render-dbal-diagram']);
 
     $services->set(RenderOrmDiagramCommand::class)
+        ->args([
+            service('doctrine')
+        ])
         ->tag('console.command', ['command' => 'ddr:doctrine:render-orm-diagram']);
 
     $services->set(CreatedUpdatedListener::class)

@@ -2,10 +2,14 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Command;
 
-use Doctrine\Bundle\DoctrineBundle\Command\Proxy\DoctrineCommandHelper;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ManyToManyAssociationMapping;
+use Doctrine\ORM\Mapping\ManyToOneAssociationMapping;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\OneToOneAssociationMapping;
+use Doctrine\ORM\Mapping\ToOneOwningSideMapping;
 use Dontdrinkandroot\Common\Asserted;
 use Exception;
 use Fhaculty\Graph\Graph;
@@ -13,7 +17,6 @@ use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
 use Override;
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,6 +26,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand('ddr:doctrine:render-orm-diagram', 'Renders an entity relationship diagram based on the ORM Metadata')]
 class RenderOrmDiagramCommand extends Command
 {
+    public function __construct(
+        private readonly Registry $registry
+    ) {
+        parent::__construct();
+    }
+
     #[Override]
     protected function configure(): void
     {
@@ -54,11 +63,8 @@ class RenderOrmDiagramCommand extends Command
 
         $ignoreTableNames = $this->getIgnoreTableNames($input);
 
-        $application = $this->getApplication();
-        assert($application instanceof Application);
-        DoctrineCommandHelper::setApplicationEntityManager($application, $input->getOption('em'));
-        /** @var EntityManagerInterface $em */
-        $em = $this->getHelper('em')->getEntityManager();
+        $em = $this->registry->getManager($input->getOption('em'));
+        Asserted::instanceOf($em, EntityManagerInterface::class);
 
         $mappingDriver = Asserted::notNull($em->getConfiguration()->getMetadataDriverImpl());
         $entityClassNames = $mappingDriver->getAllClassNames();
@@ -68,7 +74,7 @@ class RenderOrmDiagramCommand extends Command
         $graph->setAttribute('graphviz.graph.splines', 'ortho');
 
         $vertices = [];
-        $metaDatas = [];
+        /** @var array<string, string> $classToTableNames */
         $classToTableNames = [];
 
         /* Collect vertices */
@@ -100,9 +106,9 @@ class RenderOrmDiagramCommand extends Command
             if (!$classMetaData->isMappedSuperclass) {
                 $associationMappings = $classMetaData->getAssociationMappings();
                 foreach ($associationMappings as $associationMapping) {
-                    if ($associationMapping['isOwningSide']) {
+                    if ($associationMapping->isOwningSide()) {
                         $sourceTableName = $classMetaData->getTableName();
-                        $targetTableName = $classToTableNames[$associationMapping['targetEntity']];
+                        $targetTableName = $classToTableNames[$associationMapping->targetEntity];
 
                         if (
                             in_array($sourceTableName, $ignoreTableNames)
@@ -115,18 +121,15 @@ class RenderOrmDiagramCommand extends Command
                         $sourceVertex = $vertices[$sourceTableName];
                         /** @var Vertex $targetVertex */
                         $targetVertex = $vertices[$targetTableName];
-                        switch ($associationMapping['type']) {
-                            case ClassMetadataInfo::MANY_TO_MANY:
+                        switch (true) {
+                            case $associationMapping instanceof ManyToManyAssociationMapping:
                                 $edge = $sourceVertex->createEdge($targetVertex);
                                 $edge->setAttribute('graphviz.headlabel', '*');
                                 $edge->setAttribute('graphviz.taillabel', '*');
                                 break;
-                            case ClassMetadataInfo::ONE_TO_MANY:
-                                throw new Exception(
-                                    'One to many not supported yet: ' . $sourceTableName . ':' . $associationMapping['fieldName']
-                                );
-                                break;
-                            case ClassMetadataInfo::MANY_TO_ONE:
+                            case $associationMapping instanceof OneToMany:
+                                throw new Exception('One to many not supported yet');
+                            case $associationMapping instanceof ManyToOneAssociationMapping:
                                 $edge = $sourceVertex->createEdgeTo($targetVertex);
                                 if ($this->isNullableAssociation($associationMapping)) {
                                     $edge->setAttribute('graphviz.headlabel', '0,1');
@@ -136,7 +139,7 @@ class RenderOrmDiagramCommand extends Command
                                 $edge->setAttribute('graphviz.taillabel', '*');
                                 $edge->setAttribute('graphviz.arrowhead', 'none');
                                 break;
-                            case ClassMetadataInfo::ONE_TO_ONE:
+                            case $associationMapping instanceof OneToOneAssociationMapping:
                                 $edge = $sourceVertex->createEdge($targetVertex);
                                 if ($this->isNullableAssociation($associationMapping)) {
                                     $edge->setAttribute('graphviz.headlabel', '0,1');
@@ -168,17 +171,14 @@ class RenderOrmDiagramCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function isNullableAssociation(array $associationMapping): bool
+    private function isNullableAssociation(ToOneOwningSideMapping $associationMapping): bool
     {
-        $joinColumns = $associationMapping['joinColumns'];
-        if ((is_countable($joinColumns) ? count($joinColumns) : 0) > 1) {
+        $joinColumns = $associationMapping->joinColumns;
+        if (count($joinColumns) > 1) {
             throw new Exception('More than one join Column currently not supported');
         }
-        if (!array_key_exists('nullable', $joinColumns[0])) {
-            return true;
-        }
 
-        return $joinColumns[0]['nullable'];
+        return (true === $joinColumns[0]->nullable);
     }
 
     private function generateVertexLabel(ClassMetadata $classMetaData, bool $hideFields = false): string
@@ -200,8 +200,8 @@ class RenderOrmDiagramCommand extends Command
                     $label .= '<td align="left">' . $columnName . '</td>';
                 }
                 $label .= '<td align="left">' . $fieldMapping['type'] . '</td>';
-                $label .= '<td align="left">' . ($this->isNullable($fieldMapping) ? '' : 'notnull') . '</td>';
-                $label .= '<td align="left">' . ($this->isUnique($fieldMapping) ? 'unique' : '') . '</td>';
+                $label .= '<td align="left">' . (true === $fieldMapping->nullable ? '' : 'notnull') . '</td>';
+                $label .= '<td align="left">' . (true === $fieldMapping->unique ? 'unique' : '') . '</td>';
                 $label .= '</tr>';
             }
         }
@@ -220,23 +220,5 @@ class RenderOrmDiagramCommand extends Command
         }
 
         return explode(',', (string)$ignoreTablesInputOption);
-    }
-
-    private function isNullable(array $fieldMapping): bool
-    {
-        if (!array_key_exists('nullable', $fieldMapping)) {
-            return false;
-        }
-
-        return $fieldMapping['nullable'] === true;
-    }
-
-    private function isUnique(array $fieldMapping): bool
-    {
-        if (!array_key_exists('unique', $fieldMapping)) {
-            return false;
-        }
-
-        return $fieldMapping['unique'] === true;
     }
 }

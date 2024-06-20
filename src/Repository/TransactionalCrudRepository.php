@@ -26,7 +26,7 @@ class TransactionalCrudRepository extends CrudRepository
         TransactionManagerRegistry $transactionManagerRegistry
     ) {
         parent::__construct($registry, $entityClass);
-        $this->transactionManager = $transactionManagerRegistry->getByEntityManager($this->_em);
+        $this->transactionManager = $transactionManagerRegistry->getByEntityManager($this->getEntityManager());
     }
 
     #[Override]
