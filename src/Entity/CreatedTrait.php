@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\Instant;
 use Dontdrinkandroot\DoctrineBundle\Type\InstantType;
 use LogicException;
+use Override;
 
 /**
  * @psalm-require-implements CreatedInterface
@@ -15,6 +16,7 @@ trait CreatedTrait
     #[ORM\Column(type: InstantType::NAME, nullable: false)]
     protected ?Instant $created = null;
 
+    #[Override]
     public function getCreated(): Instant
     {
         return $this->created ?? throw new LogicException('Entity was not persisted yet');

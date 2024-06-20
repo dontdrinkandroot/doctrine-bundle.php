@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\Common\DateUtils;
 use LogicException;
+use Override;
 
 /**
  * @psalm-require-implements CreatedTimestampInterface
@@ -16,6 +17,7 @@ trait CreatedTimestampTrait
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
     protected ?int $created = null;
 
+    #[Override]
     public function getCreated(): int
     {
         return $this->created ?? throw new LogicException('Entity was not persisted yet');

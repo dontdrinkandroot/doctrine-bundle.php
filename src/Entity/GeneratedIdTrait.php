@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use LogicException;
+use Override;
 
 /**
  * @psalm-require-implements EntityInterface
@@ -16,6 +17,7 @@ trait GeneratedIdTrait
     #[ORM\Column(type: Types::BIGINT, nullable: false, options: ["unsigned" => true])]
     protected ?int $id = null;
 
+    #[Override]
     public function getId(): int
     {
         return $this->id ?? throw new LogicException('Entity was not persisted yet');
