@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Config;
 use Dontdrinkandroot\DoctrineBundle\Command\RenderOrmDiagramCommand;
 use Dontdrinkandroot\DoctrineBundle\Event\Listener\CreatedUpdatedListener;
 use Dontdrinkandroot\DoctrineBundle\Event\Listener\UuidListener;
+use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManager;
 use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManagerRegistry;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -33,4 +34,10 @@ return function (ContainerConfigurator $configurator): void {
             service('uuid.factory')
         ])
         ->tag('doctrine.event_listener', ['event' => 'prePersist']);
+
+    $services->set(TransactionManager::class)
+        ->args([
+            service('doctrine.orm.default_entity_manager')
+        ])
+        ->call('setLogger', [service('logger')]);
 };
