@@ -8,6 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AbstractTestCase extends WebTestCase
 {
+    /**
+     * @psalm-suppress InternalMethod
+     */
     protected static function loadFixtures(array $classNames = []): ReferenceRepository
     {
         return self::getService(DatabaseToolCollection::class)->get()
