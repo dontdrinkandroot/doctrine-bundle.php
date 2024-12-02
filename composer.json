@@ -33,7 +33,7 @@
         "doctrine/doctrine-bundle": "^2.12",
         "doctrine/dbal": "^4.0",
         "doctrine/orm": "^3.2",
-        "dontdrinkandroot/common": "^0.2.2",
+        "dontdrinkandroot/common": "^0.3",
         "symfony/config": "^6.4",
         "symfony/dependency-injection": "^6.4",
         "symfony/uid": "^6.4"
