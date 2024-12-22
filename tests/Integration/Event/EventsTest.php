@@ -20,16 +20,14 @@ class EventsTest extends AbstractTestCase
         $artist = new Artist('Test Artist');
         self::assertFalse($artist->isPersisted());
         self::assertFalse($artist->hasUuid());
-        self::assertFalse($artist->hasUpdated());
+        self::assertFalse($artist->hasUpdatedAt());
         $artistRepository->create($artist);
 
         self::assertNotNull($artist->getId());
         self::assertNotNull($artist->getUuid());
-        self::assertTrue($artist->hasUpdated());
-        $created = $artist->getCreated();
-        $createdDateTime = $artist->getCreatedDateTime();
-        $updated = $artist->getUpdated();
-        $updatedDateTime = $artist->getUpdatedDateTime();
+        self::assertTrue($artist->hasUpdatedAt());
+        $created = $artist->getCreatedAt();
+        $updated = $artist->getUpdatedAt();
 
         usleep(1000);
 
@@ -37,10 +35,9 @@ class EventsTest extends AbstractTestCase
         self::assertNotNull($artist);
         $artist->name = 'Changed Name';
         $artistRepository->flush();
-        self::assertEquals($created, $artist->getCreated());
-        self::assertEquals($createdDateTime, $artist->getCreatedDateTime());
-        self::assertGreaterThan($updated, $artist->getUpdated());
-        self::assertGreaterThan($updatedDateTime, $artist->getUpdatedDateTime());
+        self::assertEquals($created->getTimestamp(), $artist->getCreatedAt()->getTimestamp());
+        self::assertGreaterThan($updated, $artist->getUpdatedAt());
+        self::assertGreaterThan($updated->getTimestamp(), $artist->getUpdatedAt()->getTimestamp());
     }
 
     public function testGenreListeners(): void
@@ -49,13 +46,13 @@ class EventsTest extends AbstractTestCase
 
         $genreRepository = self::getService(GenreRepository::class);
         $genre = new Genre('Test Genre');
-        self::assertFalse($genre->hasUpdated());
+        self::assertFalse($genre->hasUpdatedAt());
         $genreRepository->create($genre);
 
         self::assertNotNull($genre->getId());
-        self::assertTrue($genre->hasUpdated());
-        $created = $genre->getCreated();
-        $updated = $genre->getUpdated();
+        self::assertTrue($genre->hasUpdatedAt());
+        $created = $genre->getCreatedAt();
+        $updated = $genre->getUpdatedAt();
 
         usleep(1000);
 
@@ -63,8 +60,8 @@ class EventsTest extends AbstractTestCase
         self::assertNotNull($genre);
         $genre->name = 'Changed Name';
         $genreRepository->flush();
-        self::assertEquals($created, $genre->getCreated());
-        self::assertGreaterThan($updated, $genre->getUpdated());
+        self::assertEquals($created->getTimestamp(), $genre->getCreatedAt()->getTimestamp());
+        self::assertGreaterThan($updated->getTimestamp(), $genre->getUpdatedAt()->getTimestamp());
     }
 
     public function testAlbumListeners(): void
@@ -75,19 +72,19 @@ class EventsTest extends AbstractTestCase
 
         $albumRepository = self::getService(AlbumRepository::class);
         $album = new Album($artist, 'The Fragile');
-        self::assertFalse($album->hasUpdated());
+        self::assertFalse($album->hasUpdatedAt());
         $albumRepository->create($album);
 
         self::assertNotNull($album->getId());
-        self::assertTrue($album->hasUpdated());
-        $created = $album->getCreated();
-        $updated = $album->getUpdated();
+        self::assertTrue($album->hasUpdatedAt());
+        $created = $album->getCreatedAt();
+        $updated = $album->getUpdatedAt();
 
         usleep(1000);
 
         $album->title = 'The Fragile (Definitive Edition)';
         $albumRepository->flush();
-        self::assertEquals($created->getTimestamp(), $album->getCreated()->getTimestamp());
-        self::assertGreaterThan($updated->getTimestamp(), $album->getUpdated()->getTimestamp());
+        self::assertEquals($created->getTimestamp(), $album->getCreatedAt()->getTimestamp());
+        self::assertGreaterThan($updated->getTimestamp(), $album->getUpdatedAt()->getTimestamp());
     }
 }

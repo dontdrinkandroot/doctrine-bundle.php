@@ -19,8 +19,8 @@ class ArtistRepositoryTest extends AbstractTestCase
 
         $this->assertNotNull($artist->getId());
         $this->assertNotNull($artist->getUuid());
-        $this->assertNotNull($artist->getCreated());
-        $this->assertNotNull($artist->getUpdated());
+        $this->assertNotNull($artist->getCreatedAt());
+        $this->assertNotNull($artist->getUpdatedAt());
         $this->assertTrue($artist->isPersisted());
     }
 

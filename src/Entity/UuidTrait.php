@@ -5,14 +5,15 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use LogicException;
 use Override;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @psalm-require-implements UuidInterface
+ * @psalm-require-implements UuidIdentifiedInterface
  */
 trait UuidTrait
 {
-    #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
+    #[ORM\Column(type: UuidType::NAME, unique: true, nullable: false)]
     public ?Uuid $uuid = null;
 
     #[Override]

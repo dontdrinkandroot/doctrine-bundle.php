@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use Symfony\Component\Uid\Uuid;
 
-interface UuidInterface
+interface UuidIdentifiedInterface
 {
     public function getUuid(): Uuid;
 }

@@ -9,21 +9,21 @@ use LogicException;
 use Override;
 
 /**
- * @psalm-require-implements CreatedInterface
+ * @psalm-require-implements CreatedAtInterface
  */
-trait CreatedTrait
+trait CreatedAtTrait
 {
     #[ORM\Column(type: InstantType::NAME, nullable: false)]
-    protected ?Instant $created = null;
+    protected ?Instant $createdAt = null;
 
     #[Override]
-    public function getCreated(): Instant
+    public function getCreatedAt(): Instant
     {
-        return $this->created ?? throw new LogicException('Entity was not persisted yet');
+        return $this->createdAt ?? throw new LogicException('Entity was not persisted yet');
     }
 
-    public function hasCreated(): bool
+    public function hasCreatedAt(): bool
     {
-        return null !== $this->created;
+        return null !== $this->createdAt;
     }
 }

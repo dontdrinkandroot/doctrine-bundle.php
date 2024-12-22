@@ -9,21 +9,21 @@ use LogicException;
 use Override;
 
 /**
- * @psalm-require-implements UpdatedInterface
+ * @psalm-require-implements UpdatedAtInterface
  */
-trait UpdatedTrait
+trait UpdatedAtTrait
 {
     #[ORM\Column(type: InstantType::NAME, nullable: false)]
-    protected ?Instant $updated = null;
+    protected ?Instant $updatedAt = null;
 
     #[Override]
-    public function getUpdated(): Instant
+    public function getUpdatedAt(): Instant
     {
-        return $this->updated ?? throw new LogicException('Entity was not persisted yet');
+        return $this->updatedAt ?? throw new LogicException('Entity was not persisted yet');
     }
 
-    public function hasUpdated(): bool
+    public function hasUpdatedAt(): bool
     {
-        return null !== $this->updated;
+        return null !== $this->updatedAt;
     }
 }

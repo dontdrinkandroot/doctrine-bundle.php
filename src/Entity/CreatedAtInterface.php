@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Entity;
 
 use Dontdrinkandroot\Common\Instant;
 
-interface UpdatedInterface
+interface CreatedAtInterface
 {
-    public function getUpdated(): Instant;
+    public function getCreatedAt(): Instant;
 }
