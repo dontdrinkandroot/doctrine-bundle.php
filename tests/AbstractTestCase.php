@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class AbstractTestCase extends WebTestCase
 {
     /**
+     * @param class-string[] $classNames
      * @psalm-suppress InternalMethod
      */
     protected static function loadFixtures(array $classNames = []): ReferenceRepository
@@ -19,7 +20,7 @@ class AbstractTestCase extends WebTestCase
     }
 
     /**
-     * @template T
+     * @template T of object
      * @param class-string<T> $class
      * @return T
      */

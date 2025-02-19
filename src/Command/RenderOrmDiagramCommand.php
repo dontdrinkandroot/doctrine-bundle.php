@@ -7,8 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ManyToManyAssociationMapping;
 use Doctrine\ORM\Mapping\ManyToOneAssociationMapping;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\OneToOneAssociationMapping;
+use Doctrine\ORM\Mapping\OneToOneOwningSideMapping;
 use Doctrine\ORM\Mapping\ToOneOwningSideMapping;
 use Dontdrinkandroot\Common\Asserted;
 use Exception;
@@ -127,8 +126,6 @@ class RenderOrmDiagramCommand extends Command
                                 $edge->setAttribute('graphviz.headlabel', '*');
                                 $edge->setAttribute('graphviz.taillabel', '*');
                                 break;
-                            case $associationMapping instanceof OneToMany:
-                                throw new Exception('One to many not supported yet');
                             case $associationMapping instanceof ManyToOneAssociationMapping:
                                 $edge = $sourceVertex->createEdgeTo($targetVertex);
                                 if ($this->isNullableAssociation($associationMapping)) {
@@ -139,7 +136,7 @@ class RenderOrmDiagramCommand extends Command
                                 $edge->setAttribute('graphviz.taillabel', '*');
                                 $edge->setAttribute('graphviz.arrowhead', 'none');
                                 break;
-                            case $associationMapping instanceof OneToOneAssociationMapping:
+                            case $associationMapping instanceof OneToOneOwningSideMapping:
                                 $edge = $sourceVertex->createEdge($targetVertex);
                                 if ($this->isNullableAssociation($associationMapping)) {
                                     $edge->setAttribute('graphviz.headlabel', '0,1');
@@ -181,6 +178,10 @@ class RenderOrmDiagramCommand extends Command
         return (true === $joinColumns[0]->nullable);
     }
 
+    /**
+     * @template T of object
+     * @param ClassMetadata<T> $classMetaData
+     */
     private function generateVertexLabel(ClassMetadata $classMetaData, bool $hideFields = false): string
     {
         $label = '<<table cellspacing="0" border="1" cellborder="0">';

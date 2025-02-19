@@ -23,8 +23,8 @@ class EventsTest extends AbstractTestCase
         self::assertFalse($artist->hasUpdatedAt());
         $artistRepository->create($artist);
 
-        self::assertNotNull($artist->getId());
-        self::assertNotNull($artist->getUuid());
+        self::assertTrue($artist->isPersisted());
+        self::assertTrue($artist->hasUuid());
         self::assertTrue($artist->hasUpdatedAt());
         $created = $artist->getCreatedAt();
         $updated = $artist->getUpdatedAt();
@@ -49,7 +49,6 @@ class EventsTest extends AbstractTestCase
         self::assertFalse($genre->hasUpdatedAt());
         $genreRepository->create($genre);
 
-        self::assertNotNull($genre->getId());
         self::assertTrue($genre->hasUpdatedAt());
         $created = $genre->getCreatedAt();
         $updated = $genre->getUpdatedAt();
@@ -75,7 +74,7 @@ class EventsTest extends AbstractTestCase
         self::assertFalse($album->hasUpdatedAt());
         $albumRepository->create($album);
 
-        self::assertNotNull($album->getId());
+        self::assertTrue($album->isPersisted());
         self::assertTrue($album->hasUpdatedAt());
         $created = $album->getCreatedAt();
         $updated = $album->getUpdatedAt();

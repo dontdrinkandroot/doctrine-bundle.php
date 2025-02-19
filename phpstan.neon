@@ -1,0 +1,13 @@
+includes:
+    - vendor/dontdrinkandroot/common/phpstan-extension.neon
+
+parameters:
+    level: 8
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - src/DependencyInjection/Configuration.php
+    checkMissingOverrideMethodAttribute: true
+    ignoreErrors:
+        - '#Trait .*AssignedIdTrait is used zero times and is not analysed\.$#'

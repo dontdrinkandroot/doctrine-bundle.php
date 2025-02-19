@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 /**
- * @psalm-require-implements UuidIdentifiedInterface
+ * @phpstan-require-implements UuidColumnInterface
  */
 trait UuidTrait
 {
@@ -22,8 +22,14 @@ trait UuidTrait
         return $this->uuid ?? throw new LogicException('Entity was not persisted yet');
     }
 
+    #[Override]
     public function hasUuid(): bool
     {
         return null !== $this->uuid;
+    }
+
+    protected function setUuid(Uuid $uuid): void
+    {
+        $this->uuid = $uuid;
     }
 }

@@ -9,7 +9,7 @@ use LogicException;
 use Override;
 
 /**
- * @psalm-require-implements UpdatedAtInterface
+ * @phpstan-require-implements UpdatedAtColumnInterface
  */
 trait UpdatedAtTrait
 {
@@ -22,6 +22,7 @@ trait UpdatedAtTrait
         return $this->updatedAt ?? throw new LogicException('Entity was not persisted yet');
     }
 
+    #[Override]
     public function hasUpdatedAt(): bool
     {
         return null !== $this->updatedAt;

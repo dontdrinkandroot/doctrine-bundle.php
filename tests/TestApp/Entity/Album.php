@@ -3,15 +3,15 @@
 namespace Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtInterface;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtColumnInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\EntityInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtInterface;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtTrait;
 
 #[ORM\Entity]
-class Album implements EntityInterface, CreatedAtInterface, UpdatedAtInterface
+class Album implements EntityInterface, CreatedAtColumnInterface, UpdatedAtColumnInterface
 {
     use GeneratedIdTrait;
     use CreatedAtTrait;

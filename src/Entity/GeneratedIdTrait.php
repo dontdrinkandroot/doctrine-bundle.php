@@ -8,7 +8,7 @@ use LogicException;
 use Override;
 
 /**
- * @psalm-require-implements EntityInterface
+ * @phpstan-require-implements EntityInterface
  */
 trait GeneratedIdTrait
 {

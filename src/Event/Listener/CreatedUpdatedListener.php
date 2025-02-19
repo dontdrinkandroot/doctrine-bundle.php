@@ -2,14 +2,13 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Event\Listener;
 
-use DateTime;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Dontdrinkandroot\Common\DateUtils;
 use Dontdrinkandroot\Common\Instant;
 use Dontdrinkandroot\Common\ReflectionUtils;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtTrait;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtColumnInterface;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnInterface;
 
 class CreatedUpdatedListener
 {
@@ -17,16 +16,15 @@ class CreatedUpdatedListener
     {
         $entity = $eventArgs->getObject();
         $currentTimestamp = DateUtils::currentMillis();
-        $currentDateTime = new DateTime();
 
         if (
-            ReflectionUtils::usesTrait($entity, CreatedAtTrait::class)
+            is_a($entity, CreatedAtColumnInterface::class, true)
             && !$entity->hasCreatedAt()
         ) {
             ReflectionUtils::setPropertyValue($entity, 'createdAt', Instant::fromTimestamp($currentTimestamp));
         }
 
-        if (ReflectionUtils::usesTrait($entity, UpdatedAtTrait::class)) {
+        if (is_a($entity, UpdatedAtColumnInterface::class, true)) {
             ReflectionUtils::setPropertyValue($entity, 'updatedAt', Instant::fromTimestamp($currentTimestamp));
         }
     }
@@ -35,7 +33,7 @@ class CreatedUpdatedListener
     {
         $entity = $eventArgs->getObject();
 
-        if (ReflectionUtils::usesTrait($entity, UpdatedAtTrait::class)) {
+        if (is_a($entity, UpdatedAtColumnInterface::class, true)) {
             ReflectionUtils::setPropertyValue($entity, 'updatedAt', Instant::now());
         }
     }

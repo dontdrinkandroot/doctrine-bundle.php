@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\DoctrineBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Override;
@@ -15,7 +16,7 @@ use Override;
 class CrudRepository extends ServiceEntityRepository implements CrudRepositoryInterface
 {
     #[Override]
-    public function fetch($id, $lockMode = null, $lockVersion = null): object
+    public function fetch(mixed $id, LockMode|int|null $lockMode = null, int|null $lockVersion = null): object
     {
         $result = parent::find($id, $lockMode, $lockVersion);
         $this->assertResultFound($result);
@@ -23,7 +24,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     }
 
     #[Override]
-    public function fetchOneBy(array $criteria, array $orderBy = null): object
+    public function fetchOneBy(array $criteria, ?array $orderBy = null): object
     {
         $result = parent::findOneBy($criteria, $orderBy);
         $this->assertResultFound($result);
@@ -31,7 +32,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     }
 
     #[Override]
-    public function create($entity, bool $flush = true): void
+    public function create(object $entity, bool $flush = true): void
     {
         $this->getEntityManager()->persist($entity);
         if ($flush) {
@@ -40,7 +41,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
     }
 
     #[Override]
-    public function delete($entity, bool $flush = true): void
+    public function delete(object $entity, bool $flush = true): void
     {
         $this->getEntityManager()->remove($entity);
         if ($flush) {
@@ -53,7 +54,7 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
         int $page = 1,
         int $perPage = 10,
         array $criteria = [],
-        array $orderBy = null
+        ?array $orderBy = null
     ): Paginator {
         $queryBuilder = $this->createQueryBuilder('entity');
 
@@ -88,8 +89,8 @@ class CrudRepository extends ServiceEntityRepository implements CrudRepositoryIn
 
     /**
      * @param T|null $result
-     *
      * @throws NoResultException
+     * @phpstan-assert !null $result
      */
     protected function assertResultFound(?object $result): void
     {

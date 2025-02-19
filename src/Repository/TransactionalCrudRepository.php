@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Repository;
 
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManager;
 use Dontdrinkandroot\DoctrineBundle\Service\TransactionManager\TransactionManagerRegistry;
@@ -30,13 +29,13 @@ class TransactionalCrudRepository extends CrudRepository
     }
 
     #[Override]
-    public function create($entity, bool $flush = true): void
+    public function create(object $entity, bool $flush = true): void
     {
         $this->transactionManager->transactional(fn() => parent::create($entity), $flush);
     }
 
     #[Override]
-    public function delete($entity, bool $flush = true): void
+    public function delete(object $entity, bool $flush = true): void
     {
         $this->transactionManager->transactional(fn() => parent::delete($entity), $flush);
     }

@@ -17,11 +17,10 @@ class ArtistRepositoryTest extends AbstractTestCase
         $artist = new Artist('Tool');
         self::getService(ArtistRepository::class)->create($artist);
 
-        $this->assertNotNull($artist->getId());
-        $this->assertNotNull($artist->getUuid());
-        $this->assertNotNull($artist->getCreatedAt());
-        $this->assertNotNull($artist->getUpdatedAt());
         $this->assertTrue($artist->isPersisted());
+        $this->assertTrue($artist->hasUuid());
+        $this->assertTrue($artist->hasCreatedAt());
+        $this->assertTrue($artist->hasUpdatedAt());
     }
 
     public function testFindPaginatedBy(): void

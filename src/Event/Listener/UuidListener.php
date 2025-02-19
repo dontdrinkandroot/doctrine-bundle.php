@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\DoctrineBundle\Event\Listener;
 
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Dontdrinkandroot\Common\ReflectionUtils;
-use Dontdrinkandroot\DoctrineBundle\Entity\UuidTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UuidColumnInterface;
 use Symfony\Component\Uid\Factory\UuidFactory;
 
 class UuidListener
@@ -16,7 +16,7 @@ class UuidListener
     public function prePersist(PrePersistEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getObject();
-        if (ReflectionUtils::usesTrait($entity, UuidTrait::class) && !$entity->hasUuid()) {
+        if (is_a($entity, UuidColumnInterface::class, true) && !$entity->hasUuid()) {
             ReflectionUtils::setPropertyValue($entity, 'uuid', $this->uuidFactory->create());
         }
     }

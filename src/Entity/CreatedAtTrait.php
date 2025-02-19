@@ -9,7 +9,7 @@ use LogicException;
 use Override;
 
 /**
- * @psalm-require-implements CreatedAtInterface
+ * @phpstan-require-implements CreatedAtColumnInterface
  */
 trait CreatedAtTrait
 {
@@ -22,6 +22,7 @@ trait CreatedAtTrait
         return $this->createdAt ?? throw new LogicException('Entity was not persisted yet');
     }
 
+    #[Override]
     public function hasCreatedAt(): bool
     {
         return null !== $this->createdAt;
