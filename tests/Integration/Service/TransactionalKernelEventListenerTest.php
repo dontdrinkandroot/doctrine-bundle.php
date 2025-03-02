@@ -14,7 +14,7 @@ class TransactionalKernelEventListenerTest extends AbstractTestCase
         self::loadFixtures([ArtistMuse::class]);
         $client->request('GET', '/test/1');
         self::assertResponseStatusCodeSame(200);
-        $this->assertEquals('Updated Value', $client->getResponse()->getContent());
+        self::assertEquals('Updated Value', $client->getResponse()->getContent());
 
         $artistRepository = self::getService(ArtistRepository::class);
         $artist = $artistRepository->find(1);

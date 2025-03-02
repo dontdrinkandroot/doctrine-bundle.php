@@ -25,6 +25,6 @@ class RenderOrmDiagramCommandTest extends KernelTestCase
         );
 
         $output = $commandTester->getDisplay();
-        $this->assertNotEmpty($output);
+        self::assertNotEmpty($output);
     }
 }

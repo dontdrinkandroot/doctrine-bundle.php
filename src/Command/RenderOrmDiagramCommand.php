@@ -110,8 +110,8 @@ class RenderOrmDiagramCommand extends Command
                         $targetTableName = $classToTableNames[$associationMapping->targetEntity];
 
                         if (
-                            in_array($sourceTableName, $ignoreTableNames)
-                            || in_array($targetTableName, $ignoreTableNames)
+                            in_array($sourceTableName, $ignoreTableNames, true)
+                            || in_array($targetTableName, $ignoreTableNames, true)
                         ) {
                             continue;
                         }
@@ -195,7 +195,7 @@ class RenderOrmDiagramCommand extends Command
                 $label .= '<tr>';
                 $columnName = $fieldMapping['columnName'] ?? null;
                 assert(null !== $columnName);
-                if (in_array($fieldName, $idFieldNames)) {
+                if (in_array($fieldName, $idFieldNames, true)) {
                     $label .= '<td align="left"><u>' . $columnName . '</u></td>';
                 } else {
                     $label .= '<td align="left">' . $columnName . '</td>';

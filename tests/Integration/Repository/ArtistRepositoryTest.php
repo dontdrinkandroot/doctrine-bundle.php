@@ -17,10 +17,10 @@ class ArtistRepositoryTest extends AbstractTestCase
         $artist = new Artist('Tool');
         self::getService(ArtistRepository::class)->create($artist);
 
-        $this->assertTrue($artist->isPersisted());
-        $this->assertTrue($artist->hasUuid());
-        $this->assertTrue($artist->hasCreatedAt());
-        $this->assertTrue($artist->hasUpdatedAt());
+        self::assertTrue($artist->isPersisted());
+        self::assertTrue($artist->hasUuid());
+        self::assertTrue($artist->hasCreatedAt());
+        self::assertTrue($artist->hasUpdatedAt());
     }
 
     public function testFindPaginatedBy(): void
@@ -32,8 +32,8 @@ class ArtistRepositoryTest extends AbstractTestCase
             ['name' => 'Muse'],
             ['name' => 'ASC']
         );
-        $this->assertCount(1, $artists);
-        $this->assertEquals('Muse', iterator_to_array($artists)[0]->name);
+        self::assertCount(1, $artists);
+        self::assertEquals('Muse', iterator_to_array($artists)[0]->name);
     }
 
     public function testFetch(): void
