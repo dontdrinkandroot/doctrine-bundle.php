@@ -4,18 +4,18 @@ namespace Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtColumnInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\EntityInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnTrait;
 
 #[ORM\Entity]
 class Album implements EntityInterface, CreatedAtColumnInterface, UpdatedAtColumnInterface
 {
-    use GeneratedIdTrait;
-    use CreatedAtTrait;
-    use UpdatedAtTrait;
+    use GeneratedIdColumnTrait;
+    use CreatedAtColumnTrait;
+    use UpdatedAtColumnTrait;
 
     public function __construct(
         #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'albums')]

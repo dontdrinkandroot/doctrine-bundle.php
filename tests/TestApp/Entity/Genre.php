@@ -6,13 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtColumnInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedDatetimeInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedDatetimeTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\EntityInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeTrait;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\GenreRepository;
@@ -20,9 +20,9 @@ use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\GenreRepository;
 #[ORM\Entity(repositoryClass: GenreRepository::class)]
 class Genre implements EntityInterface, CreatedAtColumnInterface, UpdatedAtColumnInterface
 {
-    use GeneratedIdTrait;
-    use CreatedAtTrait;
-    use UpdatedAtTrait;
+    use GeneratedIdColumnTrait;
+    use CreatedAtColumnTrait;
+    use UpdatedAtColumnTrait;
 
     /** @var Collection<array-key,Artist> */
     #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'genres')]

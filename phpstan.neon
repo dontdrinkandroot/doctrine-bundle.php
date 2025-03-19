@@ -5,5 +5,9 @@ parameters:
         - tests
     checkMissingOverrideMethodAttribute: true
     ignoreErrors:
-        - '#Trait .*AssignedIdTrait is used zero times and is not analysed\.$#'
-        - '#Trait .*UuidTrait is used zero times and is not analysed\.$#'
+        - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\UpdatedAtTrait is used zero times and is not analysed\.$#'
+        - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\UuidTrait is used zero times and is not analysed\.$#'
+        - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\CreatedAtTrait is used zero times and is not analysed\.$#'
+        - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\GeneratedIdTrait is used zero times and is not analysed\.$#'
+        - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\AssignedIdTrait is used zero times and is not analysed\.$#'
+        - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\AssignedIdColumnTrait is used zero times and is not analysed\.$#'

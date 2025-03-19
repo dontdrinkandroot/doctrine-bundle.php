@@ -6,13 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtColumnInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\CreatedAtColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\CreatedTimestampTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\EntityInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\GeneratedIdColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UuidColumnInterface;
@@ -23,10 +23,10 @@ use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ArtistRepository;
 class Artist
     implements EntityInterface, UuidColumnInterface, CreatedAtColumnInterface, UpdatedAtColumnInterface
 {
-    use GeneratedIdTrait;
+    use GeneratedIdColumnTrait;
     use UuidColumnTrait;
-    use CreatedAtTrait;
-    use UpdatedAtTrait;
+    use CreatedAtColumnTrait;
+    use UpdatedAtColumnTrait;
 
     /** @var Collection<array-key,Genre> */
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'artists')]
