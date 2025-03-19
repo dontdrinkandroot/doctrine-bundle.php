@@ -6,3 +6,4 @@ parameters:
     checkMissingOverrideMethodAttribute: true
     ignoreErrors:
         - '#Trait .*AssignedIdTrait is used zero times and is not analysed\.$#'
+        - '#Trait .*UuidTrait is used zero times and is not analysed\.$#'

@@ -16,7 +16,7 @@ use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedTimestampTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UuidColumnInterface;
-use Dontdrinkandroot\DoctrineBundle\Entity\UuidTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\UuidColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\ArtistRepository;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
@@ -24,7 +24,7 @@ class Artist
     implements EntityInterface, UuidColumnInterface, CreatedAtColumnInterface, UpdatedAtColumnInterface
 {
     use GeneratedIdTrait;
-    use UuidTrait;
+    use UuidColumnTrait;
     use CreatedAtTrait;
     use UpdatedAtTrait;
 
