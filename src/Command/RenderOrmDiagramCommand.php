@@ -193,14 +193,14 @@ class RenderOrmDiagramCommand extends Command
             foreach ($fieldNames as $fieldName) {
                 $fieldMapping = $classMetaData->getFieldMapping($fieldName);
                 $label .= '<tr>';
-                $columnName = $fieldMapping['columnName'] ?? null;
+                $columnName = $fieldMapping->columnName ?? null;
                 assert(null !== $columnName);
                 if (in_array($fieldName, $idFieldNames, true)) {
                     $label .= '<td align="left"><u>' . $columnName . '</u></td>';
                 } else {
                     $label .= '<td align="left">' . $columnName . '</td>';
                 }
-                $label .= '<td align="left">' . $fieldMapping['type'] . '</td>';
+                $label .= '<td align="left">' . $fieldMapping->type . '</td>';
                 $label .= '<td align="left">' . (true === $fieldMapping->nullable ? '' : 'notnull') . '</td>';
                 $label .= '<td align="left">' . (true === $fieldMapping->unique ? 'unique' : '') . '</td>';
                 $label .= '</tr>';
