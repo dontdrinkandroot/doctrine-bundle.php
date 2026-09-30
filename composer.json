@@ -50,7 +50,9 @@
         "phpunit/phpunit": "^12.5",
         "symfony/browser-kit": "^7.4",
         "symfony/framework-bundle": "^7.4",
-        "symfony/runtime": "^7.4"
+        "symfony/runtime": "^7.4",
+        "pb30/phpstan-composer-analysis": "^1.1",
+        "shipmonk/composer-dependency-analyser": "^1.8"
     },
     "suggest": {
         "doctrine/data-fixtures": "For data fixture testing",

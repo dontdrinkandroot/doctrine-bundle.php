@@ -11,3 +11,7 @@ parameters:
         - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\GeneratedIdTrait is used zero times and is not analysed\.$#'
         - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\AssignedIdTrait is used zero times and is not analysed\.$#'
         - '#Trait Dontdrinkandroot\\DoctrineBundle\\Entity\\AssignedIdColumnTrait is used zero times and is not analysed\.$#'
+    composerAnalysis:
+        ignoreAllShadowDeps: true
+        ignoreAllUnusedDeps: true
+        ignoreAllProdDepsInDev: true
