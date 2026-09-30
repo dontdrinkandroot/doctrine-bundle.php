@@ -15,14 +15,17 @@ use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedAtColumnTrait;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\UpdatedDatetimeTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\VersionColumnTrait;
+use Dontdrinkandroot\DoctrineBundle\Entity\VersionedInterface;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Repository\GenreRepository;
 
 #[ORM\Entity(repositoryClass: GenreRepository::class)]
-class Genre implements EntityInterface, CreatedAtColumnInterface, UpdatedAtColumnInterface
+class Genre implements EntityInterface, CreatedAtColumnInterface, UpdatedAtColumnInterface, VersionedInterface
 {
     use GeneratedIdColumnTrait;
     use CreatedAtColumnTrait;
     use UpdatedAtColumnTrait;
+    use VersionColumnTrait;
 
     /** @var Collection<array-key,Artist> */
     #[ORM\ManyToMany(targetEntity: Artist::class, mappedBy: 'genres')]

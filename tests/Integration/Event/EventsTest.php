@@ -2,6 +2,10 @@
 
 namespace Dontdrinkandroot\DoctrineBundle\Tests\Integration\Event;
 
+use Doctrine\DBAL\LockMode;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\OptimisticLockException;
+use Dontdrinkandroot\DoctrineBundle\Entity\VersionedInterface;
 use Dontdrinkandroot\DoctrineBundle\Tests\AbstractTestCase;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\Album;
 use Dontdrinkandroot\DoctrineBundle\Tests\TestApp\Entity\Artist;
@@ -47,9 +51,11 @@ class EventsTest extends AbstractTestCase
         $genreRepository = self::getService(GenreRepository::class);
         $genre = new Genre('Test Genre');
         self::assertFalse($genre->hasUpdatedAt());
+        self::assertSame(1, $genre->version);
         $genreRepository->create($genre);
 
         self::assertTrue($genre->hasUpdatedAt());
+        self::assertSame(1, $genre->version);
         $created = $genre->getCreatedAt();
         $updated = $genre->getUpdatedAt();
 
@@ -57,10 +63,74 @@ class EventsTest extends AbstractTestCase
 
         $genre = $genreRepository->find($genre->getId());
         self::assertNotNull($genre);
+        self::assertInstanceOf(VersionedInterface::class, $genre);
+        self::assertSame(1, $genre->version);
         $genre->name = 'Changed Name';
         $genreRepository->flush();
         self::assertEquals($created->getTimestamp(), $genre->getCreatedAt()->getTimestamp());
         self::assertGreaterThan($updated->getTimestamp(), $genre->getUpdatedAt()->getTimestamp());
+        self::assertSame(2, $genre->version);
+    }
+
+    public function testGenreVersionAutoIncrement(): void
+    {
+        $genreRepository = self::getService(GenreRepository::class);
+        $genre = new Genre('Test Genre');
+        self::assertSame(1, $genre->version);
+        $genreRepository->create($genre);
+        $genreId = $genre->getId();
+        self::assertSame(1, $genre->version);
+
+        $genre->name = 'Changed Name';
+        $genreRepository->flush();
+        self::assertSame(2, $genre->version);
+
+        $refetched = $genreRepository->fetch($genreId);
+        self::assertSame(2, $refetched->version);
+    }
+
+    public function testGenreOptimisticLocking(): void
+    {
+        $genreRepository = self::getService(GenreRepository::class);
+        $genre = new Genre('Test Genre');
+        $genreRepository->create($genre);
+        $genreId = $genre->getId();
+
+        $entityManager = self::getService(EntityManagerInterface::class);
+        $tableName = $entityManager->getClassMetadata(Genre::class)->getTableName();
+
+        /* Simulate a concurrent write bumping the version behind Doctrine's back. */
+        $entityManager->getConnection()->executeStatement(
+            sprintf('UPDATE %s SET version = version + 1', $tableName)
+        );
+
+        $genre->name = 'Second Update';
+        $this->expectException(OptimisticLockException::class);
+        $genreRepository->flush();
+    }
+
+    public function testGenreOptimisticReadLock(): void
+    {
+        $genreRepository = self::getService(GenreRepository::class);
+        $genre = new Genre('Test Genre');
+        $genreRepository->create($genre);
+        $genreId = $genre->getId();
+        self::assertSame(1, $genre->version);
+
+        $fresh = $genreRepository->fetch($genreId, LockMode::OPTIMISTIC, 1);
+        self::assertSame(1, $fresh->version);
+
+        $fresh->name = 'Changed Name';
+        $genreRepository->flush();
+        self::assertSame(2, $fresh->version);
+
+        $genreRepository->clear();
+
+        $updated = $genreRepository->fetch($genreId, LockMode::OPTIMISTIC, 2);
+        self::assertSame(2, $updated->version);
+
+        $this->expectException(OptimisticLockException::class);
+        $genreRepository->fetch($genreId, LockMode::OPTIMISTIC, 1);
     }
 
     public function testAlbumListeners(): void
