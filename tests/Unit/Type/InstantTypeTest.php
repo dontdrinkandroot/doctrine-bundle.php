@@ -40,6 +40,19 @@ class InstantTypeTest extends TestCase
         self::assertSame('BIGINT', (new InstantType())->getSQLDeclaration([], new SQLitePlatform()));
     }
 
+    public function testMappedDatabaseTypesOnPostgresql(): void
+    {
+        self::assertSame(
+            ['timestamptz'],
+            (new InstantType())->getMappedDatabaseTypes(new PostgreSQLPlatform())
+        );
+    }
+
+    public function testMappedDatabaseTypesOnSqlite(): void
+    {
+        self::assertSame([], (new InstantType())->getMappedDatabaseTypes(new SQLitePlatform()));
+    }
+
     public function testConvertToDatabaseValueOnPostgresql(): void
     {
         $instant = Instant::fromTimestamp(self::TIMESTAMP_WITH_MILLIS);

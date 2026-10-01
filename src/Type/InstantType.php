@@ -24,6 +24,9 @@ use RuntimeException;
  * <strong>BC note:</strong> existing BIGINT columns are not migrated automatically. Doctrine
  * cannot diff this conversion; migrate manually with
  * <code>ALTER TABLE ... ALTER COLUMN ... TYPE timestamptz USING to_timestamp(column / 1000.0)</code>.
+ *
+ * The {@link getMappedDatabaseTypes() timestamptz} mapping ensures schema introspection maps the
+ * PostgreSQL column back to this type, so schema comparison sees an equivalent declaration.
  */
 class InstantType extends Type
 {
@@ -44,6 +47,12 @@ class InstantType extends Type
         }
 
         return $platform->getBigIntTypeDeclarationSQL($column);
+    }
+
+    #[Override]
+    public function getMappedDatabaseTypes(AbstractPlatform $platform): array
+    {
+        return $platform instanceof PostgreSQLPlatform ? ['timestamptz'] : [];
     }
 
     #[Override]
